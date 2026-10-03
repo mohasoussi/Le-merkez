@@ -1,0 +1,3 @@
+# Variables locales pour `npm run preview` (copier en .dev.vars)
+NEXTJS_ENV=development
+NEXT_PUBLIC_SITE_URL=http://localhost:8787

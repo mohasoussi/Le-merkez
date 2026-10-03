@@ -4,9 +4,14 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   images: {
-    formats: ["image/avif", "image/webp"],
-    deviceSizes: [640, 828, 1080, 1280, 1600, 1920, 2560],
+    // Hébergement Cloudflare Workers : les images sont servies telles quelles.
+    // Fournir des fichiers déjà optimisés (WebP/AVIF, ~2000 px max).
+    unoptimized: true,
   },
 };
 
 export default nextConfig;
+
+// Permet d'utiliser les bindings Cloudflare pendant `next dev`.
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+initOpenNextCloudflareForDev();

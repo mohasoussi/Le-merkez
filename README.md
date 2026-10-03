@@ -12,7 +12,8 @@ npm run build && npm start
 npm run typecheck
 ```
 
-Node ≥ 20.9. Prêt à déployer sur Vercel ou sur tout hébergeur Node (`next start`).
+Node ≥ 20.9. Hébergé sur **Cloudflare Workers** via l'adaptateur [OpenNext](https://opennext.js.org/cloudflare)
+(voir « Déploiement Cloudflare » ci-dessous). Fonctionne aussi sur Vercel ou tout hébergeur Node (`next start`).
 Variables d'environnement : voir `.env.example` (au minimum `NEXT_PUBLIC_SITE_URL` en production).
 
 ---
@@ -106,6 +107,24 @@ Aucun paiement n'est simulé. Deux chemins :
 s'appuyant sur `book.sku` ; les composants n'ont pas à changer.
 
 ---
+
+## Déploiement Cloudflare
+
+Configuration : `wrangler.jsonc` (Worker `le-merkez`) et `open-next.config.ts`.
+
+```bash
+npm run preview   # build OpenNext + aperçu local dans le runtime Cloudflare (http://localhost:8787)
+npm run deploy    # build + déploiement direct (nécessite `npx wrangler login`)
+```
+
+Déploiement automatique depuis GitHub (Workers Builds) :
+- Commande de build : `npx opennextjs-cloudflare build`
+- Commande de déploiement : `npx opennextjs-cloudflare deploy`
+- Variable de build : `NEXT_PUBLIC_SITE_URL` = URL publique du site
+- Le nom du Worker dans Cloudflare doit être `le-merkez` (identique à `wrangler.jsonc`).
+
+Les images (`next/image`) sont servies sans optimisation à la volée : fournir des fichiers déjà compressés.
+Les clés de paiement (Stripe, PayPal, HelloAsso) se déclarent en *secrets* du Worker.
 
 ## SEO
 Métadonnées + Open Graph + Twitter Cards (`src/app/layout.tsx`), image de partage générée

@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "le-merkez",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      // Auto-référence requise par OpenNext (doit correspondre à "name")
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "le-merkez"
+    }
+  ],
+  "observability": { "enabled": true }
+}
