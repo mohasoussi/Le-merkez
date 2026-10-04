@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageHeader from "@/components/layout/PageHeader";
@@ -39,13 +40,32 @@ export default async function ArticlePage({ params }: { params: Promise<{ catego
         </div>
         <div className="gutter mx-auto max-w-[760px] pb-28">
           {article.location !== undefined && (
-            <p className="ph-label mb-8 text-umber/55">{article.location ?? "[LIEU À AJOUTER]"}</p>
+            <p className={`mb-8 ${article.location ? "eyebrow text-earth" : "ph-label text-umber/55"}`}>{article.location ?? "[LIEU À AJOUTER]"}</p>
           )}
           <div className="space-y-6 text-lg leading-relaxed text-umber/85">
             {article.body.map((p) => (
               <p key={p}>{p}</p>
             ))}
           </div>
+          {article.photos && article.photos.length > 0 && (
+            <div className="mt-14 grid grid-cols-2 gap-3 md:gap-4">
+              {article.photos.map((ph, i) => (
+                <figure
+                  key={ph.src ?? i}
+                  className={`group relative overflow-hidden rounded-[4px] ${(ph.height ?? 0) > (ph.width ?? 1) ? "row-span-2" : ""} ${i === 0 ? "col-span-2" : ""}`}
+                >
+                  <Image
+                    src={ph.src!}
+                    alt={ph.alt}
+                    width={ph.width ?? 1600}
+                    height={ph.height ?? 1200}
+                    sizes={i === 0 ? "(min-width:760px) 760px, 100vw" : "(min-width:760px) 380px, 50vw"}
+                    className="h-full w-full object-cover transition-transform duration-[1.4s] ease-[var(--ease-silk)] group-hover:scale-[1.04]"
+                  />
+                </figure>
+              ))}
+            </div>
+          )}
           <Link
             href={`/actions/${action.slug}`}
             className="mt-16 inline-flex items-center gap-3 border-b border-current pb-1 text-[0.68rem] font-semibold uppercase tracking-[0.22em]"

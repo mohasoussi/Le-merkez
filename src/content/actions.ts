@@ -46,7 +46,12 @@ export const actions: ActionAxis[] = [
     objective: "Favoriser la connaissance mutuelle, le dialogue et le respect.",
     color: textile.indigo,
     accent: textile.saffron,
-    image: { src: null, alt: "Rencontre interreligieuse", placeholder: "[PHOTO À FOURNIR — Rencontre interreligieuse]" },
+    image: {
+      src: "/images/actions/rencontre-abbaye-de-fleury/jardin.jpg",
+      alt: "Fuqaras en muraqaa et moines bénédictins réunis dans le parc de l’abbaye de Fleury",
+      width: 1600,
+      height: 1200,
+    },
   },
   {
     slug: "retraites-spirituelles",
@@ -135,12 +140,42 @@ export interface Article {
   excerpt: string;
   cover: Media;
   body: string[];
+  /** Photos de l'événement, affichées sous le texte. */
+  photos?: Media[];
   /** true = modèle de démonstration, non indexé, à supprimer. */
   placeholder?: boolean;
 }
 
-/** Un modèle par catégorie, pour montrer la structure. À remplacer par les vraies actions. */
-export const articles: Article[] = actions.map((a) => ({
+const fleury = "/images/actions/rencontre-abbaye-de-fleury";
+
+/** Actions publiées. */
+const published: Article[] = [
+  {
+    category: "rencontres-interreligieuses",
+    slug: "rencontre-abbaye-de-fleury",
+    title: "Rencontre fraternelle et dialogue spirituel à Saint-Benoît-sur-Loire",
+    date: null, // [DATE À AJOUTER] — format AAAA-MM-JJ
+    location: "Abbaye de Fleury, Saint-Benoît-sur-Loire",
+    excerpt:
+      "Les fuqaras de la tariqa Karkariya ont eu la joie de rencontrer les moines de l’Abbaye de Fleury dans le cadre d’un temps d’échange et de dialogue interreligieux.",
+    cover: { src: `${fleury}/abbaye.jpg`, alt: "Trois fuqaras, dont deux en muraqaa, devant la basilique de l’abbaye de Fleury", width: 1600, height: 1200 },
+    body: [
+      "Les fuqaras de la tariqa Karkariya ont eu la joie de rencontrer les moines de l’Abbaye de Fleury dans le cadre d’un temps d’échange et de dialogue interreligieux.",
+      "Cette rencontre a été l’occasion de partager nos expériences spirituelles, d’approfondir notre connaissance mutuelle et de mettre en lumière les valeurs qui nous rassemblent : la recherche de Dieu, la prière, l’humilité, le service et la paix.",
+      "Dans un climat de respect et d’écoute sincère, les échanges ont permis de dépasser les préjugés et de renforcer les liens de fraternité entre nos communautés. Ces moments de rencontre rappellent l’importance du dialogue comme moyen de favoriser la compréhension mutuelle et la coexistence harmonieuse entre les croyants.",
+      "Nous remercions chaleureusement les frères de l’abbaye pour leur accueil empreint de bienveillance et pour leur invitation à poursuivre ces échanges dans l’avenir. Puissent ces rencontres continuer à semer des graines de paix, d’amitié et de fraternité entre les hommes.",
+    ],
+    photos: [
+      { src: `${fleury}/jardin.jpg`, alt: "Moines et fuqaras réunis dans le parc de l’abbaye", width: 1600, height: 1200 },
+      { src: `${fleury}/marche.jpg`, alt: "Marche côte à côte sur un chemin, moines et fuqaras", width: 1200, height: 1600 },
+      { src: `${fleury}/echange.jpg`, alt: "Temps d’échange entre les moines et un fuqara en muraqaa, assis en cercle", width: 1600, height: 1200 },
+      { src: `${fleury}/puits.jpg`, alt: "Moines et fuqaras penchés ensemble au-dessus d’un ancien puits de pierre", width: 1600, height: 1200 },
+    ],
+  },
+];
+
+/** Modèles de démonstration pour les catégories encore vides (non indexés). À supprimer au fur et à mesure. */
+const templates: Article[] = actions.map((a) => ({
   category: a.slug,
   slug: "modele-article",
   title: `[TITRE DE L’ARTICLE À AJOUTER — ${a.short}]`,
@@ -154,6 +189,11 @@ export const articles: Article[] = actions.map((a) => ({
   ],
   placeholder: true,
 }));
+
+export const articles: Article[] = [
+  ...published,
+  ...templates.filter((t) => !published.some((p) => p.category === t.category)),
+];
 
 export const getAction = (slug: string) => actions.find((a) => a.slug === slug);
 export const getArticles = (category?: string) =>
