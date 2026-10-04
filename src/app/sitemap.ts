@@ -4,7 +4,7 @@ import { site } from "@/content/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = site.url.replace(/\/$/, "");
-  const pages = ["", "/le-shaykh", "/actualites", "/librairie"].map((p) => ({
+  const pages = ["", "/le-merkez", "/le-shaykh", "/actualites", "/librairie"].map((p) => ({
     url: `${base}${p}`,
     changeFrequency: "weekly" as const,
     priority: p === "" ? 1 : 0.7,

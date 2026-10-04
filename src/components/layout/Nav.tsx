@@ -115,8 +115,9 @@ export default function Nav() {
 
   const isActive = (href: string) => {
     const [path, hash] = href.split("#");
-    if (hash) return pathname === "/" && active === hash;
-    return pathname.startsWith(path);
+    // Ancre de l'accueil (ex. « /#actions ») : suit la section visible. Autre page : égalité de chemin.
+    if (path === "" || path === "/") return hash ? pathname === "/" && active === hash : pathname === "/";
+    return pathname === path || pathname.startsWith(`${path}/`);
   };
   const itemActive = (item: NavItem) => isActive(item.href) || Boolean(item.children?.some((c) => isActive(c.href)));
   const solid = (scrolled || lightTopPages.includes(pathname)) && !open;

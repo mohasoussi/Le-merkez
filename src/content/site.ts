@@ -35,10 +35,11 @@ export interface NavItem {
 export const nav: NavItem[] = [
   {
     label: "Le Merkez",
-    href: "/#vision",
+    href: "/le-merkez",
     inHeader: true,
     children: [
-      { label: "La vision", href: "/#vision" },
+      { label: "Le projet", href: "/le-merkez" },
+      { label: "Le futur lieu", href: "/le-merkez#lieu" },
       { label: "Le Shaykh", href: "/le-shaykh" },
     ],
   },
@@ -55,7 +56,7 @@ export const joinCta = { label: "Nous rejoindre", href: "https://t.me/+ntcTlHvj-
 export const navCta = { label: "Nous soutenir", href: "/#soutenir" };
 
 export const footerLinks = [
-  { label: "La vision", href: "/#vision" },
+  { label: "Le Merkez", href: "/le-merkez" },
   { label: "Le Shaykh", href: "/le-shaykh" },
   { label: "Actualités", href: "/actualites" },
   { label: "Nos actions", href: "/#actions" },

@@ -57,6 +57,7 @@ Tout le contenu est dans **`src/content/`** — pas besoin de toucher aux compos
 | `gallery.ts` | photos de la galerie (format : portrait / landscape / square / full) |
 | `shaykh.ts` | page /le-shaykh : portrait, biographie, enseignements, conférences, vidéos, publications |
 | `events.ts` | prochain événement affiché sur la page Actualités (le plus proche dans le futur) |
+| `merkez.ts` | page « Le Merkez » (/le-merkez) : idée, muraqaa, lieu, participer |
 | `place.ts` | le futur lieu (espaces, textes, futures photos) |
 | `donation.ts` | montants, objectifs (montants réels uniquement), lien de don externe |
 

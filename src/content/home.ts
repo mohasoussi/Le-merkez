@@ -26,32 +26,53 @@ export const hero = {
 };
 
 /**
- * Photos qui coulissent derrière le titre du hero : d'abord le projet du Merkez (maquettes),
- * puis les actions menées. `group` donne le libellé affiché ; `caption` précise la nature du visuel.
- * Pour ajouter une photo : l'ajouter à la liste (images dans /public/images/…).
+ * Photos qui défilent derrière le titre du hero, toutes les 3 secondes, en alternant :
+ * le projet du Merkez → une rencontre interreligieuse → une retraite spirituelle → …
+ * L'ordre ci-dessous EST l'ordre de passage : garder l'alternance projet / interreligieux / retraite.
  */
+export type HeroGroup = "projet" | "interreligieux" | "retraite";
+
 export interface HeroSlide {
   src: string;
   alt: string;
-  group: "Le projet du Merkez" | "Nos actions";
+  group: HeroGroup;
+  /** Légende affichée en bas à gauche. */
   caption: string;
   /** Cadrage de l'image (object-position CSS). */
   position?: string;
 }
 
+export const heroGroups: Record<HeroGroup, { label: string; color: string }> = {
+  projet: { label: "Le projet du Merkez", color: "#c99a3e" },
+  interreligieux: { label: "Rencontres interreligieuses", color: "#e3a493" },
+  retraite: { label: "Retraites spirituelles", color: "#a9cfa6" },
+};
+
+/** Intervalle entre deux photos (millisecondes). */
+export const heroSlideDelay = 3000;
+
 const projet = "/images/projet";
 const concept = "Visualisation conceptuelle du futur lieu";
+const fleury = "/images/actions/rencontre-abbaye-de-fleury";
+const paix = "/images/actions/rencontre-centre-etudes-paix";
+const blue = "/images/actions/retraite-blue-mountains";
 
 export const heroSlides: HeroSlide[] = [
-  { src: `${projet}/vue-aerienne.jpg`, alt: "Vue aérienne d’un lieu de rencontre au cœur des collines : bâtiment en bois, yourtes et pavillon aux couleurs de patchwork", group: "Le projet du Merkez", caption: concept },
-  { src: `${projet}/ensemble-pierre-bois.jpg`, alt: "Vue aérienne d’un ensemble de pierre et de bois entouré de potagers, avec une yourte en patchwork", group: "Le projet du Merkez", caption: concept },
-  { src: `${projet}/vallee-yourte.jpg`, alt: "Une yourte aux motifs de patchwork, des potagers et des moutons dans une vallée", group: "Le projet du Merkez", caption: concept },
-  { src: `${projet}/jardin-potager.jpg`, alt: "Yourtes, potager et clôtures de bois dans les collines, des personnes vêtues de couleurs se promènent", group: "Le projet du Merkez", caption: concept },
-  { src: `${projet}/marche-collines.jpg`, alt: "Des personnes en tenues claires et colorées marchent côte à côte sur un chemin de colline", group: "Le projet du Merkez", caption: concept },
-  { src: "/images/actions/rencontre-abbaye-de-fleury/jardin.jpg", alt: "Fuqaras en muraqaa et moines bénédictins réunis dans le parc de l’abbaye de Fleury", group: "Nos actions", caption: "Rencontre à l’abbaye de Fleury", position: "50% 55%" },
-  { src: "/images/actions/retraite-blue-mountains/groupe-panorama.jpg", alt: "Photo de groupe des participants à la retraite des Blue Mountains, sur un belvédère", group: "Nos actions", caption: "Retraite dans les Blue Mountains", position: "50% 70%" },
-  { src: "/images/retraites/musique.jpg", alt: "Musique partagée à l’oud et à la guitare pendant une retraite", group: "Nos actions", caption: "Retraite spirituelle" },
-  { src: "/images/actions/rencontre-centre-etudes-paix/table-ronde.jpg", alt: "Repas partagé entre disciples en muraqaa et membres d’une association", group: "Nos actions", caption: "Rencontre au Centre d’études pour la Paix" },
+  { src: `${projet}/vue-aerienne.jpg`, alt: "Vue aérienne d’un lieu de rencontre au cœur des collines : bâtiment en bois, yourtes et pavillon aux couleurs de patchwork", group: "projet", caption: concept },
+  { src: `${fleury}/jardin.jpg`, alt: "Fuqaras en muraqaa et moines bénédictins réunis dans le parc de l’abbaye de Fleury", group: "interreligieux", caption: "Rencontre à l’abbaye de Fleury", position: "50% 55%" },
+  { src: `${blue}/groupe-panorama.jpg`, alt: "Photo de groupe des participants à la retraite des Blue Mountains, sur un belvédère", group: "retraite", caption: "Retraite dans les Blue Mountains", position: "50% 70%" },
+
+  { src: `${projet}/ensemble-pierre-bois.jpg`, alt: "Vue aérienne d’un ensemble de pierre et de bois entouré de potagers, avec une yourte en patchwork", group: "projet", caption: concept },
+  { src: `${paix}/table-ronde.jpg`, alt: "Repas partagé entre disciples en muraqaa et membres d’une association", group: "interreligieux", caption: "Rencontre au Centre d’études pour la Paix" },
+  { src: "/images/retraites/musique.jpg", alt: "Musique partagée à l’oud et à la guitare pendant une retraite", group: "retraite", caption: "Retraite spirituelle" },
+
+  { src: `${projet}/vallee-yourte.jpg`, alt: "Une yourte aux motifs de patchwork, des potagers et des moutons dans une vallée", group: "projet", caption: concept },
+  { src: `${fleury}/abbaye.jpg`, alt: "Trois fuqaras devant la basilique de l’abbaye de Fleury", group: "interreligieux", caption: "Abbaye de Fleury, Saint-Benoît-sur-Loire", position: "50% 40%" },
+  { src: "/images/retraites/flute.jpg", alt: "Un participant joue de la flûte traversière pendant une retraite", group: "retraite", caption: "Retraite spirituelle" },
+
+  { src: `${projet}/jardin-potager.jpg`, alt: "Yourtes, potager et clôtures de bois dans les collines, des personnes vêtues de couleurs se promènent", group: "projet", caption: concept },
+  { src: `${paix}/salle-lumineuse.jpg`, alt: "Table dressée dans une salle lumineuse ouverte sur un jardin, convives de tous âges", group: "interreligieux", caption: "Rencontre au Centre d’études pour la Paix" },
+  { src: "/images/retraites/marche.jpg", alt: "Marche en forêt, vêtus de muraqaas aux carrés de tissu colorés", group: "retraite", caption: "Retraite spirituelle", position: "50% 62%" },
 ];
 
 export const vision = {

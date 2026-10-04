@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageHeader from "@/components/layout/PageHeader";
 import ArticleCard from "@/components/ui/ArticleCard";
+import ArticleFeature from "@/components/ui/ArticleFeature";
 import Button from "@/components/ui/Button";
 import { actions, getAction, getArticles } from "@/content/actions";
 
@@ -58,7 +59,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
             </ul>
           )}
 
-          {action.photos && action.photos.length > 0 && (
+          {action.photos && action.photos.length > 0 && !list.some((a) => !a.placeholder) && (
             <div className="mb-20">
               <h2 className="eyebrow mb-8 text-umber/60">En images</h2>
               <div className="columns-1 gap-4 sm:columns-2 lg:columns-3">
@@ -78,12 +79,12 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
             </div>
           )}
 
-          <h2 className="eyebrow mb-10 text-umber/60">Actions menées</h2>
+          <h2 className="eyebrow mb-10 text-umber/60">{list.some((a) => !a.placeholder) ? (list.length > 1 ? `${list.length} actions` : "1 action") : "Actions menées"}</h2>
           {list.length ? (
-            <div className="grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-              {list.map((a, i) => (
-                <ArticleCard key={a.slug} article={a} index={i} />
-              ))}
+            <div className="space-y-8 md:space-y-12">
+              {list.map((a, i) =>
+                a.placeholder ? <ArticleCard key={a.slug} article={a} index={i} /> : <ArticleFeature key={a.slug} article={a} index={i} />,
+              )}
             </div>
           ) : (
             <p className="text-umber/70">Aucune action publiée pour le moment.</p>

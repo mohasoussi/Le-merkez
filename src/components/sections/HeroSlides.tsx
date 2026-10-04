@@ -3,9 +3,9 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { gsap } from "@/components/motion/gsap";
-import { heroSlides } from "@/content/home";
+import { heroGroups, heroSlideDelay, heroSlides } from "@/content/home";
 
-const DELAY = 6500;
+const DELAY = heroSlideDelay;
 
 /**
  * Photos coulissantes du hero : chaque photo glisse de droite à gauche en poussant la précédente,
@@ -40,7 +40,7 @@ export default function HeroSlides() {
       gsap.set(from, { zIndex: 1 });
       gsap
         .timeline({
-          defaults: { duration: 1.5, ease: "expo.inOut" },
+          defaults: { duration: 1.05, ease: "expo.inOut" },
           onComplete: () => {
             gsap.set(from, { autoAlpha: 0, xPercent: 0 });
             busy.current = false;
@@ -48,8 +48,9 @@ export default function HeroSlides() {
         })
         .to(next, { xPercent: 0 }, 0)
         .to(from, { xPercent: -30 }, 0)
-        .fromTo(next.querySelector("[data-slide-img]"), { xPercent: -25, scale: 1.1 }, { xPercent: 0, scale: 1.04 }, 0)
-        .fromTo(next.querySelector("[data-slide-img]"), { scale: 1.04 }, { scale: 1, duration: 8, ease: "none" }, 1.5);
+        .fromTo(next.querySelector("[data-slide-img]"), { xPercent: -25 }, { xPercent: 0 }, 0);
+      // respiration lente de la photo : hors de la transition, pour ne pas la rallonger
+      gsap.fromTo(next.querySelector("[data-slide-img]"), { scale: 1.1 }, { scale: 1, duration: 4, ease: "none", overwrite: "auto" });
     },
     [],
   );
@@ -69,12 +70,15 @@ export default function HeroSlides() {
     const items = root.current!.querySelectorAll<HTMLElement>("[data-slide]");
     gsap.set(items, { autoAlpha: 0 });
     gsap.set(items[0], { autoAlpha: 1, zIndex: 2 });
-    if (!reduce.current) gsap.fromTo(items[0].querySelector("[data-slide-img]"), { scale: 1.1 }, { scale: 1, duration: 9, ease: "none" });
+    if (!reduce.current) gsap.fromTo(items[0].querySelector("[data-slide-img]"), { scale: 1.1 }, { scale: 1, duration: 4, ease: "none" });
+    // précharge les photos suivantes pour qu'elles soient prêtes à défiler toutes les 3 s
+    const warm = window.setTimeout(() => slides.slice(1).forEach((s) => Object.assign(new window.Image(), { src: s.src })), 600);
     schedule();
     return () => {
+      window.clearTimeout(warm);
       if (timer.current) window.clearTimeout(timer.current);
     };
-  }, [schedule]);
+  }, [schedule, slides]);
 
   const pick = (i: number) => {
     go(i);
@@ -82,7 +86,7 @@ export default function HeroSlides() {
   };
 
   const slide = slides[index];
-  const isProject = slide.group === "Le projet du Merkez";
+  const group = heroGroups[slide.group];
 
   return (
     <>
@@ -111,9 +115,9 @@ export default function HeroSlides() {
       {/* Légende + navigation */}
       <div className="gutter pointer-events-none absolute inset-x-0 bottom-5 z-[3] flex items-end justify-between gap-4 md:bottom-7">
         <div aria-live="polite" className="max-w-[46%] md:max-w-[40%]">
-          <p className="eyebrow flex items-center gap-2 text-[0.55rem] md:text-[0.62rem]" style={{ color: isProject ? "#c99a3e" : "#d8c3a0" }}>
-            <span aria-hidden="true" className="h-1.5 w-1.5 rotate-45" style={{ backgroundColor: isProject ? "#c99a3e" : "#d8c3a0" }} />
-            {slide.group}
+          <p className="eyebrow flex items-center gap-2 text-[0.55rem] md:text-[0.62rem]" style={{ color: group.color }}>
+            <span aria-hidden="true" className="h-1.5 w-1.5 rotate-45" style={{ backgroundColor: group.color }} />
+            {group.label}
           </p>
           <p className="mt-1.5 text-[0.62rem] leading-snug text-cream/70 md:text-xs">{slide.caption}</p>
           <span className="sr-only">{slide.alt}</span>
@@ -128,7 +132,10 @@ export default function HeroSlides() {
               aria-current={i === index ? "true" : undefined}
               className="group grid h-6 place-items-center px-0.5"
             >
-              <span className={`block h-[3px] rounded-full transition-all duration-500 ${i === index ? "w-7 bg-saffron" : "w-3 bg-cream/35 group-hover:bg-cream/70"} ${s.group === "Nos actions" && i === 5 ? "ml-2" : ""}`} />
+              <span
+                className={`block h-[3px] rounded-full transition-all duration-500 ${i === index ? "w-7" : "w-3 opacity-45 group-hover:opacity-90"}`}
+                style={{ backgroundColor: heroGroups[s.group].color }}
+              />
             </button>
           ))}
         </div>
