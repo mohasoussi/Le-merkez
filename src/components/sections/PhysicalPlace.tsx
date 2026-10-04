@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, useState } from "react";
 import { gsap, MQ, useGSAP } from "@/components/motion/gsap";
 import RevealText from "@/components/motion/RevealText";
@@ -46,6 +47,15 @@ export default function PhysicalPlace() {
           .from("[data-core-glow]", { opacity: 0, scale: 0.4, transformOrigin: "50% 50%", duration: 0.6, ease: "expo.out" }, ">-0.1")
           .from("[data-space]", { opacity: 0, x: 24, duration: 0.3, stagger: 0.05 }, desktop ? 0.9 : 0.6)
           .to({}, { duration: 0.4 });
+        gsap.utils.toArray<HTMLElement>("[data-maq]").forEach((el, i) => {
+          gsap.from(el, {
+            clipPath: i % 2 ? "inset(0% 0% 100% 0%)" : "inset(100% 0% 0% 0%)",
+            duration: 1.6,
+            ease: "expo.inOut",
+            scrollTrigger: { trigger: el, start: "top 88%", once: true },
+          });
+          gsap.fromTo(el.querySelector("img"), { scale: 1.2 }, { scale: 1.02, ease: "none", scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true } });
+        });
       });
     },
     { scope: root },
@@ -169,6 +179,37 @@ export default function PhysicalPlace() {
           <p className="mt-8 font-serif text-xl italic text-sand/90">{place.centerNote}</p>
         </div>
       </div>
+
+      {place.images.length > 0 && (
+        <div data-maquette className="gutter mx-auto max-w-[1600px] pb-28 pt-8 md:pb-40">
+          <div className="grid gap-6 md:grid-cols-12">
+            <h3 className="display text-[clamp(1.8rem,3.6vw,3.4rem)] md:col-span-6">{place.maquetteTitle}</h3>
+            <p className="text-base leading-relaxed text-cream/75 md:col-span-5 md:col-start-8 md:text-lg">{place.maquetteText}</p>
+          </div>
+          <div className="mt-10 grid gap-3 md:mt-14 md:grid-cols-12 md:gap-5">
+            {place.images.map((img, i) => (
+              <figure
+                key={img.src}
+                data-maq
+                className={`group relative overflow-hidden ${
+                  i === 0 ? "md:col-span-8 md:row-span-2" : i === 4 ? "md:col-span-12" : "md:col-span-4"
+                }`}
+              >
+                <div className={`relative ${i === 0 ? "aspect-[16/10] md:aspect-auto md:h-full md:min-h-[420px]" : i === 4 ? "aspect-[16/7]" : "aspect-[4/3]"}`}>
+                  <Image
+                    src={img.src!}
+                    alt={img.alt}
+                    fill
+                    sizes={i === 0 ? "(min-width:768px) 66vw, 100vw" : i === 4 ? "100vw" : "(min-width:768px) 33vw, 100vw"}
+                    className="object-cover transition-transform duration-[1.6s] ease-[var(--ease-silk)] group-hover:scale-[1.05]"
+                  />
+                </div>
+              </figure>
+            ))}
+          </div>
+          <p className="mt-5 text-xs text-cream/55">{place.maquetteNote}</p>
+        </div>
+      )}
     </section>
   );
 }

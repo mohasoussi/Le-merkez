@@ -24,6 +24,16 @@ export const place = {
     { label: "Activités culturelles", color: textile.olive },
     { label: "Accueil", color: textile.ochre },
   ],
-  /** Photos ou rendus du lieu, lorsqu'ils existeront. */
-  images: [] as Media[],
+  /** Maquette du projet : visualisations conceptuelles du futur lieu (aucun lieu n'est encore arrêté). */
+  maquetteTitle: "La maquette du projet",
+  maquetteText:
+    "Un lieu ouvert sur la nature, pensé comme un village de la rencontre : un bâtiment central, des yourtes pour accueillir, des jardins, des chemins qui relient les espaces.",
+  maquetteNote: "Visualisations conceptuelles — ces images illustrent l’esprit du projet, elles ne représentent pas un lieu existant.",
+  images: [
+    { src: "/images/projet/vue-aerienne.jpg", alt: "Vue aérienne du lieu : bâtiment en bois, yourtes et pavillon aux couleurs de patchwork au milieu des collines", width: 1456, height: 816 },
+    { src: "/images/projet/ensemble-pierre-bois.jpg", alt: "Vue aérienne d’un ensemble de pierre et de bois entouré de potagers", width: 1456, height: 816 },
+    { src: "/images/projet/vallee-yourte.jpg", alt: "Yourte aux motifs de patchwork, potagers et moutons dans une vallée", width: 1456, height: 816 },
+    { src: "/images/projet/jardin-potager.jpg", alt: "Yourtes, potager et clôtures de bois, des personnes se promènent dans les collines", width: 1456, height: 816 },
+    { src: "/images/projet/marche-collines.jpg", alt: "Des personnes marchent côte à côte sur un chemin de colline au coucher du soleil", width: 1344, height: 896 },
+  ] as Media[],
 };

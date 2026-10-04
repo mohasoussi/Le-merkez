@@ -79,7 +79,7 @@ export default function Button({
     { scope: ref },
   );
 
-  const cls = `group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full px-7 py-4 text-[0.7rem] font-semibold uppercase tracking-[0.22em] transition-colors duration-500 disabled:opacity-50 ${styles[variant]} ${className}`;
+  const cls = `group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full [text-shadow:none] px-7 py-4 text-[0.7rem] font-semibold uppercase tracking-[0.22em] transition-colors duration-500 disabled:opacity-50 ${styles[variant]} ${className}`;
   const inner = (
     <>
       <span

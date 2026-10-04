@@ -28,7 +28,8 @@ chaque carré = une personne, une culture, une tradition. Les fragments textiles
 
 | Section | Animation |
 | --- | --- |
-| Hero | fragments épars → ils dérivent, se rapprochent, se cousent en un emblème 3×3 → « LE MERKEZ » |
+| Hero | photos qui coulissent (le projet du Merkez, puis nos actions), avec les fragments qui s'assemblent en emblème et « LE MERKEZ » ; photos dans `heroSlides` (`home.ts`) |
+| Hero (animation) | fragments épars → ils dérivent, se rapprochent, se cousent en un emblème 3×3 → « LE MERKEZ » |
 | Transitions | lisières de tissu qui se cousent au scroll (`FragmentDivider`) |
 | Le Merkez (vision) | 35 fragments dispersés convergent en mosaïque, la phrase de vision s'écrit au centre |
 | Nos actions | défilement horizontal ; les images traversent les grands titres |
@@ -55,6 +56,7 @@ Tout le contenu est dans **`src/content/`** — pas besoin de toucher aux compos
 | `books.ts` | catalogue des ouvrages (éditions Les 7 Lectures) + sélection de l'accueil |
 | `gallery.ts` | photos de la galerie (format : portrait / landscape / square / full) |
 | `shaykh.ts` | page /le-shaykh : portrait, biographie, enseignements, conférences, vidéos, publications |
+| `events.ts` | prochain événement affiché sur la page Actualités (le plus proche dans le futur) |
 | `place.ts` | le futur lieu (espaces, textes, futures photos) |
 | `donation.ts` | montants, objectifs (montants réels uniquement), lien de don externe |
 

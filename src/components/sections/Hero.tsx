@@ -5,7 +5,8 @@ import { gsap, MQ, SplitText, useGSAP } from "@/components/motion/gsap";
 import Button from "@/components/ui/Button";
 import { emblemColors } from "@/components/ui/Emblem";
 import PatchField from "@/components/ui/PatchField";
-import { hero, verse } from "@/content/home";
+import { hero, heroSlides, verse } from "@/content/home";
+import HeroSlides from "./HeroSlides";
 import { site } from "@/content/site";
 import { makePatches, patchStyle } from "@/lib/patchwork";
 import { textile } from "@/lib/palette";
@@ -115,7 +116,8 @@ export default function Hero() {
           .from("[data-tag]", { opacity: 0, yPercent: 60, duration: 1, stagger: 0.14 }, 4.7)
           .from("[data-cta] > *", { opacity: 0, y: 24, duration: 1.1, stagger: 0.12 }, 5.1)
           .from("[data-cue]", { opacity: 0, duration: 1 }, 5.5)
-          .from("[data-glow]", { opacity: 0, duration: 3, ease: "power1.out" }, 0);
+          .from("[data-glow]", { opacity: 0, duration: 3, ease: "power1.out" }, 0)
+          .from("[data-slides]", { opacity: 0, duration: 2.6, ease: "power1.out" }, 0.4);
 
         // En quittant le hero : les fragments se décousent légèrement, le texte s'éloigne.
         const out = gsap.timeline({
@@ -125,7 +127,7 @@ export default function Hero() {
           .to("[data-content]", { yPercent: -18, opacity: 0, ease: "none" }, 0)
           .to("[data-emblem-wrap]", { scale: desktop ? 2.2 : 1.6, yPercent: -40, ease: "none" }, 0)
           .to("[data-core-wrap]", { x: (i) => ((i % 3) - 1) * 14, y: (i) => (Math.floor(i / 3) - 1) * 14, rotation: (i) => (i - 4) * 3, ease: "none" }, 0)
-          .to("[data-backdrop]", { scale: 1.15, opacity: 0.4, ease: "none" }, 0);
+          .to("[data-backdrop], [data-slides]", { scale: 1.12, opacity: 0.35, ease: "none" }, 0);
 
         return () => {
           split.revert();
@@ -167,7 +169,7 @@ export default function Hero() {
             </video>
             <div className="absolute inset-0 bg-night/60" />
           </>
-        ) : (
+        ) : heroSlides.length > 0 ? null : (
           <>
             {glows.map((g, i) => (
               <div
@@ -206,7 +208,9 @@ export default function Hero() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(20,16,12,.85)_100%)]" />
       </div>
 
-      <div data-hero-hide className="gutter relative z-[2] flex w-full flex-col items-center pb-28 pt-[calc(var(--nav-h)+1.5rem)] text-center">
+      {heroSlides.length > 0 && !hero.video.src && <HeroSlides />}
+
+      <div data-hero-hide className="gutter relative z-[2] flex w-full flex-col items-center [text-shadow:0_2px_28px_rgba(10,8,6,.65)] pb-28 pt-[calc(var(--nav-h)+1.5rem)] text-center">
         {/* Fragments + emblème */}
         <div className="relative mb-8 grid place-items-center md:mb-10" style={{ "--em": "clamp(58px, 7vw, 96px)" } as CSSProperties}>
           <div aria-hidden="true" className="absolute left-1/2 top-1/2 h-0 w-0">
