@@ -23,21 +23,27 @@ export const site = {
 export interface NavItem {
   label: string;
   href: string;
+  /** Affiché aussi comme onglet dans la barre du haut (sinon : seulement dans le menu burger). */
+  inHeader?: boolean;
   children?: { label: string; href: string }[];
 }
 
-/** Menu principal (les sous-rubriques s'ouvrent au survol sur ordinateur). */
+/**
+ * Menu complet (burger). Les entrées `inHeader` apparaissent aussi en onglets dans la barre ;
+ * leurs sous-rubriques s'ouvrent au survol.
+ */
 export const nav: NavItem[] = [
   {
-    label: "La Vision",
+    label: "Le Merkez",
     href: "/#vision",
+    inHeader: true,
     children: [
-      { label: "Le Merkez", href: "/#vision" },
+      { label: "La vision", href: "/#vision" },
       { label: "Le Shaykh", href: "/le-shaykh" },
     ],
   },
-  { label: "Actualités", href: "/actualites" },
-  { label: "Nos actions", href: "/#actions" },
+  { label: "Actualités", href: "/actualites", inHeader: true },
+  { label: "Nos actions", href: "/#actions", inHeader: true },
   { label: "Contactez-nous", href: "/#contact" },
   { label: "Ouvrages", href: "/librairie" },
 ];
@@ -46,7 +52,7 @@ export const nav: NavItem[] = [
 export const navCta = { label: "Nous soutenir", href: "/#soutenir" };
 
 export const footerLinks = [
-  { label: "Le Merkez", href: "/#vision" },
+  { label: "La vision", href: "/#vision" },
   { label: "Le Shaykh", href: "/le-shaykh" },
   { label: "Actualités", href: "/actualites" },
   { label: "Nos actions", href: "/#actions" },

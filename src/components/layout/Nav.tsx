@@ -118,7 +118,7 @@ export default function Nav() {
           </Link>
 
           <ul className="hidden items-center gap-6 lg:flex xl:gap-8">
-            {nav.map((item) => (
+            {nav.filter((n) => n.inHeader).map((item) => (
               <li key={item.label} className="group/item relative">
                 <Link
                   href={item.href}
@@ -174,7 +174,7 @@ export default function Nav() {
               aria-expanded={open}
               aria-controls="menu-mobile"
               aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
-              className="relative z-[60] grid h-10 w-10 place-items-center lg:hidden"
+              className="relative z-[60] grid h-10 w-10 place-items-center"
             >
               <span className="relative block h-3 w-6">
                 <span
@@ -197,9 +197,9 @@ export default function Nav() {
         aria-label="Menu"
         aria-hidden={!open}
         inert={!open}
-        className="invisible fixed inset-0 z-40 text-cream lg:hidden"
+        className="invisible fixed inset-0 z-40 text-cream"
       >
-        <div aria-hidden="true" className="absolute inset-0 grid grid-cols-4 grid-rows-6">
+        <div aria-hidden="true" className="absolute inset-0 grid grid-cols-4 grid-rows-6 lg:grid-cols-8 lg:grid-rows-3">
           {menuPatches.map((p) => (
             <div key={p.id} data-menu-patch style={patchStyle(p)} />
           ))}

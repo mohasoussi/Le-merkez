@@ -28,12 +28,12 @@ chaque carré = une personne, une culture, une tradition. Les fragments textiles
 
 | Section | Animation |
 | --- | --- |
-| Intro | un patchwork plein écran se coud puis se défait pour révéler le hero |
 | Hero | fragments épars → ils dérivent, se rapprochent, se cousent en un emblème 3×3 → « LE MERKEZ » |
 | Transitions | lisières de tissu qui se cousent au scroll (`FragmentDivider`) |
 | Le Merkez (vision) | 35 fragments dispersés convergent en mosaïque, la phrase de vision s'écrit au centre |
 | Nos actions | défilement horizontal ; les images traversent les grands titres |
-| En action | Rencontrer ↓ Échanger ↓ Transmettre ↓ Servir ↓ Construire |
+| En action | Rencontrer → Échanger → Transmettre → Servir → Construire, sur fond clair aux halos colorés mouvants |
+| Fil de lumière | un point lumineux descend le long d'une ligne verticale au fil du scroll (toutes les pages) |
 | Galerie | mosaïque de personnes → une seule image ; photos qui sortent de leurs cadres, parallaxe |
 | Le lieu | plan conceptuel : huit espaces cousus autour d'un centre (la même forme que l'emblème) |
 | Dons | compteur / barre de progression **uniquement** si un objectif chiffré réel est saisi |
@@ -52,7 +52,7 @@ Tout le contenu est dans **`src/content/`** — pas besoin de toucher aux compos
 | `site.ts` | titre, description, navigation, réseaux sociaux, coordonnées, affichage des étiquettes `[À FOURNIR]` |
 | `home.ts` | verset, hero (+ vidéo), phrase de vision, « en action », récit final |
 | `actions.ts` | les 5 axes **et les articles** (actions menées) par catégorie |
-| `books.ts` | catalogue de la librairie |
+| `books.ts` | catalogue des ouvrages (éditions Les 7 Lectures) + sélection de l'accueil |
 | `gallery.ts` | photos de la galerie (format : portrait / landscape / square / full) |
 | `shaykh.ts` | page /le-shaykh : portrait, biographie, enseignements, conférences, vidéos, publications |
 | `place.ts` | le futur lieu (espaces, textes, futures photos) |

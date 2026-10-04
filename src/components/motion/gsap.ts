@@ -7,6 +7,8 @@ import { SplitText } from "gsap/SplitText";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, SplitText, useGSAP);
+  // Évite les recalculs (et sauts) quand la barre d’adresse mobile apparaît / disparaît.
+  ScrollTrigger.config({ ignoreMobileResize: true });
   gsap.defaults({ ease: "expo.out", duration: 1.2 });
 }
 

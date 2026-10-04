@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { Amiri, Cormorant_Garamond, Montserrat } from "next/font/google";
 import Footer from "@/components/layout/Footer";
 import Nav from "@/components/layout/Nav";
+import ScrollLine from "@/components/layout/ScrollLine";
 import SmoothScroll from "@/components/motion/SmoothScroll";
 import { site, socials } from "@/content/site";
 import "./globals.css";
@@ -67,17 +68,13 @@ const jsonLd = {
   ],
 };
 
-/**
- * Pose la classe `js` avant le rendu (pour masquer les éléments du hero animés),
- * avec un filet de sécurité : si l'hydratation échoue, le contenu redevient visible.
- */
-const jsFlag = `document.documentElement.classList.add('js');setTimeout(function(){if(!window.__merkezReady)document.documentElement.classList.remove('js')},4000);`;
-
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fr" className={`${montserrat.variable} ${cormorant.variable} ${amiri.variable}`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: jsFlag }} />
+        <noscript>
+          <style>{`[data-hero-hide]{opacity:1!important}`}</style>
+        </noscript>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </head>
       <body>
@@ -89,6 +86,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         </a>
         <SmoothScroll />
         <Nav />
+        <ScrollLine />
         <main id="main">{children}</main>
         <Footer />
       </body>

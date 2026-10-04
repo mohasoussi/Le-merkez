@@ -24,9 +24,6 @@ export default function SmoothScroll() {
   const pathname = usePathname();
 
   useEffect(() => {
-    document.documentElement.dataset.ready = "true";
-    (window as unknown as { __merkezReady?: boolean }).__merkezReady = true;
-
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     lenis = new Lenis({ lerp: 0.085, wheelMultiplier: 0.9, anchors: false });

@@ -24,7 +24,7 @@ export default function ChapterPanel({
     <article
       data-panel
       aria-labelledby={`chapter-${action.slug}`}
-      className={`relative flex w-full shrink-0 flex-col justify-center overflow-hidden py-20 md:py-28 lg:h-[100svh] lg:w-screen lg:py-0 ${
+      className={`relative flex w-full shrink-0 flex-col justify-center overflow-hidden py-20 md:py-28 group-[.is-h]/h:h-[100svh] group-[.is-h]/h:w-screen group-[.is-h]/h:pb-12 group-[.is-h]/h:pt-[var(--nav-h)] lg:group-[.is-h]/h:py-0 ${
         light ? "bg-cream text-umber" : "text-cream"
       }`}
       style={light ? undefined : { backgroundColor: action.color }}
@@ -57,8 +57,10 @@ export default function ChapterPanel({
             {action.title}
           </h3>
           <div className={`mt-8 max-w-xl space-y-4 text-[clamp(1rem,1.2vw,1.2rem)] leading-relaxed ${light ? "text-umber/80" : "text-cream/85"}`}>
-            {action.description.map((d) => (
-              <p key={d}>{d}</p>
+            {action.description.map((d, i) => (
+              <p key={d} className={i ? "max-md:group-[.is-h]/h:hidden" : ""}>
+                {d}
+              </p>
             ))}
           </div>
           {action.objective && (
@@ -74,7 +76,7 @@ export default function ChapterPanel({
             Articles &amp; actions menées <span aria-hidden="true">→</span>
           </Link>
         </div>
-        {aside && <div className="lg:col-span-4 lg:col-start-7">{aside}</div>}
+        {aside && <div className="max-md:group-[.is-h]/h:hidden lg:col-span-4 lg:col-start-7">{aside}</div>}
       </div>
     </article>
   );

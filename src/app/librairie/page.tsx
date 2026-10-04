@@ -18,24 +18,37 @@ export default function BookstorePage() {
   return (
     <>
       <PageHeader eyebrow="Ouvrages" title={bookstore.title} intro={bookstore.text} seed={45} />
-      <section className="bg-umber py-20 text-cream md:py-28">
-        <div className="gutter mx-auto grid max-w-[1600px] gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="bg-umber pt-12">
+      <p className="gutter mx-auto max-w-[1600px] text-sm text-cream/60">
+        {books.length} ouvrages · Éditions{" "}
+        <a href={bookstore.publisher.url} target="_blank" rel="noopener noreferrer" className="text-saffron underline-offset-4 hover:underline">
+          {bookstore.publisher.name}
+        </a>
+      </p>
+      </div>
+      <section className="bg-umber pb-20 pt-10 text-cream md:pb-28">
+        <div className="gutter mx-auto grid max-w-[1600px] grid-cols-2 gap-x-5 gap-y-14 sm:gap-x-8 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {books.map((b, i) => {
             const availability = getAvailability(b);
             const price = formatPrice(b);
             return (
-              <article key={b.slug} className="group">
-                <div className="mx-auto max-w-[260px] transition-transform duration-700 ease-[var(--ease-silk)] group-hover:-translate-y-2 group-hover:-rotate-1">
-                  <BookCover book={b} index={i} sizes="(min-width:1024px) 260px, 50vw" />
+              <article key={b.slug} id={b.slug} className="group relative flex scroll-mt-28 flex-col">
+                <div className="mx-auto w-full max-w-[240px] transition-transform duration-700 ease-[var(--ease-silk)] group-hover:-translate-y-2 group-hover:-rotate-1">
+                  <BookCover book={b} index={i} sizes="(min-width:1024px) 240px, 45vw" />
                 </div>
-                <h2 className={`mt-8 text-lg font-light ${b.placeholder ? "ph-label text-sm text-cream/85" : ""}`}>{b.title}</h2>
-                <p className="mt-1 text-sm text-cream/60">{b.author ?? "[AUTEUR À AJOUTER]"}</p>
-                <p className="mt-3 text-sm leading-relaxed text-cream/70">{b.description}</p>
-                <div className="mt-5 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-                  <span className="text-sm text-cream/80">{price ?? <span className="ph-label text-cream/45">[PRIX À AJOUTER]</span>}</span>
+                <h2 className="mt-7 text-lg font-light leading-snug">{b.title}</h2>
+                {b.subtitle && <p className="mt-1 font-serif text-base italic text-cream/70">{b.subtitle}</p>}
+                {b.author && <p className="mt-2 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-saffron">{b.author}</p>}
+                <div className="mt-auto flex flex-col gap-2 pt-5">
+                  {price && <span className="text-xs text-cream/65">{price}</span>}
                   {availability.status === "external" ? (
-                    <a href={availability.href} target="_blank" rel="noopener noreferrer" className="eyebrow border-b border-saffron pb-1 text-saffron">
-                      {availability.label} →
+                    <a
+                      href={availability.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="eyebrow self-start border-b border-saffron pb-1 text-saffron after:absolute after:inset-0"
+                    >
+                      {availability.label} →<span className="sr-only"> : {b.title} (Les 7 Lectures, nouvel onglet)</span>
                     </a>
                   ) : (
                     <span className="eyebrow text-cream/45">{availability.label}</span>

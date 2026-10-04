@@ -150,17 +150,11 @@ html.lenis body {
 }
 
 /* ─────────────────────────────────────────────
-   Progressive enhancement
-   `.js` est posé par un script inline : sans JS, tout reste visible.
+   Hero : masqué jusqu'à son animation d'entrée.
+   Sans JavaScript, une règle <noscript> (layout) le rend visible.
    ───────────────────────────────────────────── */
-.js [data-hero-hide] {
+[data-hero-hide] {
   opacity: 0;
-}
-.intro {
-  display: none;
-}
-.js .intro {
-  display: grid;
 }
 
 /* Animations ambiantes en CSS (pas de JS nécessaire) */
@@ -221,10 +215,7 @@ html.lenis body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
-  .js [data-hero-hide] {
+  [data-hero-hide] {
     opacity: 1;
-  }
-  .js .intro {
-    display: none;
   }
 }
