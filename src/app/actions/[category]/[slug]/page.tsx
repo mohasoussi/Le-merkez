@@ -48,19 +48,16 @@ export default async function ArticlePage({ params }: { params: Promise<{ catego
             ))}
           </div>
           {article.photos && article.photos.length > 0 && (
-            <div className="mt-14 grid grid-cols-2 gap-3 md:gap-4">
+            <div className="mt-14 columns-2 gap-3 md:gap-4">
               {article.photos.map((ph, i) => (
-                <figure
-                  key={ph.src ?? i}
-                  className={`group relative overflow-hidden rounded-[4px] ${(ph.height ?? 0) > (ph.width ?? 1) ? "row-span-2" : ""} ${i === 0 ? "col-span-2" : ""}`}
-                >
+                <figure key={ph.src ?? i} className="group mb-3 break-inside-avoid overflow-hidden rounded-[4px] md:mb-4">
                   <Image
                     src={ph.src!}
                     alt={ph.alt}
                     width={ph.width ?? 1600}
                     height={ph.height ?? 1200}
-                    sizes={i === 0 ? "(min-width:760px) 760px, 100vw" : "(min-width:760px) 380px, 50vw"}
-                    className="h-full w-full object-cover transition-transform duration-[1.4s] ease-[var(--ease-silk)] group-hover:scale-[1.04]"
+                    sizes="(min-width:760px) 380px, 50vw"
+                    className="h-auto w-full transition-transform duration-[1.4s] ease-[var(--ease-silk)] group-hover:scale-[1.04]"
                   />
                 </figure>
               ))}

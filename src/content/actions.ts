@@ -174,6 +174,36 @@ const published: Article[] = [
   },
 ];
 
+const blueMountains = "/images/actions/retraite-blue-mountains";
+
+published.push({
+  category: "retraites-spirituelles",
+  slug: "retraite-blue-mountains-ontario",
+  title: "Retraite spirituelle dans les Blue Mountains, en Ontario",
+  date: null, // [DATE À AJOUTER] — « cet été » ; format AAAA-MM-JJ
+  location: "Blue Mountains, Ontario (Canada)",
+  excerpt:
+    "Cet été, les disciples d’Amérique du Nord ont organisé ensemble une retraite spirituelle dans les Blue Mountains, en présence du Shaykh Mohamed Faouzi al-Karkari.",
+  cover: {
+    src: `${blueMountains}/groupe-panorama.jpg`,
+    alt: "Photo de groupe des participants, beaucoup vêtus de muraqaas, sur un belvédère dominant le lac",
+    width: 1800,
+    height: 1350,
+  },
+  body: [
+    "Les disciples d’Amérique du Nord ont conjointement organisé cet été une retraite spirituelle dans les Blue Mountains, en Ontario (Canada). Chercheurs spirituels, étudiants, érudits, amis et proches venus du monde entier se sont rassemblés pour apprendre, prier et invoquer Dieu en présence du Shaykh Mohamed Faouzi al-Karkari.",
+    "Loin du rythme du quotidien, cette retraite a offert un véritable temps de recueillement au cœur de la nature : assemblées de transmission en plein air autour du Shaykh, moments d’invocation partagés, échanges en petits cercles et haltes face aux vastes paysages de la région.",
+    "Venus d’horizons, de cultures et de parcours différents, les participants ont vécu ensemble l’apprentissage, la prière et le souvenir de Dieu. Beaucoup portaient la muraqaa, ce vêtement fait de pièces de tissu assemblées qui exprime à lui seul l’esprit du Merkez : des histoires différentes, réunies dans un même vêtement.",
+    "Cette retraite s’inscrit pleinement dans la vocation du Merkez : créer des espaces où l’on apprend à se connaître, où la spiritualité se vit ensemble, et où les liens tissés se prolongent bien au-delà du temps de la rencontre.",
+  ],
+  photos: [
+    { src: `${blueMountains}/cercle.jpg`, alt: "Assemblée en cercle sur l’herbe autour du Shaykh, vue d’en haut", width: 922, height: 1152 },
+    { src: `${blueMountains}/soeurs.jpg`, alt: "Participantes réunies devant l’entrée des Blue Mountains, plusieurs en muraqaa", width: 1350, height: 1800 },
+    { src: `${blueMountains}/chalet.jpg`, alt: "Échange en petit cercle dans un chalet en bois ouvert sur la forêt", width: 1229, height: 1536 },
+    { src: `${blueMountains}/invocation.jpg`, alt: "Participantes en invocation, mains ouvertes, dans une salle baignée de lumière", width: 922, height: 1152 },
+  ],
+});
+
 /** Modèles de démonstration pour les catégories encore vides (non indexés). À supprimer au fur et à mesure. */
 const templates: Article[] = actions.map((a) => ({
   category: a.slug,
