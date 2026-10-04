@@ -5,7 +5,7 @@ import { books, bookstore } from "@/content/books";
 import { formatPrice, getAvailability } from "@/lib/commerce";
 
 export const metadata: Metadata = {
-  title: "Librairie",
+  title: "Ouvrages",
   description: bookstore.text,
   alternates: { canonical: "/librairie" },
 };
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default function BookstorePage() {
   return (
     <>
-      <PageHeader eyebrow="Librairie" title={bookstore.title} intro={bookstore.text} seed={45} />
+      <PageHeader eyebrow="Ouvrages" title={bookstore.title} intro={bookstore.text} seed={45} />
       <section className="bg-umber py-20 text-cream md:py-28">
         <div className="gutter mx-auto grid max-w-[1600px] gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-4">
           {books.map((b, i) => {

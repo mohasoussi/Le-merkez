@@ -47,7 +47,7 @@ export const books: Book[] = [
 ];
 
 export const bookstore = {
-  eyebrow: "05 — Librairie",
+  eyebrow: "Ouvrages",
   title: "Des livres pour prolonger la rencontre",
   text: "Transmettre, c’est aussi écrire, lire et partager. La librairie du Merkez rassemble des ouvrages pour approfondir le chemin.",
   cta: { label: "Découvrir les livres", href: "/librairie" },

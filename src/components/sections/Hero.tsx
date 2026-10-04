@@ -12,6 +12,7 @@ import { textile } from "@/lib/palette";
 
 const core = makePatches(9, 11).map((p, i) => ({ ...p, color: emblemColors[i], pattern: i === 4 ? ("plain" as const) : p.pattern }));
 const shards = makePatches(18, 29);
+const introPatches = makePatches(40, 53);
 const glows = [
   { c: textile.madder, x: "12%", y: "22%", s: "48vmax", d: "22s" },
   { c: textile.indigo, x: "82%", y: "18%", s: "52vmax", d: "26s" },
@@ -59,7 +60,25 @@ export default function Hero() {
           opacity: 0,
         });
 
-        const tl = gsap.timeline({ delay: 0.25, defaults: { ease: "expo.out" } });
+        // 0. Intro : un patchwork plein écran se coud, puis se défait pour révéler le hero.
+        const intro = gsap.timeline({ defaults: { ease: "expo.inOut" } });
+        intro
+          .from("[data-intro-patch]", { scale: 0, duration: 0.7, stagger: { each: 0.012, from: "random" } })
+          .from("[data-intro-mark]", { opacity: 0, y: 12, duration: 0.5, ease: "power2.out" }, 0.45)
+          .to("[data-intro-mark]", { opacity: 0, duration: 0.3, ease: "power2.in" }, 1.15)
+          .to(
+            "[data-intro-patch]",
+            {
+              scaleY: 0,
+              transformOrigin: (i: number) => (i % 2 ? "50% 0%" : "50% 100%"),
+              duration: 0.75,
+              stagger: { each: 0.012, from: "center", grid: "auto" },
+            },
+            1.2,
+          )
+          .set("[data-intro]", { display: "none" });
+
+        const tl = gsap.timeline({ delay: 1.75, defaults: { ease: "expo.out" } });
         tl.set("[data-hero-hide]", { opacity: 1 })
           // 1. la diversité : des fragments épars apparaissent
           .to(pieces, { opacity: 1, duration: 1.2, ease: "power2.out", stagger: { each: 0.04, from: "random" } }, 0)
@@ -117,6 +136,7 @@ export default function Hero() {
       });
 
       mm.add(MQ.reduce, () => {
+        gsap.set("[data-intro]", { display: "none" });
         gsap.set("[data-hero-hide]", { opacity: 1 });
         gsap.set("[data-shard]", { opacity: 0 });
       });
@@ -131,6 +151,16 @@ export default function Hero() {
       aria-labelledby="hero-title"
       className="grain relative isolate flex min-h-[100svh] items-center justify-center overflow-hidden bg-night text-cream"
     >
+      {/* Intro patchwork (affichée uniquement avec JS, avant le hero) */}
+      <div data-intro aria-hidden="true" className="intro fixed inset-0 z-[70] grid-cols-5 grid-rows-8 bg-night md:grid-cols-8 md:grid-rows-5">
+        {introPatches.map((p) => (
+          <span key={p.id} data-intro-patch className="block" style={patchStyle(p)} />
+        ))}
+        <span data-intro-mark className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-night px-6 py-4 text-[0.75rem] font-semibold uppercase tracking-[0.5em] text-cream shadow-2xl">
+          Le Merkez
+        </span>
+      </div>
+
       {/* Fond : vidéo si fournie, sinon composition textile animée */}
       <div data-backdrop className="absolute inset-0 -z-10">
         {hero.video.src ? (

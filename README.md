@@ -28,13 +28,11 @@ chaque carré = une personne, une culture, une tradition. Les fragments textiles
 
 | Section | Animation |
 | --- | --- |
+| Intro | un patchwork plein écran se coud puis se défait pour révéler le hero |
 | Hero | fragments épars → ils dérivent, se rapprochent, se cousent en un emblème 3×3 → « LE MERKEZ » |
 | Transitions | lisières de tissu qui se cousent au scroll (`FragmentDivider`) |
-| Vision | 35 fragments dispersés convergent en mosaïque, la phrase centrale apparaît |
-| Convergence | « rencontre » en 12 langues vient de toutes les directions → **RENCONTRE** |
-| Muraqaa | l'image est composée de 80 fragments qui se joignent ; zoom puis 3 zones mises en évidence |
-| Nos actions | cartes qui réagissent à la souris (inclinaison, reflet, parallaxe), déploiement au survol |
-| Axes | défilement horizontal ; les images traversent les grands titres |
+| Le Merkez (vision) | 35 fragments dispersés convergent en mosaïque, la phrase de vision s'écrit au centre |
+| Nos actions | défilement horizontal ; les images traversent les grands titres |
 | En action | Rencontrer ↓ Échanger ↓ Transmettre ↓ Servir ↓ Construire |
 | Galerie | mosaïque de personnes → une seule image ; photos qui sortent de leurs cadres, parallaxe |
 | Le lieu | plan conceptuel : huit espaces cousus autour d'un centre (la même forme que l'emblème) |
@@ -52,11 +50,11 @@ Tout le contenu est dans **`src/content/`** — pas besoin de toucher aux compos
 | Fichier | Contenu |
 | --- | --- |
 | `site.ts` | titre, description, navigation, réseaux sociaux, coordonnées, affichage des étiquettes `[À FOURNIR]` |
-| `home.ts` | verset, hero (+ vidéo), vision, convergence, muraqaa (photo + zones), « en action », récit final |
+| `home.ts` | verset, hero (+ vidéo), phrase de vision, « en action », récit final |
 | `actions.ts` | les 5 axes **et les articles** (actions menées) par catégorie |
 | `books.ts` | catalogue de la librairie |
 | `gallery.ts` | photos de la galerie (format : portrait / landscape / square / full) |
-| `shaykh.ts` | portrait, biographie, enseignements, conférences, vidéos, publications |
+| `shaykh.ts` | page /le-shaykh : portrait, biographie, enseignements, conférences, vidéos, publications |
 | `place.ts` | le futur lieu (espaces, textes, futures photos) |
 | `donation.ts` | montants, objectifs (montants réels uniquement), lien de don externe |
 
@@ -65,8 +63,6 @@ Déposer les fichiers dans `public/images/…` ou `public/videos/…`, puis rens
 Tant que `src` vaut `null`, un visuel textile avec une étiquette `[PHOTO À FOURNIR]` est affiché.
 Pour masquer toutes les étiquettes : `showPlaceholderLabels: false` dans `site.ts`.
 
-- **Photo de la muraqaa** : `home.ts → muraqaa.image`. Elle est automatiquement découpée en fragments.
-  Ajuster ensuite `muraqaa.focus` (zones mises en évidence, en %) et, si besoin, la palette.
 - **Vidéo du hero** : `home.ts → hero.video` (mp4 + webm optionnel + poster). Prévoir ~10–20 s, ≤ 6 Mo.
 - **Palette** : `src/lib/palette.ts` et `@theme` dans `src/app/globals.css` (à affiner d'après la photo).
 
@@ -139,7 +135,7 @@ src/
   components/
     layout/               Nav, Footer, FragmentDivider, PageHeader
     motion/               gsap (plugins + media queries), SmoothScroll (Lenis), RevealText
-    sections/             Hero, Vision, Convergence, Muraqaa, Activities, ActionChapters,
+    sections/             Hero, InAction, Vision, ActionChapters,
                           chapters/{Interfaith,Retreats,Conferences,Humanitarian}, ArticlesBoard,
                           Books, InAction, Gallery, PhysicalPlace, Shaykh, Donation
     ui/                   Button, Photo, PatchField, Emblem, BookCover, ArticleCard, SectionHeading

@@ -14,7 +14,7 @@ const tabKeys = Object.keys(shaykh.tabs) as TabKey[];
  * SOUS LA DIRECTION DU SHAYKH — portrait, biographie, enseignements, conférences, vidéos, publications.
  * Aucune information n'est inventée : tout provient de src/content/shaykh.ts.
  */
-export default function Shaykh() {
+export default function Shaykh({ headingAs = "h2" }: { headingAs?: "h1" | "h2" }) {
   const root = useRef<HTMLElement>(null);
   const [tab, setTab] = useState<TabKey>(tabKeys[0]);
 
@@ -46,7 +46,7 @@ export default function Shaykh() {
   };
 
   return (
-    <section ref={root} id="shaykh" aria-labelledby="shaykh-title" className="relative bg-linen py-28 text-umber md:py-40">
+    <section ref={root} id="shaykh" aria-labelledby="shaykh-title" className="relative bg-linen pb-28 pt-[calc(var(--nav-h)+4rem)] text-umber md:pb-40 md:pt-[calc(var(--nav-h)+6rem)]">
       <div className="gutter mx-auto grid max-w-[1600px] gap-14 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-5">
           <div data-portrait className="relative aspect-[4/5] overflow-hidden lg:sticky lg:top-28">
@@ -61,7 +61,7 @@ export default function Shaykh() {
             <span aria-hidden="true" className="stitch inline-block w-10" />
             {shaykh.eyebrow}
           </p>
-          <RevealText as="h2" id="shaykh-title" className="display text-[clamp(2.1rem,4.4vw,4.2rem)]">
+          <RevealText as={headingAs} id="shaykh-title" className="display text-[clamp(2.1rem,4.4vw,4.2rem)]">
             {shaykh.title}
           </RevealText>
 

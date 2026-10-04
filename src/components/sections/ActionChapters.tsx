@@ -54,7 +54,7 @@ export default function ActionChapters() {
   );
 
   return (
-    <section ref={root} aria-label="Les axes en détail" className="relative overflow-hidden bg-night">
+    <section ref={root} id="actions" aria-label="Nos actions" className="relative overflow-hidden bg-night">
       <div data-track className="flex flex-col lg:h-[100svh] lg:w-max lg:flex-row">
         <Interfaith />
         <Retreats />

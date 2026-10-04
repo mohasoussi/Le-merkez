@@ -20,26 +20,43 @@ export const site = {
   showPlaceholderLabels: true,
 };
 
-export const nav = [
-  { label: "Vision", href: "/#vision" },
-  { label: "Muraqaa", href: "/#muraqaa" },
-  { label: "Nos actions", href: "/#actions" },
-  { label: "Le Shaykh", href: "/#shaykh" },
+export interface NavItem {
+  label: string;
+  href: string;
+  children?: { label: string; href: string }[];
+}
+
+/** Menu principal (les sous-rubriques s'ouvrent au survol sur ordinateur). */
+export const nav: NavItem[] = [
+  {
+    label: "La Vision",
+    href: "/#vision",
+    children: [
+      { label: "Le Merkez", href: "/#vision" },
+      { label: "Le Shaykh", href: "/le-shaykh" },
+    ],
+  },
   { label: "Actualités", href: "/actualites" },
-  { label: "Librairie", href: "/librairie" },
-  { label: "Soutenir", href: "/#soutenir" },
+  { label: "Nos actions", href: "/#actions" },
+  { label: "Contactez-nous", href: "/#contact" },
+  { label: "Ouvrages", href: "/librairie" },
 ];
 
+/** Bouton permanent de la navigation. */
+export const navCta = { label: "Nous soutenir", href: "/#soutenir" };
+
 export const footerLinks = [
-  { label: "Vision", href: "/#vision" },
+  { label: "Le Merkez", href: "/#vision" },
+  { label: "Le Shaykh", href: "/le-shaykh" },
+  { label: "Actualités", href: "/actualites" },
   { label: "Nos actions", href: "/#actions" },
   { label: "Rencontres", href: "/actions/rencontres-interreligieuses" },
   { label: "Retraites", href: "/actions/retraites-spirituelles" },
   { label: "Conférences", href: "/actions/conferences-tables-rondes" },
   { label: "Humanitaire", href: "/actions/actions-humanitaires" },
-  { label: "Librairie", href: "/librairie" },
-  { label: "Soutenir", href: "/#soutenir" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Ouvrages", href: "/librairie" },
+  { label: "Nous soutenir", href: "/#soutenir" },
+  { label: "Contactez-nous", href: "/#contact" },
 ];
 
 /** Réseaux sociaux — `href: null` tant que l'URL n'est pas fournie. */

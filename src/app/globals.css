@@ -156,6 +156,12 @@ html.lenis body {
 .js [data-hero-hide] {
   opacity: 0;
 }
+.intro {
+  display: none;
+}
+.js .intro {
+  display: grid;
+}
 
 /* Animations ambiantes en CSS (pas de JS nécessaire) */
 @keyframes drift {
@@ -217,5 +223,8 @@ html.lenis body {
   }
   .js [data-hero-hide] {
     opacity: 1;
+  }
+  .js .intro {
+    display: none;
   }
 }
