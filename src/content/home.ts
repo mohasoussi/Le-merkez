@@ -75,6 +75,20 @@ export const heroSlides: HeroSlide[] = [
   { src: "/images/retraites/marche.jpg", alt: "Marche en forêt, vêtus de muraqaas aux carrés de tissu colorés", group: "retraite", caption: "Retraite spirituelle", position: "50% 62%" },
 ];
 
+/**
+ * Vidéo affichée sous le hero, dans un cadre en patchwork.
+ * `youtubeId` : l'identifiant dans le lien (youtu.be/XXXXXXXXXXX). Laisser vide pour masquer la section.
+ */
+export const film = {
+  youtubeId: "PGJgaHGDcS8",
+  url: "https://youtu.be/PGJgaHGDcS8",
+  eyebrow: "En vidéo",
+  /** Titre du lecteur (accessibilité) — à préciser quand le titre de la vidéo est confirmé. */
+  title: "Vidéo du Merkez",
+  /** Légende facultative sous le cadre. */
+  caption: null as string | null,
+};
+
 export const vision = {
   /** Phrase écrite au cœur du patchwork qui se constitue (seul texte de la section). */
   statement:
