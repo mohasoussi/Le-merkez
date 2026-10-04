@@ -5,13 +5,10 @@ import { gsap, MQ, useGSAP } from "@/components/motion/gsap";
 import { threadIcons } from "@/content/home";
 import { seeded } from "@/lib/patchwork";
 
-const W = 1200;
-const BASE = 128; // hauteur du fil
-const COLS = threadIcons.length;
-const cx = (i: number) => ((i + 0.5) * W) / COLS;
+type IconId = (typeof threadIcons)[number]["id"];
 
 /** Icônes tracées au trait, centrées en x = 0, posées sur le fil (y = 0 = niveau du fil). */
-const icons: Record<(typeof threadIcons)[number]["id"], string[]> = {
+const icons: Record<IconId, string[]> = {
   spiritualite: ["M-24 0 V-42 Q-24 -66 0 -70 Q24 -66 24 -42 V0", "M0 -30 l6 7 l-6 7 l-6 -7 z"],
   rencontre: [
     "M-14 -57 m-9 0 a9 9 0 1 0 18 0 a9 9 0 1 0 -18 0",
@@ -31,119 +28,101 @@ const icons: Record<(typeof threadIcons)[number]["id"], string[]> = {
     "M0 -38 Q16 -42 20 -56 Q6 -54 0 -38",
     "M0 -70 Q-7 -80 0 -88 Q7 -80 0 -70",
   ],
-  solidaires: [
-    "M0 -38 C-26 -58 -12 -84 0 -70 C12 -84 26 -58 0 -38 Z",
-    "M-34 -8 Q-34 16 0 16 Q34 16 34 -8",
-    "M-34 -8 L-46 -14",
-    "M34 -8 L46 -14",
-    "M-18 2 Q0 9 18 2",
-  ],
+  solidaires: ["M0 -38 C-26 -58 -12 -84 0 -70 C12 -84 26 -58 0 -38 Z", "M-34 -8 Q-34 16 0 16 Q34 16 34 -8", "M-34 -8 L-46 -14", "M34 -8 L46 -14", "M-18 2 Q0 9 18 2"],
 };
 
-/** Fil principal : ondule doucement et passe par la base de chaque icône. */
+const THREAD = "#f0dfba"; // fil de jute clair (lisible sur les photos du hero)
+const TWIST = "#fffaf0";
+
+/** Fil principal : une longue ondulation douce qui traverse tout l'écran (gauche → droite). */
 function wavePath() {
   const r = seeded(17);
-  let d = `M-10 ${BASE + 2}`;
-  for (let i = 0; i <= COLS; i++) {
-    const x1 = i === 0 ? 0 : cx(i - 1);
-    const x2 = i === COLS ? W + 10 : cx(i);
-    const mid = (x1 + x2) / 2;
-    d += ` Q${mid} ${BASE + (i % 2 ? -9 : 9) + (r() - 0.5) * 4} ${x2} ${BASE}`;
+  const base = 92;
+  let d = `M-20 ${base + 3}`;
+  const n = 14;
+  for (let i = 1; i <= n; i++) {
+    const x = (1240 * i) / n - 20;
+    const prev = (1240 * (i - 0.5)) / n - 20;
+    d += ` Q${prev} ${base + (i % 2 ? -6 : 6) + (r() - 0.5) * 3} ${x} ${base + (r() - 0.5) * 2}`;
   }
   return d;
 }
-
-/** Bord de bande de tissu cousue : haut et bas effilochés. */
-function hem(seed: number, side: "top" | "bottom") {
-  const r = seeded(seed);
-  const pts: string[] = [];
-  for (let x = 0; x <= 100; x += 1.4) pts.push(`${x.toFixed(1)}% ${(r() * 2.6 + 0.6).toFixed(2)}${"%"}`);
-  const edge = pts.map((p) => p);
-  return edge;
-}
-const topEdge = hem(2, "top");
-const bottomEdge = (() => {
-  const r = seeded(9);
-  const pts: string[] = [];
-  for (let x = 100; x >= 0; x -= 1.4) pts.push(`${x.toFixed(1)}% ${(100 - (r() * 2.6 + 0.6)).toFixed(2)}%`);
-  return pts;
-})();
-const clip = `polygon(${[...topEdge, ...bottomEdge].join(", ")})`;
+const WAVE = wavePath();
 
 /**
- * LE FIL — une bande de lin cousue sous le hero ; un fil de jute ondule et dessine, au passage,
- * sept icônes : spiritualité, rencontre, transmission, retraite, livres, nature, actions solidaires.
+ * LE FIL — en haut du hero, juste sous la barre de navigation : un fil de jute traverse l'écran de gauche
+ * à droite et dessine sept icônes (spiritualité, rencontre, transmission, retraite, livres, nature,
+ * actions solidaires). Sans fond ; s'adapte à la largeur (ordinateur comme téléphone).
  */
 export default function ThreadLine() {
-  const root = useRef<HTMLElement>(null);
-  const path = wavePath();
+  const root = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
       mm.add(`${MQ.desktop}, ${MQ.mobile}`, () => {
-        const tl = gsap.timeline({ scrollTrigger: { trigger: root.current, start: "top 80%", once: true } });
-        tl.fromTo("[data-wave]", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 2.6, ease: "power1.inOut" }, 0)
-          .fromTo("[data-twist]", { opacity: 0 }, { opacity: 0.75, duration: 1.4, ease: "none" }, 1.6);
+        const tl = gsap.timeline({ delay: 0.9 });
+        tl.fromTo("[data-wave]", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 2.8, ease: "power1.inOut" }, 0).fromTo(
+          "[data-twist]",
+          { opacity: 0 },
+          { opacity: 0.8, duration: 1.4, ease: "none" },
+          1.8,
+        );
         threadIcons.forEach((_, i) => {
-          const at = 0.25 + i * 0.3;
-          tl.fromTo(`[data-icon="${i}"] [data-stroke]`, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.1, ease: "power2.inOut", stagger: 0.12 }, at)
-            .fromTo(`[data-label="${i}"]`, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.9, ease: "expo.out" }, at + 0.5);
+          const at = 0.35 + i * 0.32;
+          tl.fromTo(`[data-icon="${i}"] [data-stroke]`, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.1, ease: "power2.inOut", stagger: 0.1 }, at).fromTo(
+            `[data-label="${i}"]`,
+            { opacity: 0, y: 8 },
+            { opacity: 1, y: 0, duration: 0.9, ease: "expo.out" },
+            at + 0.5,
+          );
         });
+        // le fil s'efface quand le hero s'éloigne
+        gsap.to(root.current, { opacity: 0, ease: "none", scrollTrigger: { trigger: root.current, start: "top top+=20", end: "+=240", scrub: true } });
       });
     },
     { scope: root },
   );
 
   return (
-    <section ref={root} id="fil" aria-labelledby="fil-title" className="relative bg-night py-10 md:py-14">
-      <h2 id="fil-title" className="sr-only">
-        Les fils du Merkez : {threadIcons.map((t) => t.label).join(", ")}
-      </h2>
+    <div ref={root} data-thread-root className="pointer-events-none absolute inset-x-0 top-[calc(var(--nav-h)+0.25rem)] z-[3] [--h:clamp(40px,5.4vw,78px)]" aria-label={`Les fils du Merkez : ${threadIcons.map((t) => t.label).join(", ")}`} role="img">
+      {/* grain de jute : filtre partagé par tous les tracés */}
+      <svg width="0" height="0" aria-hidden="true" className="absolute">
+        <defs>
+          <filter id="rope" x="-5%" y="-20%" width="110%" height="140%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="4" result="n" />
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="3.2" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+      </svg>
 
-      {/* bande de lin cousue (haut et bas effilochés) */}
-      <div className="linen relative" style={{ clipPath: clip }}>
-        <span aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-30 mix-blend-multiply" style={{ backgroundImage: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .4  0 0 0 0 .3  0 0 0 0 .2  0 0 0 .8 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")" }} />
-        {/* coutures du haut et du bas */}
-        <span aria-hidden="true" className="stitch pointer-events-none absolute inset-x-0 top-3 text-[#a98a5c]/70" />
-        <span aria-hidden="true" className="stitch pointer-events-none absolute inset-x-0 bottom-3 text-[#a98a5c]/70" />
+      <div className="relative [filter:drop-shadow(0_2px_6px_rgba(10,8,6,.55))]">
+        {/* le fil : toute la largeur de l'écran */}
+        <svg viewBox="0 0 1200 112" preserveAspectRatio="none" aria-hidden="true" className="absolute inset-x-0 top-0 block h-[var(--h)] w-full overflow-visible">
+          <g filter="url(#rope)" fill="none" strokeLinecap="round">
+            <path data-wave d={WAVE} pathLength={1} stroke={THREAD} strokeWidth="5" strokeDasharray="1" />
+            <path data-twist d={WAVE} stroke={TWIST} strokeWidth="1.6" strokeDasharray="2 6" opacity="0.8" />
+          </g>
+        </svg>
 
-        <div className="relative mx-auto max-w-[1240px] overflow-x-auto px-[var(--gutter)] py-12 md:overflow-visible md:py-16 [scrollbar-width:none]">
-          <div className="min-w-[820px]">
-            <svg viewBox={`0 0 ${W} ${BASE + 18}`} role="presentation" aria-hidden="true" className="block h-auto w-full overflow-visible">
-              <defs>
-                {/* bord irrégulier : le trait ressemble à un fil, pas à une ligne vectorielle */}
-                <filter id="rope" x="-5%" y="-20%" width="110%" height="140%">
-                  <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="4" result="n" />
-                  <feDisplacementMap in="SourceGraphic" in2="n" scale="3.4" xChannelSelector="R" yChannelSelector="G" />
-                </filter>
-              </defs>
-              <g filter="url(#rope)" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                {/* fil de jute : trait épais + brins plus clairs torsadés */}
-                <path data-wave d={path} pathLength={1} stroke="#a9885c" strokeWidth="4.6" strokeDasharray="1" />
-                <path data-twist d={path} stroke="#e6d2ab" strokeWidth="1.5" strokeDasharray="2 5" opacity="0.75" />
-                {threadIcons.map((t, i) => (
-                  <g key={t.id} data-icon={i} transform={`translate(${cx(i)} ${BASE})`}>
-                    {icons[t.id].map((d, k) => (
-                      <path key={k} data-stroke d={d} pathLength={1} stroke="#a9885c" strokeWidth="3.6" strokeDasharray="1" />
-                    ))}
-                  </g>
-                ))}
-              </g>
-            </svg>
-            <ul className="mt-5 grid grid-cols-7 text-center">
-              {threadIcons.map((t, i) => (
-                <li key={t.id} data-label={i} className="px-1 text-[clamp(0.78rem,1.35vw,1.2rem)] leading-tight text-[#7d6240]">
-                  {t.label}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <p aria-hidden="true" className="eyebrow pb-5 text-center text-[0.58rem] text-[#a98a5c] md:hidden">
-          Faites glisser le fil →
-        </p>
+        {/* icônes + libellés : 7 colonnes égales, centrées sur la largeur (au plus 1000 px) */}
+        <ul className="relative mx-auto grid max-w-[1000px] grid-cols-7 px-1">
+          {threadIcons.map((t, i) => (
+            <li key={t.id} className="flex flex-col items-center">
+              <svg viewBox="-52 -92 104 112" aria-hidden="true" data-icon={i} className="block h-[var(--h)] w-auto overflow-visible">
+                <g filter="url(#rope)" fill="none" strokeLinecap="round" strokeLinejoin="round" stroke={THREAD} strokeWidth="4.8">
+                  {icons[t.id].map((d, k) => (
+                    <path key={k} data-stroke d={d} pathLength={1} strokeDasharray="1" />
+                  ))}
+                </g>
+              </svg>
+              <span data-label={i} className="mt-1 text-center text-[clamp(0.48rem,1.25vw,1.05rem)] font-light leading-[1.1] tracking-[-0.02em] sm:tracking-[0.01em] text-cream/90 [text-shadow:0_1px_8px_rgba(10,8,6,.8)]">
+                {t.label}
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
-    </section>
+    </div>
   );
 }

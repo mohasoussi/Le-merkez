@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { gsap, MQ, useGSAP } from "@/components/motion/gsap";
+import { gsap, MQ, setImmersive, useGSAP } from "@/components/motion/gsap";
 import { film } from "@/content/home";
 import { makePatches, patchStyle, seeded } from "@/lib/patchwork";
 
@@ -37,18 +37,40 @@ export default function FilmFrame() {
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
-      mm.add(`${MQ.desktop}, ${MQ.mobile}`, () => {
-        const tl = gsap.timeline({ scrollTrigger: { trigger: root.current, start: "top 80%", once: true } });
-        tl.from("[data-film-tile]", {
-          x: () => gsap.utils.random(-120, 120),
-          y: () => gsap.utils.random(-90, 90),
-          rotation: () => gsap.utils.random(-80, 80),
-          scale: 0.2,
-          opacity: 0,
-          duration: 1.5,
-          ease: "expo.out",
+      mm.add({ desktop: MQ.desktop, mobile: MQ.mobile }, (ctx) => {
+        const { desktop } = ctx.conditions as { desktop: boolean };
+        const k = desktop ? 1 : 0.55;
+        const rnd = seeded(31);
+        const tiles = gsap.utils.toArray<HTMLElement>("[data-film-tile]");
+        const scatter = tiles.map(() => ({ x: (rnd() - 0.5) * 120, y: (rnd() - 0.5) * 100, r: (rnd() - 0.5) * 150, s: 0.4 + rnd() * 0.9 }));
+        const section = root.current!;
+        if (desktop) section.classList.add("is-pinned");
+
+        // Même effet que la mosaïque de la vision : des fragments épars se rapprochent et se cousent
+        // autour de la vidéo, puis le lecteur s'ouvre au centre.
+        const tl = gsap.timeline({
+          scrollTrigger: desktop
+            ? { trigger: section, start: "top top", end: "+=140%", scrub: 1, pin: true, onToggle: (self) => setImmersive(self.isActive) }
+            : { trigger: "[data-film-frame]", start: "top 92%", end: "center 50%", scrub: 1 },
+        });
+        tl.from(tiles, {
+          x: (i) => `${scatter[i].x * k}vw`,
+          y: (i) => `${scatter[i].y * k}vh`,
+          rotation: (i) => scatter[i].r,
+          scale: (i) => scatter[i].s,
+          opacity: 0.3,
+          ease: "power3.inOut",
           stagger: { each: 0.012, from: "random" },
-        }).from("[data-film-box]", { scale: 0.86, opacity: 0, duration: 1.3, ease: "expo.out" }, 0.25);
+        })
+          .from("[data-film-bg]", { opacity: 0, ease: "none", duration: 0.4 }, 0.6)
+          .from("[data-film-box]", { clipPath: "inset(50% 50% 50% 50%)", ease: "expo.inOut", duration: 0.6 }, ">-0.2")
+          .from("[data-film-text]", { opacity: 0, y: 16, stagger: 0.1, duration: 0.3 }, ">-0.3")
+          .to({}, { duration: desktop ? 0.4 : 0.05 });
+
+        return () => {
+          setImmersive(false);
+          section.classList.remove("is-pinned");
+        };
       });
     },
     { scope: root },
@@ -67,15 +89,17 @@ export default function FilmFrame() {
   );
 
   return (
-    <section ref={root} aria-label={film.title} className="relative bg-night px-[var(--gutter)] py-16 text-cream md:py-24">
-      <div className="mx-auto max-w-[1180px]">
-        <p className="eyebrow mb-6 flex items-center gap-4 text-saffron">
+    <section ref={root} aria-label={film.title} className="group/film relative overflow-hidden bg-night px-[var(--gutter)] py-16 text-cream md:py-24 group-[.is-pinned]/film:py-0">
+      <div className="mx-auto flex max-w-[min(1180px,calc(1.6*(100svh-10rem)))] flex-col justify-center group-[.is-pinned]/film:h-[100svh] max-md:max-w-[1180px]">
+        <p data-film-text className="eyebrow mb-6 flex items-center gap-4 text-saffron">
           <span aria-hidden="true" className="stitch inline-block w-10" />
           {film.eyebrow}
         </p>
 
         {/* Cadre en patchwork */}
-        <div className="linen relative p-[3px] [--t:clamp(22px,4.6vw,60px)]" style={{ filter: "drop-shadow(0 30px 50px rgba(0,0,0,.6))", backgroundColor: "#4a3626" }}>
+        <div data-film-frame className="relative p-[3px] [--t:clamp(22px,4.6vw,60px)]" style={{ filter: "drop-shadow(0 30px 50px rgba(0,0,0,.6))" }}>
+          {/* toile de fond sur laquelle les pièces se cousent */}
+          <span data-film-bg aria-hidden="true" className="linen absolute inset-0" style={{ backgroundColor: "#4a3626" }} />
           <div aria-hidden="true" className="flex h-[var(--t)]">
             {top.map(tile)}
           </div>
@@ -125,7 +149,7 @@ export default function FilmFrame() {
           </div>
         </div>
 
-        <p className="mt-5 flex flex-wrap items-center justify-between gap-3 text-xs text-cream/55">
+        <p data-film-text className="mt-5 flex flex-wrap items-center justify-between gap-3 text-xs text-cream/55">
           <span>{film.caption}</span>
           <a href={film.url} target="_blank" rel="noopener noreferrer" className="underline-offset-4 hover:text-cream hover:underline">
             Voir sur YouTube ↗

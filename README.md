@@ -29,8 +29,8 @@ chaque carré = une personne, une culture, une tradition. Les fragments textiles
 | Section | Animation |
 | --- | --- |
 | Les gestes | cinq bandes de tissu (Rencontrer, Se retrouver, Transmettre, Servir, Cultiver) qui se déroulent au scroll, photo à droite (`fabricBands` dans `home.ts`) |
-| Le fil | bande de lin cousue sous le hero ; un fil de jute dessine 7 icônes (spiritualité, rencontre, transmission, retraite, livres, nature, actions solidaires) — `threadIcons` dans `home.ts` |
-| Vidéo | un lecteur YouTube serti dans un cadre en patchwork, sous le hero (`film` dans `home.ts`) |
+| Le fil | en haut du hero, sous la barre de navigation : un fil de jute traverse l'écran et dessine 7 icônes (spiritualité, rencontre, transmission, retraite, livres, nature, actions solidaires) — `threadIcons` dans `home.ts` |
+| Vidéo | un lecteur YouTube serti dans un cadre en patchwork : les fragments dispersés convergent au scroll (même effet que la mosaïque), puis le lecteur s'ouvre (`film` dans `home.ts`) |
 | Hero | photos qui coulissent (le projet du Merkez, puis nos actions), avec les fragments qui s'assemblent en emblème et « LE MERKEZ » ; photos dans `heroSlides` (`home.ts`) |
 | Hero (animation) | fragments épars → ils dérivent, se rapprochent, se cousent en un emblème 3×3 → « LE MERKEZ » |
 | Transitions | lisières de tissu qui se cousent au scroll (`FragmentDivider`) |

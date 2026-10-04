@@ -7,6 +7,7 @@ import { emblemColors } from "@/components/ui/Emblem";
 import PatchField from "@/components/ui/PatchField";
 import { hero, heroSlides, verse } from "@/content/home";
 import HeroSlides from "./HeroSlides";
+import ThreadLine from "./ThreadLine";
 import { site } from "@/content/site";
 import { makePatches, patchStyle } from "@/lib/patchwork";
 import { textile } from "@/lib/palette";
@@ -210,7 +211,10 @@ export default function Hero() {
 
       {heroSlides.length > 0 && !hero.video.src && <HeroSlides />}
 
-      <div data-hero-hide className="gutter relative z-[2] flex w-full flex-col items-center [text-shadow:0_2px_28px_rgba(10,8,6,.65)] pb-28 pt-[calc(var(--nav-h)+1.5rem)] text-center">
+      {/* Le fil du Merkez : sous la barre de navigation, au-dessus du contenu du hero */}
+      <ThreadLine />
+
+      <div data-hero-hide className="gutter relative z-[2] flex w-full flex-col items-center [text-shadow:0_2px_28px_rgba(10,8,6,.65)] pb-28 pt-[calc(var(--nav-h)+6.5rem)] text-center md:pt-[calc(var(--nav-h)+8rem)]">
         {/* Fragments + emblème */}
         <div className="relative mb-8 grid place-items-center md:mb-10" style={{ "--em": "clamp(58px, 7vw, 96px)" } as CSSProperties}>
           <div aria-hidden="true" className="absolute left-1/2 top-1/2 h-0 w-0">
