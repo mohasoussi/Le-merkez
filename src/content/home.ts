@@ -149,6 +149,17 @@ export const fabricBands: FabricBand[] = [
   },
 ];
 
+/** Fil brodé sous le hero : sept icônes et leurs libellés (de gauche à droite). */
+export const threadIcons = [
+  { id: "spiritualite", label: "Spiritualité" },
+  { id: "rencontre", label: "Rencontre" },
+  { id: "transmission", label: "Transmission" },
+  { id: "retraite", label: "Retraite" },
+  { id: "livres", label: "Livres" },
+  { id: "nature", label: "Nature" },
+  { id: "solidaires", label: "Actions solidaires" },
+] as const;
+
 export const vision = {
   /** Phrase écrite au cœur du patchwork qui se constitue (seul texte de la section). */
   statement:

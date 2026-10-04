@@ -8,6 +8,7 @@ import Gallery from "@/components/sections/Gallery";
 import Hero from "@/components/sections/Hero";
 import InAction from "@/components/sections/InAction";
 import PhysicalPlace from "@/components/sections/PhysicalPlace";
+import ThreadLine from "@/components/sections/ThreadLine";
 import Vision from "@/components/sections/Vision";
 
 /**
@@ -19,6 +20,7 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <ThreadLine />
       <FilmFrame />
       <FragmentDivider from="var(--color-night)" to="var(--color-cream)" seed={3} />
       <InAction />
