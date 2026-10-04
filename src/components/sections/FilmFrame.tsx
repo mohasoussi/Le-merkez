@@ -44,14 +44,13 @@ export default function FilmFrame() {
         const tiles = gsap.utils.toArray<HTMLElement>("[data-film-tile]");
         const scatter = tiles.map(() => ({ x: (rnd() - 0.5) * 120, y: (rnd() - 0.5) * 100, r: (rnd() - 0.5) * 150, s: 0.4 + rnd() * 0.9 }));
         const section = root.current!;
-        if (desktop) section.classList.add("is-pinned");
+        section.classList.add("is-pinned");
 
         // Même effet que la mosaïque de la vision : des fragments épars se rapprochent et se cousent
         // autour de la vidéo, puis le lecteur s'ouvre au centre.
         const tl = gsap.timeline({
-          scrollTrigger: desktop
-            ? { trigger: section, start: "top top", end: "+=140%", scrub: 1, pin: true, onToggle: (self) => setImmersive(self.isActive) }
-            : { trigger: "[data-film-frame]", start: "top 92%", end: "center 50%", scrub: 1 },
+          // épinglée aussi sur téléphone : l'assemblage reste visible pendant que l'on fait défiler
+          scrollTrigger: { trigger: section, start: "top top", end: desktop ? "+=140%" : "+=120%", scrub: 1, pin: true, onToggle: (self) => setImmersive(self.isActive) },
         });
         tl.from(tiles, {
           x: (i) => `${scatter[i].x * k}vw`,

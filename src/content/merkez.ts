@@ -18,9 +18,8 @@ export const merkezPage = {
 
   existence: {
     eyebrow: "Il existe déjà",
-    title: "Le Merkez n’attend pas un bâtiment",
+    title: "Le Merkez vit en chacun de nous",
     text: [
-      "Mais le Merkez n’attend pas la construction d’un bâtiment pour exister. Il existe à travers les retraites spirituelles organisées, les rencontres interreligieuses, les conférences, les tables rondes, les actions solidaires, les visites, les initiatives culturelles et toutes les rencontres qui permettent à des personnes d’horizons différents de se retrouver.",
       "Aujourd’hui, le Merkez est une réalité immatérielle. Demain, cette réalité se matérialisera dans des lieux dédiés à ces activités.",
     ],
     emphasis: ["Les murs ne créent pas le Merkez.", "Ils donnent un lieu à ce qui existe déjà."],
@@ -36,6 +35,12 @@ export const merkezPage = {
       "Dans un monde marqué par les discours de division, de séparation et de fracture, le Merkez crée des espaces où la rencontre redevient possible. Des espaces où l’on se parle. Des espaces où l’on s’écoute. Des espaces où l’on découvre l’autre pour mieux le connaître. Des espaces où les différences peuvent coexister et être une occasion de se découvrir.",
     ],
     emphasis: "Le Merkez crée des ponts là où d’autres construisent des frontières.",
+    photo: {
+      src: "/images/vision/accolade.jpg",
+      alt: "Un homme âgé en cardigan bleu serre dans ses bras une personne vêtue d’un vêtement rapiécé aux carrés de couleurs vives",
+      width: 1080,
+      height: 1440,
+    } as Media,
   },
 
   light: {
@@ -75,6 +80,7 @@ export const merkezPage = {
     items: [
       {
         word: "Rencontrer",
+        photo: { src: "/images/actions/rencontre-abbaye-de-fleury/jardin.jpg", alt: "Fuqaras en muraqaa et moines bénédictins réunis dans le parc de l’abbaye de Fleury", position: "50% 28%" },
         subtitle: "Rencontres interreligieuses et interculturelles",
         color: "#efe6d3",
         ink: "#4a3324",
@@ -87,6 +93,7 @@ export const merkezPage = {
       },
       {
         word: "Se retrouver",
+        photo: { src: "/images/retraites/flute.jpg", alt: "Un participant joue de la flûte traversière près d’une baie vitrée pendant une retraite" },
         subtitle: "Retraites spirituelles",
         color: "#d8c3a0",
         ink: "#7a4a1d",
@@ -100,6 +107,7 @@ export const merkezPage = {
       },
       {
         word: "Transmettre",
+        photo: { src: "/images/actions/assises-fraternelles/shaykh-parole.jpg", alt: "Le Shaykh Mohamed Faouzi Al Karkari prend la parole au micro, au centre d’un cercle de participants", position: "50% 18%" },
         subtitle: "Conférences et tables rondes",
         color: "#6e1b21",
         ink: "#f4ecdd",
@@ -113,6 +121,7 @@ export const merkezPage = {
       },
       {
         word: "Servir",
+        photo: { src: null, alt: "Action solidaire", placeholder: "[PHOTO À FOURNIR — Action solidaire]" },
         subtitle: "Des actions tournées vers l’humain",
         color: "#1f4a36",
         ink: "#f4ecdd",
@@ -126,6 +135,7 @@ export const merkezPage = {
       },
       {
         word: "Cultiver",
+        photo: { src: null, alt: "Nature, permaculture, plantation d’oliviers", placeholder: "[PHOTO À FOURNIR — Nature, permaculture]" },
         subtitle: "La terre comme espace de transmission",
         color: "#14233f",
         ink: "#f4ecdd",

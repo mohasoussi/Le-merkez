@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { gsap, useGSAP } from "@/components/motion/gsap";
 import Emblem from "@/components/ui/Emblem";
+import { scrollToTarget } from "@/components/motion/SmoothScroll";
 import { joinCta, nav, navCta, type NavItem } from "@/content/site";
 import { makePatches, patchStyle } from "@/lib/patchwork";
 
@@ -119,6 +120,15 @@ export default function Nav() {
     if (path === "" || path === "/") return hash ? pathname === "/" && active === hash : pathname === "/";
     return pathname === path || pathname.startsWith(`${path}/`);
   };
+  /** Sur l'accueil, « Le Merkez » ramène tout en haut ; ailleurs, le lien normal mène à l'accueil. */
+  const goHome = (e: React.MouseEvent) => {
+    setOpen(false);
+    if (pathname === "/") {
+      e.preventDefault();
+      scrollToTarget("#top");
+      history.replaceState(null, "", "/");
+    }
+  };
   const itemActive = (item: NavItem) => isActive(item.href) || Boolean(item.children?.some((c) => isActive(c.href)));
   const solid = (scrolled || lightTopPages.includes(pathname)) && !open;
 
@@ -130,8 +140,8 @@ export default function Nav() {
         } ${solid ? "border-b border-cream/10 bg-night/55 backdrop-blur-xl" : "border-b border-transparent"}`}
       >
         <nav aria-label="Navigation principale" className="gutter mx-auto flex h-[var(--nav-h)] items-center justify-between gap-6 text-cream">
-          <Link href="/" className="group flex items-center gap-3" aria-label="Le Merkez — accueil">
-            <Emblem size={26} className="transition-transform duration-700 ease-[var(--ease-silk)] group-hover:rotate-90" />
+          <Link href="/" onClick={goHome} className="group flex items-center gap-3" aria-label="Le Merkez — accueil">
+            <Emblem size={24} className="transition-transform duration-700 ease-[var(--ease-silk)] group-hover:rotate-90" />
             <span className="whitespace-nowrap text-[0.72rem] font-semibold uppercase tracking-[0.3em] sm:text-[0.8rem] sm:tracking-[0.38em]">Le Merkez</span>
           </Link>
 
@@ -140,6 +150,7 @@ export default function Nav() {
               <li key={item.label} className="group/item relative">
                 <Link
                   href={item.href}
+                  onClick={item.href === "/" ? goHome : undefined}
                   aria-current={itemActive(item) ? "true" : undefined}
                   aria-haspopup={item.children ? "true" : undefined}
                   className="group relative flex items-center gap-1.5 py-2 text-[0.68rem] font-medium uppercase tracking-[0.2em] text-cream/75 transition-colors hover:text-cream aria-[current]:text-cream"
@@ -182,17 +193,11 @@ export default function Nav() {
               href={joinCta.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden whitespace-nowrap rounded-full border border-cream/45 px-5 py-2.5 text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-cream transition-colors duration-500 hover:border-cream hover:bg-cream hover:text-night xl:inline-block"
-            >
-              {joinCta.label}
-            </a>
-            <Link
-              href={navCta.href}
               className="whitespace-nowrap rounded-full bg-saffron px-4 py-2.5 text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-night transition-colors duration-500 hover:bg-cream sm:px-5"
             >
-              <span className="sm:hidden">Soutenir</span>
-              <span className="max-sm:hidden">{navCta.label}</span>
-            </Link>
+              <span className="sm:hidden">Rejoindre</span>
+              <span className="max-sm:hidden">{joinCta.label}</span>
+            </a>
             <button
               ref={burgerRef}
               type="button"
@@ -266,15 +271,14 @@ export default function Nav() {
             ))}
           </ul>
           <div className="flex flex-col">
-          <a
+          <Link
             data-menu-foot
-            href={joinCta.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mb-6 inline-flex items-center justify-center gap-3 self-start rounded-full border border-cream/45 px-7 py-4 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-cream"
+            href={navCta.href}
+            onClick={() => setOpen(false)}
+            className="mb-6 inline-flex items-center justify-center gap-3 self-start rounded-full bg-saffron px-7 py-4 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-night"
           >
-            {joinCta.label} <span aria-hidden="true">↗</span>
-          </a>
+            {navCta.label} <span aria-hidden="true">→</span>
+          </Link>
           <p data-menu-foot className="font-serif text-lg italic text-cream/70">
             « Afin que vous vous connaissiez. »
           </p>

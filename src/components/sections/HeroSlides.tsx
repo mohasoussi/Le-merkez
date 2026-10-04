@@ -114,7 +114,7 @@ export default function HeroSlides() {
 
       {/* Légende + navigation */}
       <div className="gutter pointer-events-none absolute inset-x-0 bottom-5 z-[3] flex items-end justify-between gap-4 md:bottom-7">
-        <div aria-live="polite" className="max-w-[46%] md:max-w-[40%]">
+        <div aria-live="polite" className="max-w-[46%] md:max-w-[40%] [@media(max-height:700px)]:invisible">
           <p className="eyebrow flex items-center gap-2 text-[0.55rem] md:text-[0.62rem]" style={{ color: group.color }}>
             <span aria-hidden="true" className="h-1.5 w-1.5 rotate-45" style={{ backgroundColor: group.color }} />
             {group.label}

@@ -36,7 +36,6 @@ chaque carré = une personne, une culture, une tradition. Les fragments textiles
 | Transitions | lisières de tissu qui se cousent au scroll (`FragmentDivider`) |
 | Le Merkez (vision) | 35 fragments dispersés convergent en mosaïque, la phrase de vision s'écrit au centre |
 | Nos actions | défilement horizontal ; les images traversent les grands titres |
-| En action | Rencontrer → Échanger → Transmettre → Servir → Construire, sur fond clair aux halos colorés mouvants |
 | Fil de lumière | un point lumineux descend le long d'une ligne verticale au fil du scroll (toutes les pages) |
 | Galerie | mosaïque de personnes → une seule image ; photos qui sortent de leurs cadres, parallaxe |
 | Le lieu | plan conceptuel : huit espaces cousus autour d'un centre (la même forme que l'emblème) |
@@ -142,9 +141,9 @@ src/
   components/
     layout/               Nav, Footer, FragmentDivider, PageHeader
     motion/               gsap (plugins + media queries), SmoothScroll (Lenis), RevealText
-    sections/             Hero, InAction, Vision, ActionChapters,
+    sections/             Hero, Vision, ActionChapters,
                           chapters/{Interfaith,Retreats,Conferences,Humanitarian}, ArticlesBoard,
-                          Books, InAction, Gallery, PhysicalPlace, Shaykh, Donation
+                          Books, Gallery, PhysicalPlace, Shaykh, Donation
     ui/                   Button, Photo, PatchField, Emblem, BookCover, ArticleCard, SectionHeading
   content/                ← tout le contenu modifiable
   lib/                    palette, patchwork, payments/, commerce, format

@@ -149,7 +149,7 @@ export default function Hero() {
       ref={root}
       id="top"
       aria-labelledby="hero-title"
-      className="grain relative isolate flex min-h-[100svh] items-center justify-center overflow-hidden bg-night text-cream"
+      className="grain relative isolate flex h-[100svh] min-h-[600px] items-center justify-center overflow-hidden bg-night text-cream"
     >
       {/* Fond : vidéo si fournie, sinon composition textile animée */}
       <div data-backdrop className="absolute inset-0 -z-10">
@@ -214,9 +214,9 @@ export default function Hero() {
       {/* Le fil du Merkez : sous la barre de navigation, au-dessus du contenu du hero */}
       <ThreadLine />
 
-      <div data-hero-hide className="gutter relative z-[2] flex w-full flex-col items-center [text-shadow:0_2px_28px_rgba(10,8,6,.65)] pb-28 pt-[calc(var(--nav-h)+6.5rem)] text-center md:pt-[calc(var(--nav-h)+8rem)]">
+      <div data-hero-hide className="gutter relative z-[2] flex w-full flex-col items-center [text-shadow:0_2px_28px_rgba(10,8,6,.65)] pb-[clamp(4.75rem,12vh,7.5rem)] pt-[calc(var(--nav-h)+clamp(4.4rem,13vh,8rem))] text-center">
         {/* Fragments + emblème */}
-        <div className="relative mb-8 grid place-items-center md:mb-10" style={{ "--em": "clamp(58px, 7vw, 96px)" } as CSSProperties}>
+        <div className="relative mb-[clamp(.6rem,2.4vh,2.5rem)] grid place-items-center" style={{ "--em": "clamp(44px, min(7vw, 9vh), 96px)" } as CSSProperties}>
           <div aria-hidden="true" className="absolute left-1/2 top-1/2 h-0 w-0">
             {shards.map((p, i) => (
               <span
@@ -242,17 +242,17 @@ export default function Hero() {
           <h1
             id="hero-title"
             data-title
-            className="pl-[0.3em] text-[clamp(2.4rem,9vw,7.6rem)] font-extralight uppercase leading-none tracking-[0.3em]"
+            className="pl-[0.3em] text-[clamp(2.2rem,min(9vw,13vh),7.6rem)] font-extralight uppercase leading-none tracking-[0.3em]"
           >
             {hero.title}
           </h1>
-          <span data-seam aria-hidden="true" className="stitch mt-7 block w-[min(420px,70vw)] text-saffron/70" />
+          <span data-seam aria-hidden="true" className="stitch mt-[clamp(.9rem,2.6vh,1.75rem)] block w-[min(420px,70vw)] text-saffron/70" />
 
-          <blockquote className="mt-7 max-w-3xl">
-            <p data-verse className="font-serif text-[clamp(1.25rem,2.4vw,2rem)] font-light italic leading-snug text-cream/90">
+          <blockquote className="mt-[clamp(.9rem,2.6vh,1.75rem)] max-w-3xl">
+            <p data-verse className="font-serif text-[clamp(1.1rem,min(2.4vw,3.3vh),2rem)] font-light italic leading-snug text-cream/90">
               « {verse.short} »
             </p>
-            <footer className="mt-4 flex flex-col items-center gap-2">
+            <footer className="mt-3 flex flex-col items-center gap-2 [@media(max-height:790px)]:hidden">
               <span data-arabic lang="ar" dir="rtl" className="font-arabic text-lg text-saffron/90 md:text-xl">
                 {verse.ar}
               </span>
@@ -262,7 +262,7 @@ export default function Hero() {
             </footer>
           </blockquote>
 
-          <p className="mt-8 flex flex-wrap justify-center gap-x-5 gap-y-1 text-[0.72rem] font-medium uppercase tracking-[0.28em] text-cream/85 md:text-xs">
+          <p className="mt-[clamp(.9rem,3vh,2rem)] flex flex-wrap justify-center gap-x-5 gap-y-1 text-[0.72rem] font-medium uppercase tracking-[0.28em] text-cream/85 md:text-xs">
             {hero.tagline.map((t) => (
               <span key={t} data-tag className="inline-block">
                 {t}
@@ -270,7 +270,7 @@ export default function Hero() {
             ))}
           </p>
 
-          <div data-cta className="mt-9 flex flex-col items-center gap-4 sm:flex-row">
+          <div data-cta className="mt-[clamp(1rem,3.4vh,2.25rem)] flex flex-col items-center gap-3 sm:flex-row sm:gap-4">
             <Button href={hero.primaryCta.href} variant="glass">
               {hero.primaryCta.label}
             </Button>
@@ -285,7 +285,7 @@ export default function Hero() {
         href="#vision"
         data-hero-hide
         aria-label="Faire défiler vers la vision"
-        className="absolute bottom-6 left-1/2 z-[2] flex -translate-x-1/2 flex-col items-center gap-3 text-cream/60"
+        className="absolute bottom-6 left-1/2 z-[2] flex -translate-x-1/2 flex-col items-center gap-3 text-cream/60 [@media(max-height:860px)]:hidden"
       >
         <span data-cue className="flex flex-col items-center gap-3">
           <span className="eyebrow text-[0.6rem]">Défiler</span>

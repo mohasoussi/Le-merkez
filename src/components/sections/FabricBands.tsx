@@ -6,23 +6,8 @@ import { gsap, MQ, setImmersive, useGSAP } from "@/components/motion/gsap";
 import Photo from "@/components/ui/Photo";
 import { fabricBands, type FabricBand } from "@/content/home";
 import { featuredBooks } from "@/content/books";
+import { frayedEdge, noise, weave } from "@/lib/fabric";
 import { seeded } from "@/lib/patchwork";
-
-/** Bord effiloché : polygone irrégulier le long du bord droit du tissu. */
-function frayedEdge(seed: number, base: number, amp: number) {
-  const rnd = seeded(seed);
-  const pts: string[] = ["0% 0%"];
-  for (let y = 0; y <= 100; y += 2.5) pts.push(`${(base + rnd() * amp).toFixed(2)}% ${y}%`);
-  pts.push("0% 100%");
-  return `polygon(${pts.join(", ")})`;
-}
-
-const weave: CSSProperties = {
-  backgroundImage:
-    "repeating-linear-gradient(0deg, rgba(0,0,0,.075) 0 1px, transparent 1px 3px), repeating-linear-gradient(90deg, rgba(255,255,255,.055) 0 1px, transparent 1px 3px)",
-};
-const noise =
-  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")";
 
 /** Fil cousu : ligne ondulée en pointillés qui se dessine. */
 function Thread({ color, seed }: { color: string; seed: number }) {

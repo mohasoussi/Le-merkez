@@ -35,16 +35,15 @@ export interface NavItem {
 export const nav: NavItem[] = [
   {
     label: "Le Merkez",
-    href: "/le-merkez",
+    href: "/",
     inHeader: true,
     children: [
       { label: "Le projet", href: "/le-merkez" },
-      { label: "Le futur lieu", href: "/le-futur-lieu" },
       { label: "Le Shaykh", href: "/le-shaykh" },
     ],
   },
   { label: "Actualités", href: "/actualites", inHeader: true },
-  { label: "Nos actions", href: "/#actions", inHeader: true },
+  { label: "Nos actions", href: "/actions", inHeader: true },
   { label: "Contactez-nous", href: "/#contact" },
   { label: "Ouvrages", href: "/librairie" },
 ];
@@ -60,7 +59,7 @@ export const footerLinks = [
   { label: "Le futur lieu", href: "/le-futur-lieu" },
   { label: "Le Shaykh", href: "/le-shaykh" },
   { label: "Actualités", href: "/actualites" },
-  { label: "Nos actions", href: "/#actions" },
+  { label: "Nos actions", href: "/actions" },
   { label: "Rencontres", href: "/actions/rencontres-interreligieuses" },
   { label: "Retraites", href: "/actions/retraites-spirituelles" },
   { label: "Conférences", href: "/actions/conferences-tables-rondes" },

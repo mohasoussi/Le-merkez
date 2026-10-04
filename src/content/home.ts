@@ -168,17 +168,6 @@ export const vision = {
 
 
 
-export const inAction = {
-  eyebrow: "Le Merkez en action",
-  intro: "Le Merkez n’est pas uniquement une idée. C’est un projet qui vit sur le terrain.",
-  steps: [
-    { word: "Rencontrer", line: "Aller vers l’autre, au-delà de ce qui sépare." },
-    { word: "Échanger", line: "Écouter, parler, apprendre les uns des autres." },
-    { word: "Transmettre", line: "Partager un savoir, une expérience, une sagesse." },
-    { word: "Servir", line: "Se mettre au service de ceux qui en ont besoin." },
-    { word: "Construire", line: "Bâtir ensemble des liens durables et un lieu commun." },
-  ],
-};
 
 /** Le récit du site, rappelé en clôture. */
 export const story = [

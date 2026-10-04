@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import PageHeader from "@/components/layout/PageHeader";
 import Reveal from "@/components/motion/Reveal";
 import RevealText from "@/components/motion/RevealText";
 import WordCascade from "@/components/motion/WordCascade";
+import FabricStory, { type StoryItem } from "@/components/sections/FabricStory";
 import Button from "@/components/ui/Button";
 import { merkezPage as c } from "@/content/merkez";
 
@@ -16,10 +16,6 @@ export const metadata: Metadata = {
 };
 
 const sectionTitle = "display text-[clamp(2.1rem,4.6vw,4.4rem)]";
-const weave = {
-  backgroundImage:
-    "repeating-linear-gradient(0deg, rgba(0,0,0,.075) 0 1px, transparent 1px 3px), repeating-linear-gradient(90deg, rgba(255,255,255,.055) 0 1px, transparent 1px 3px)",
-};
 
 function Eyebrow({ children, className = "text-madder" }: { children: React.ReactNode; className?: string }) {
   return (
@@ -68,11 +64,11 @@ export default function MerkezPage() {
                 </footer>
               </blockquote>
             </Reveal>
-            <ol className="mt-6 grid grid-cols-2 gap-px bg-umber/15 sm:grid-cols-5">
-              {c.existence.steps.map((s, i) => (
-                <li key={s} className="bg-cream px-3 py-5 text-center">
-                  <span className="block text-[0.6rem] font-semibold tracking-[0.2em] text-madder">0{i + 1}</span>
-                  <span className="mt-2 block text-[0.68rem] font-semibold uppercase tracking-[0.16em]">{s}</span>
+            <ol className="mt-6 flex flex-wrap gap-2">
+              {c.existence.steps.map((st, i) => (
+                <li key={st} className="flex items-center gap-3 border border-umber/20 bg-cream px-4 py-3">
+                  <span className="text-[0.6rem] font-semibold tracking-[0.2em] text-madder">0{i + 1}</span>
+                  <span className="whitespace-nowrap text-[0.68rem] font-semibold uppercase tracking-[0.16em]">{st}</span>
                 </li>
               ))}
             </ol>
@@ -88,8 +84,11 @@ export default function MerkezPage() {
             <RevealText as="h2" className={sectionTitle}>
               {c.vision.title}
             </RevealText>
+            <Reveal mode="clip" parallax className="relative mt-12 aspect-[3/4] w-full max-w-[460px] overflow-hidden shadow-[0_30px_60px_-30px_rgba(20,16,12,.5)]">
+              <Image src={c.vision.photo.src!} alt={c.vision.photo.alt} fill sizes="(min-width:1024px) 460px, 90vw" className="object-cover object-[50%_30%]" />
+            </Reveal>
           </div>
-          <div className="space-y-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-umber/85 lg:col-span-6 lg:col-start-7">
+          <div className="space-y-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-umber/85 lg:col-span-6 lg:col-start-7 lg:pt-6">
             {c.vision.text.map((t) => (
               <RevealText key={t}>{t}</RevealText>
             ))}
@@ -155,7 +154,7 @@ export default function MerkezPage() {
         </div>
       </section>
 
-      {/* 5 — Le Merkez en action */}
+      {/* 5 — Le Merkez en action : bandes de tissu rapiécé */}
       <section id="action" className="relative bg-night text-cream">
         <div className="gutter mx-auto max-w-[1600px] pb-14 pt-24 md:pt-36">
           <Eyebrow className="text-saffron">{c.action.eyebrow}</Eyebrow>
@@ -163,89 +162,47 @@ export default function MerkezPage() {
             {c.action.title}
           </RevealText>
         </div>
-        <div>
-          {c.action.items.map((it, i) => (
-            <article key={it.word} className="relative grid overflow-hidden md:grid-cols-12" aria-labelledby={`g-${i}`}>
-              {/* tissu */}
-              <div className="relative p-8 md:col-span-5 md:p-12 lg:p-16" style={{ background: it.color, color: it.ink, ...weave }}>
-                <span aria-hidden="true" className="absolute inset-y-0 right-0 w-px" style={{ borderRight: `2px dashed ${it.thread}` }} />
-                <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px" style={{ borderBottom: `2px dashed ${it.thread}` }} />
-                <Reveal className="md:sticky md:top-28">
-                  <p className="text-[0.65rem] font-semibold tracking-[0.3em] opacity-70">0{i + 1}</p>
-                  <h3 id={`g-${i}`} className="mt-3 text-[clamp(1.9rem,4vw,3.6rem)] font-semibold uppercase leading-[0.98] tracking-[0.02em]">
-                    {it.word}
-                  </h3>
-                  <p className="mt-3 max-w-[26ch] text-lg leading-snug opacity-85">{it.subtitle}</p>
-                </Reveal>
-              </div>
-              {/* texte */}
-              <div className="bg-night p-8 md:col-span-7 md:p-12 lg:p-16">
-                <div className="max-w-2xl space-y-5 text-[clamp(1.05rem,1.25vw,1.2rem)] leading-relaxed text-cream/85">
-                  {it.text.map((t) => (
-                    <RevealText key={t}>{t}</RevealText>
-                  ))}
-                  {"list" in it && it.list && (
-                    <Reveal>
-                      <ul className="grid gap-x-8 gap-y-2 sm:grid-cols-2">
-                        {it.list.map((l) => (
-                          <li key={l} className="flex items-center gap-3 border-b border-cream/15 py-2.5 text-base">
-                            <span aria-hidden="true" className="h-1.5 w-1.5 rotate-45 bg-saffron" />
-                            {l}
-                          </li>
-                        ))}
-                      </ul>
-                    </Reveal>
-                  )}
-                  {"after" in it && it.after && <RevealText>{it.after}</RevealText>}
-                  {"motto" in it && it.motto && (
-                    <Reveal className="!mt-8 border-l-2 pl-5 font-serif text-[clamp(1.25rem,1.9vw,1.7rem)] italic leading-snug" >
-                      <span style={{ borderColor: it.thread }} className="block text-sand">
-                        {it.motto}
-                      </span>
-                    </Reveal>
-                  )}
-                  {it.href && (
-                    <p className="!mt-8">
-                      <Link href={it.href} className="inline-flex items-center gap-3 border-b border-saffron pb-1 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-saffron">
-                        {it.hrefLabel} <span aria-hidden="true">→</span>
-                      </Link>
-                    </p>
-                  )}
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
+        <FabricStory items={c.action.items as StoryItem[]} />
       </section>
 
       {/* 6 — De l'espace immatériel à l'espace physique */}
       <section id="espace-physique" className="grain relative overflow-hidden bg-moss py-24 text-cream md:py-36">
         <div className="gutter mx-auto max-w-[1600px]">
           <Eyebrow className="text-saffron">{c.bridge.eyebrow}</Eyebrow>
-          <div className="grid gap-8 lg:grid-cols-12">
-            <RevealText as="h2" className={`${sectionTitle} lg:col-span-7`}>
-              {c.bridge.title}
-            </RevealText>
-            <div className="space-y-5 text-lg leading-relaxed text-cream/85 lg:col-span-5 lg:col-start-8">
+          <RevealText as="h2" className={`${sectionTitle} max-w-5xl`}>
+            {c.bridge.title}
+          </RevealText>
+
+          <div className="mt-14 grid gap-12 lg:grid-cols-12 lg:gap-16">
+            {/* Le texte */}
+            <div className="space-y-6 text-[clamp(1.05rem,1.3vw,1.3rem)] leading-relaxed text-cream/85 lg:col-span-5">
               {c.bridge.text.map((t) => (
                 <RevealText key={t}>{t}</RevealText>
               ))}
-              <RevealText className="font-serif text-2xl italic text-sand">{c.bridge.exists}</RevealText>
+              <Reveal className="!mt-8 border-l-2 border-saffron pl-5 font-serif text-[clamp(1.5rem,2.4vw,2.2rem)] italic leading-snug text-sand">{c.bridge.exists}</Reveal>
               <RevealText>{c.bridge.next}</RevealText>
+            </div>
+
+            {/* Les « Un lieu de… » */}
+            <div className="lg:col-span-6 lg:col-start-7">
+              <WordCascade
+                lines={c.bridge.places}
+                className="divide-y divide-cream/15 border-y border-cream/15"
+                lineClassName="py-3.5 text-[clamp(1.2rem,2.1vw,1.9rem)] font-light leading-tight md:py-4"
+              />
             </div>
           </div>
 
-          <WordCascade lines={c.bridge.places} className="mt-16 space-y-1" lineClassName="text-[clamp(1.6rem,4.2vw,3.8rem)] font-extralight uppercase leading-[1.05] tracking-[0.02em]" />
-
-          <div className="mt-14 grid gap-3 md:grid-cols-12 md:gap-5">
-            {c.bridge.photos.map((ph, i) => (
-              <Reveal key={ph.src} mode="clip" parallax className={`relative overflow-hidden ${i === 0 ? "aspect-[16/10] md:col-span-8 md:row-span-2 md:aspect-auto md:min-h-[420px]" : i === 3 ? "aspect-[4/3] md:col-span-12 md:aspect-[16/6]" : "aspect-[4/3] md:col-span-4"}`}>
-                <Image src={ph.src!} alt={ph.alt} fill sizes={i === 0 ? "(min-width:768px) 66vw, 100vw" : i === 3 ? "100vw" : "(min-width:768px) 33vw, 100vw"} className="object-cover" />
+          {/* Les maquettes : grille régulière */}
+          <div className="mt-20 grid grid-cols-1 gap-3 sm:grid-cols-2 md:gap-5">
+            {c.bridge.photos.map((ph) => (
+              <Reveal key={ph.src} mode="clip" parallax className="relative aspect-[16/10] overflow-hidden">
+                <Image src={ph.src!} alt={ph.alt} fill sizes="(min-width:640px) 50vw, 100vw" className="object-cover" />
               </Reveal>
             ))}
           </div>
-          <p className="mt-5 text-xs text-cream/60">{c.bridge.note}</p>
-          <div className="mt-10">
+          <div className="mt-5 flex flex-col justify-between gap-6 sm:flex-row sm:items-center">
+            <p className="max-w-xl text-xs text-cream/60">{c.bridge.note}</p>
             <Button href={c.bridge.cta.href} variant="glass">
               {c.bridge.cta.label}
             </Button>
