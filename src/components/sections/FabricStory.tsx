@@ -73,7 +73,7 @@ export default function FabricStory({ items }: { items: StoryItem[] }) {
 
             {/* Tissu */}
             <div data-st-fabric className="relative z-[2] order-1 md:w-[64%] md:[clip-path:var(--clip)]" style={{ background: it.color, color: it.ink, ...weave }}>
-              <span aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.28] mix-blend-multiply" style={{ backgroundImage: noise }} />
+              <span aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.16]" style={{ backgroundImage: noise }} />
               {/* pièce brodée à gauche, cousue par une ligne pointillée verticale */}
               <div aria-hidden="true" className="absolute inset-y-0 left-0 w-[6%] min-w-6 md:w-[8%]" style={{ background: "rgba(0,0,0,.14)", borderRight: `2px dashed ${it.thread}` }}>
                 <svg className="absolute inset-0 h-full w-full opacity-60" preserveAspectRatio="none">

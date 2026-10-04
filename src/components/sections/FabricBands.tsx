@@ -52,7 +52,7 @@ function Band({ band, index }: { band: FabricBand; index: number }) {
 
       {/* Tissu */}
       <div data-fabric className="absolute inset-y-0 left-0 z-[2] w-[60%]" style={{ background: band.color, clipPath: edge, ...weave }}>
-        <span aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.28] mix-blend-multiply" style={{ backgroundImage: noise }} />
+        <span aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.16]" style={{ backgroundImage: noise }} />
         {/* pièce brodée à gauche, cousue par une ligne pointillée verticale */}
         <div aria-hidden="true" className="absolute inset-y-0 left-0 w-[11%]" style={{ background: "rgba(0,0,0,.14)", borderRight: `2px dashed ${band.thread}` }}>
           <svg className="absolute inset-0 h-full w-full opacity-60" preserveAspectRatio="none">

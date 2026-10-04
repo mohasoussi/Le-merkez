@@ -7,7 +7,7 @@ import { gsap, useGSAP } from "@/components/motion/gsap";
 type Variant = "glass" | "solid" | "outline" | "dark";
 
 const styles: Record<Variant, string> = {
-  glass: "glass text-cream",
+  glass: "glass-blur text-cream",
   solid: "bg-saffron text-night border border-saffron",
   outline: "border border-current text-current",
   dark: "bg-night text-cream border border-night",

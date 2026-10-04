@@ -9,15 +9,6 @@ const TOP = 20;
 const SIDE = 10;
 const patches = makePatches(TOP * 2 + SIDE * 2, 83);
 
-/** Bord de pièce de tissu : quatre côtés légèrement irréguliers (coupe aux ciseaux, fils qui dépassent). */
-function rough(seed: number) {
-  const r = seeded(seed);
-  const j = (n: number) => `${(r() * n).toFixed(2)}%`;
-  const k = (n: number) => `${(100 - r() * n).toFixed(2)}%`;
-  const mid = () => `${(40 + r() * 20).toFixed(1)}%`;
-  return `polygon(${j(1.4)} ${j(3.6)}, ${mid()} ${j(1.8)}, ${k(1.4)} ${j(3)}, ${k(1.8)} ${mid()}, ${k(1.2)} ${k(3.6)}, ${mid()} ${k(1.8)}, ${j(1.4)} ${k(3)}, ${j(1.8)} ${mid()})`;
-}
-const roughs = patches.map((p) => rough(p.id * 7 + 5));
 const tilts = patches.map((p) => ((seeded(p.id * 3 + 1)() - 0.5) * 2.2).toFixed(2));
 const stitches = ["rgba(255,244,214,.62)", "rgba(40,24,12,.45)", "rgba(255,226,170,.6)"];
 const top = patches.slice(0, TOP);
@@ -77,14 +68,14 @@ export default function FilmFrame() {
 
   if (!film.youtubeId) return null;
 
-  // Chaque pièce : un enveloppe qui porte l'ombre (relief) + la pièce découpée, grainée et surpiquée.
+  // Chaque pièce : un seul élément, sans filtre ni découpe (l'ombre est portée par le fond, une seule fois).
   const tile = (p: (typeof patches)[number]) => (
-    <span key={p.id} data-film-tile className="block flex-1" style={{ filter: "drop-shadow(0 2px 2.5px rgba(0,0,0,.55))", margin: "-1.5px" }}>
-      <span
-        className="fabric block h-full w-full"
-        style={{ ...patchStyle(p), clipPath: roughs[p.id], rotate: `${tilts[p.id]}deg`, ["--stitch" as string]: stitches[p.id % stitches.length] }}
-      />
-    </span>
+    <span
+      key={p.id}
+      data-film-tile
+      className="fabric block flex-1 [backface-visibility:hidden] will-change-transform"
+      style={{ ...patchStyle(p), rotate: `${tilts[p.id]}deg`, ["--stitch" as string]: stitches[p.id % stitches.length] }}
+    />
   );
 
   return (
@@ -96,9 +87,9 @@ export default function FilmFrame() {
         </p>
 
         {/* Cadre en patchwork */}
-        <div data-film-frame className="relative p-[3px] [--t:clamp(22px,4.6vw,60px)]" style={{ filter: "drop-shadow(0 30px 50px rgba(0,0,0,.6))" }}>
+        <div data-film-frame className="relative p-[3px] [--t:clamp(22px,4.6vw,60px)]">
           {/* toile de fond sur laquelle les pièces se cousent */}
-          <span data-film-bg aria-hidden="true" className="linen absolute inset-0" style={{ backgroundColor: "#4a3626" }} />
+          <span data-film-bg aria-hidden="true" className="linen absolute inset-0 shadow-[0_30px_60px_-20px_rgba(0,0,0,.7)]" style={{ backgroundColor: "#4a3626" }} />
           <div aria-hidden="true" className="flex h-[var(--t)]">
             {top.map(tile)}
           </div>

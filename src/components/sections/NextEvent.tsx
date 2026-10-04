@@ -108,7 +108,7 @@ export default function NextEvent() {
               {following.map((e) => {
                 const h = articleHref(e);
                 return (
-                  <li key={e.slug} className="group relative flex gap-4 border border-cream/20 bg-night/20 p-4 backdrop-blur-sm transition-colors hover:bg-night/35">
+                  <li key={e.slug} className="group relative flex gap-4 border border-cream/20 bg-night/20 p-4 transition-colors hover:bg-night/35">
                     {e.image?.src && (
                       <div className="relative h-24 w-[4.2rem] shrink-0 overflow-hidden">
                         <Image src={e.image.src} alt="" fill sizes="70px" className="object-cover" />

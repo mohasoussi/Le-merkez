@@ -24,19 +24,19 @@ function ActionCard({ action, index }: { action: ActionAxis; index: number }) {
   return (
     <article
       data-card
-      className="group relative h-[min(70svh,640px)] w-[80vw] shrink-0 snap-center sm:w-[56vw] lg:w-[min(30vw,460px)]"
+      className="group relative h-[min(70svh,640px)] w-[80vw] shrink-0 snap-center will-change-transform sm:w-[56vw] lg:w-[min(30vw,460px)]"
       style={{ "--c": action.color, "--a": action.accent } as CSSProperties}
     >
       <div
         data-card-inner
-        className="relative flex h-full flex-col overflow-hidden rounded-[26px] text-cream shadow-[0_40px_80px_-30px_rgba(0,0,0,.7)] transition-transform duration-700 ease-[var(--ease-silk)] group-hover:-translate-y-2"
+        className="relative flex h-full flex-col overflow-hidden rounded-[26px] text-cream shadow-[0_22px_40px_-22px_rgba(0,0,0,.65)] transition-transform duration-700 ease-[var(--ease-silk)] group-hover:-translate-y-2"
         style={{ background: `linear-gradient(160deg, color-mix(in oklab, var(--c) 82%, white) 0%, var(--c) 45%, color-mix(in oklab, var(--c) 70%, black) 100%)` }}
       >
         {/* Lumière qui dérive dans la carte */}
         <span
           aria-hidden="true"
-          className="animate-drift pointer-events-none absolute -right-1/4 -top-1/4 h-[80%] w-[90%] rounded-full opacity-60"
-          style={{ background: `radial-gradient(circle, color-mix(in oklab, var(--a) 70%, transparent), transparent 65%)`, "--dur": `${12 + index * 2}s`, "--dx": "-60px", "--dy": "50px" } as CSSProperties}
+          className="pointer-events-none absolute -right-1/4 -top-1/4 h-[80%] w-[90%] rounded-full opacity-60"
+          style={{ background: `radial-gradient(circle, color-mix(in oklab, var(--a) 70%, transparent), transparent 65%)`, } as CSSProperties}
         />
 
         {/* Patchwork animé */}
@@ -61,7 +61,7 @@ function ActionCard({ action, index }: { action: ActionAxis; index: number }) {
           <span
             data-number
             aria-hidden="true"
-            className="absolute bottom-2 right-3 text-[clamp(3rem,7vw,6rem)] font-extralight leading-none text-cream mix-blend-overlay"
+            className="absolute bottom-2 right-3 text-[clamp(3rem,7vw,6rem)] font-extralight leading-none text-cream/55"
           >
             {action.number}
           </span>
@@ -74,7 +74,7 @@ function ActionCard({ action, index }: { action: ActionAxis; index: number }) {
           {action.highlights && (
             <ul className="mt-4 flex flex-wrap gap-1.5 max-sm:hidden">
               {action.highlights.slice(0, 4).map((h) => (
-                <li key={h} className="rounded-full border border-cream/30 bg-cream/10 px-3 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.14em] backdrop-blur-sm">
+                <li key={h} className="rounded-full border border-cream/30 bg-cream/15 px-3 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.14em]">
                   {h}
                 </li>
               ))}
@@ -133,8 +133,8 @@ export default function ActionChapters() {
           // la carte arrive inclinée, se pose au centre, repart en s'inclinant
           gsap
             .timeline({ scrollTrigger: { containerAnimation: scroll, trigger: card, start: "left right", end: "right left", scrub: true } })
-            .fromTo(card, { rotation: 7, yPercent: 8, scale: 0.9 }, { rotation: 0, yPercent: 0, scale: 1, ease: "power2.out" })
-            .to(card, { rotation: -6, yPercent: -4, scale: 0.92, ease: "power2.in" });
+            .fromTo(card, { rotation: 7, yPercent: 8 }, { rotation: 0, yPercent: 0, ease: "power2.out" })
+            .to(card, { rotation: -6, yPercent: -4, ease: "power2.in" });
           // les carrés de tissu se retournent un à un
           gsap.from(card.querySelectorAll("[data-tile]"), {
             rotationY: 90,
@@ -164,8 +164,8 @@ export default function ActionChapters() {
     <section ref={root} id="actions" aria-labelledby="actions-title" className="group/h grain relative overflow-hidden bg-night text-cream">
       {/* halo de couleurs en fond */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <span className="animate-drift absolute -left-[10%] top-[10%] h-[70vmax] w-[70vmax] rounded-full opacity-30" style={{ background: "radial-gradient(circle, #283d5b, transparent 65%)", "--dur": "20s" } as CSSProperties} />
-        <span className="animate-drift absolute -right-[10%] bottom-[-20%] h-[70vmax] w-[70vmax] rounded-full opacity-30" style={{ background: "radial-gradient(circle, #8f2d22, transparent 65%)", "--dur": "24s", "--dx": "-40px" } as CSSProperties} />
+        <span className="absolute -left-[10%] top-[10%] h-[70vmax] w-[70vmax] rounded-full opacity-30" style={{ background: "radial-gradient(circle, #283d5b, transparent 65%)" }} />
+        <span className="absolute -right-[10%] bottom-[-20%] h-[70vmax] w-[70vmax] rounded-full opacity-30" style={{ background: "radial-gradient(circle, #8f2d22, transparent 65%)" }} />
       </div>
 
       <div

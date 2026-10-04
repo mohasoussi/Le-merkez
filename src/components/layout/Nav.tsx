@@ -137,7 +137,7 @@ export default function Nav() {
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-[transform,background-color,border-color] duration-700 ease-[var(--ease-silk)] ${
           hidden && !open ? "-translate-y-full" : "translate-y-0"
-        } ${solid ? "border-b border-cream/10 bg-night/55 backdrop-blur-xl" : "border-b border-transparent"}`}
+        } ${solid ? "border-b border-cream/10 bg-night/85" : "border-b border-transparent"}`}
       >
         <nav aria-label="Navigation principale" className="gutter mx-auto flex h-[var(--nav-h)] items-center justify-between gap-6 text-cream">
           <Link href="/" onClick={goHome} className="group flex items-center gap-3" aria-label="Le Merkez — accueil">
@@ -168,7 +168,7 @@ export default function Nav() {
                 </Link>
                 {item.children && (
                   <div className="invisible absolute left-1/2 top-full -translate-x-1/2 pt-3 opacity-0 transition-[opacity,visibility,translate] duration-300 group-focus-within/item:visible group-focus-within/item:opacity-100 group-hover/item:visible group-hover/item:opacity-100">
-                    <ul className="min-w-[200px] overflow-hidden rounded-[3px] border border-cream/10 bg-night/90 py-2 shadow-[0_20px_50px_-15px_rgba(0,0,0,.6)] backdrop-blur-xl">
+                    <ul className="min-w-[200px] overflow-hidden rounded-[3px] border border-cream/10 bg-night/90 py-2 shadow-[0_20px_50px_-15px_rgba(0,0,0,.6)]">
                       {item.children.map((c, i) => (
                         <li key={c.href}>
                           <Link
@@ -235,7 +235,7 @@ export default function Nav() {
             <div key={p.id} data-menu-patch style={patchStyle(p)} />
           ))}
         </div>
-        <div data-menu-veil aria-hidden="true" className="absolute inset-0 bg-night/88 backdrop-blur-sm" />
+        <div data-menu-veil aria-hidden="true" className="absolute inset-0 bg-night/90" />
         <div className="gutter relative flex h-full flex-col justify-between pb-10 pt-[calc(var(--nav-h)+2rem)]">
           <ul className="space-y-1">
             {nav.map((item, i) => (
