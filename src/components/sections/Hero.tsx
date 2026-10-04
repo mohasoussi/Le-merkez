@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { gsap, MQ, SplitText, useGSAP } from "@/components/motion/gsap";
 import Button from "@/components/ui/Button";
 import { emblemColors } from "@/components/ui/Emblem";
@@ -27,9 +27,26 @@ const glows = [
  */
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
+  // L'animation attend les polices : sinon le titre, découpé en lettres avec la police de secours,
+  // « saute » quand Montserrat arrive (visible sur mobile en connexion lente).
+  const [fontsReady, setFontsReady] = useState(false);
+
+  useEffect(() => {
+    let done = false;
+    const go = () => {
+      if (!done) {
+        done = true;
+        setFontsReady(true);
+      }
+    };
+    const timer = window.setTimeout(go, 2500);
+    document.fonts?.ready.then(go).catch(go);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   useGSAP(
     () => {
+      if (!fontsReady) return;
       const mm = gsap.matchMedia();
 
       mm.add({ desktop: MQ.desktop, mobile: MQ.mobile }, (ctx) => {
@@ -121,7 +138,7 @@ export default function Hero() {
         gsap.set("[data-shard]", { opacity: 0 });
       });
     },
-    { scope: root },
+    { scope: root, dependencies: [fontsReady] },
   );
 
   return (

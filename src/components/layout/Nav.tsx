@@ -24,14 +24,31 @@ export default function Nav() {
   const burgerRef = useRef<HTMLButtonElement>(null);
 
   // Apparence au scroll : transparente sur le hero, verre sombre ensuite, masquée en descendant.
+  // Pendant les sections plein écran (attribut `data-immersive` posé par elles), la barre reste masquée.
+  // Ailleurs, elle ne réapparaît qu'après une vraie remontée (> 80 px), pas au moindre à-coup.
   useEffect(() => {
     let last = window.scrollY;
+    let upTravel = 0;
     const onScroll = () => {
       const y = window.scrollY;
-      setScrolled(y > 40);
-      setHidden(y > 500 && y > last + 4);
-      if (y < last - 4) setHidden(false);
+      const delta = y - last;
       last = y;
+      setScrolled(y > 40);
+      if (document.documentElement.hasAttribute("data-immersive")) {
+        upTravel = 0;
+        return setHidden(true);
+      }
+      if (y < 200) {
+        upTravel = 0;
+        return setHidden(false);
+      }
+      if (delta > 0) {
+        upTravel = 0;
+        setHidden(true);
+      } else if (delta < 0) {
+        upTravel -= delta;
+        if (upTravel > 80) setHidden(false);
+      }
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });

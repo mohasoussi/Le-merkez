@@ -1,21 +1,23 @@
 "use client";
 
 import { useRef, type CSSProperties } from "react";
-import { gsap, MQ, SplitText, useGSAP } from "@/components/motion/gsap";
+import { gsap, MQ, setImmersive, SplitText, useGSAP } from "@/components/motion/gsap";
 import { inAction } from "@/content/home";
 import { textile } from "@/lib/palette";
 
 /** Teinte de fond (claire) et couleur d'accent de chaque étape. */
-const tints = ["#f4ecdd", "#f3e7e3", "#eef0e4", "#f5e7dc", "#f4ebd6"];
+const tints = ["#f6e9d2", "#f6e1dc", "#e6eedf", "#f6e0d0", "#e3e8f2"];
 const accents = [textile.saffron, textile.rose, textile.olive, textile.terracotta, textile.indigo];
 
-/** Halos colorés flous qui dérivent lentement derrière le texte. */
+/** Halos colorés flous qui dérivent lentement derrière le texte (couleurs textiles vives). */
 const blobs = [
-  { c: textile.saffron, x: "18%", y: "28%", s: "58vmax", d: "16s", dx: "140px", dy: "90px" },
-  { c: textile.rose, x: "82%", y: "22%", s: "52vmax", d: "19s", dx: "-120px", dy: "110px" },
-  { c: textile.moss, x: "72%", y: "84%", s: "50vmax", d: "22s", dx: "-90px", dy: "-120px" },
-  { c: textile.indigo, x: "12%", y: "88%", s: "44vmax", d: "18s", dx: "130px", dy: "-80px" },
-  { c: textile.terracotta, x: "50%", y: "50%", s: "40vmax", d: "25s", dx: "80px", dy: "70px" },
+  { c: "#e3a83a", x: "16%", y: "26%", s: "62vmax", d: "14s", dx: "160px", dy: "100px" },
+  { c: "#d9786a", x: "84%", y: "20%", s: "56vmax", d: "17s", dx: "-140px", dy: "120px" },
+  { c: "#4f9070", x: "74%", y: "82%", s: "54vmax", d: "20s", dx: "-110px", dy: "-140px" },
+  { c: "#4a6aa8", x: "10%", y: "86%", s: "50vmax", d: "16s", dx: "150px", dy: "-90px" },
+  { c: "#d0663a", x: "48%", y: "52%", s: "44vmax", d: "23s", dx: "100px", dy: "80px" },
+  { c: "#b8403a", x: "92%", y: "58%", s: "40vmax", d: "19s", dx: "-90px", dy: "60px" },
+  { c: "#c79bd0", x: "36%", y: "8%", s: "38vmax", d: "21s", dx: "70px", dy: "110px" },
 ];
 
 /**
@@ -47,6 +49,7 @@ export default function InAction() {
             end: `+=${steps.length * (desktop ? 90 : 70)}%`,
             scrub: 1,
             pin: true,
+            onToggle: (self) => setImmersive(self.isActive),
           },
         });
 
@@ -71,6 +74,7 @@ export default function InAction() {
         tl.to({}, { duration: 0.6 });
 
         return () => {
+          setImmersive(false);
           splits.forEach((s) => s.revert());
           section.classList.remove("is-stacked");
         };
@@ -88,7 +92,7 @@ export default function InAction() {
             {blobs.map((b, i) => (
               <span
                 key={i}
-                className={`animate-drift absolute rounded-full opacity-55 mix-blend-multiply ${i > 2 ? "max-md:hidden" : ""}`}
+                className={`animate-drift absolute rounded-full opacity-80 mix-blend-multiply ${i > 4 ? "max-md:hidden" : ""}`}
                 style={
                   {
                     left: b.x,
@@ -97,7 +101,7 @@ export default function InAction() {
                     height: b.s,
                     marginLeft: `calc(${b.s} / -2)`,
                     marginTop: `calc(${b.s} / -2)`,
-                    background: `radial-gradient(circle, color-mix(in oklab, ${b.c} 70%, white) 0%, transparent 65%)`,
+                    background: `radial-gradient(circle, ${b.c} 0%, color-mix(in oklab, ${b.c} 45%, transparent) 35%, transparent 68%)`,
                     "--dur": b.d,
                     "--dx": b.dx,
                     "--dy": b.dy,

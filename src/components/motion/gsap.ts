@@ -20,3 +20,8 @@ export const MQ = {
 };
 
 export { gsap, ScrollTrigger, SplitText, useGSAP };
+
+/** Section plein écran active : la barre de navigation se masque (voir Nav). */
+export function setImmersive(active: boolean) {
+  document.documentElement.toggleAttribute("data-immersive", active);
+}
