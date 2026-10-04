@@ -243,6 +243,47 @@ published.push({
   ],
 });
 
+const assises = "/images/actions/assises-fraternelles";
+
+published.push({
+  category: "rencontres-interreligieuses",
+  slug: "assises-fraternelles-dialogue-interreligieux",
+  title: "Le Shaykh Mohamed Faouzi Al Karkari invité aux « Assises fraternelles » autour du dialogue interreligieux",
+  // Lundi 18 mai : l'année n'a pas été précisée ; 2026 est la seule récente où le 18 mai tombe un lundi. À confirmer.
+  date: "2026-05-18",
+  location: null, // [LIEU À AJOUTER]
+  excerpt:
+    "Le 18 mai, l’association Les Compagnons a organisé les « Assises fraternelles », sur le thème « Pourquoi le dialogue est la seule solution ? », en présence du Shaykh Mohamed Faouzi Al Karkari.",
+  cover: {
+    src: `${assises}/table-ronde.jpg`,
+    alt: "Assemblée réunie en cercle dans une salle lumineuse, un intervenant prend la parole au micro",
+    width: 1179,
+    height: 1116,
+  },
+  body: [
+    "Le lundi 18 mai, l’association Les Compagnons a organisé les « Assises fraternelles », une rencontre placée sous le thème : « Pourquoi le dialogue est la seule solution ? ».",
+    "L’événement a réuni plusieurs personnalités engagées en faveur du dialogue, de la paix et du vivre-ensemble, parmi lesquelles le Shaykh Mohamed Faouzi Al Karkari, ainsi que :",
+    "- Michel Serfaty, rabbin franco-marocain et fondateur de l’Amitié Judéo-Musulmane de France (AJMF) ;",
+    "- Fadela Vaillant, vice-présidente de l’association « Les Guerrières de la Paix » ;",
+    "- Jean-François de Marignan, représentant de l’association « EFESIA », qui œuvre au rapprochement des peuples ;",
+    "- Mouhamadou Abu Nur, docteur en droit public et juriste au Conseil d’État.",
+    "Les échanges se sont articulés autour de trois grandes questions :",
+    "- Qu’est-ce qui nous unit ?",
+    "- Comment concilier nos différences ?",
+    "- Quelles solutions existent pour promouvoir le vivre-ensemble ?",
+    "Les intervenants ont souligné l’importance d’un dialogue sincère entre les traditions religieuses, culturelles et humaines, dans un contexte mondial marqué par les tensions identitaires et les fractures sociales. Tous ont insisté sur la nécessité de dépasser les préjugés et de chercher à connaître l’autre, et ont rappelé que ce que visent les trois traditions religieuses est de vouloir pour l’autre ce que l’on voudrait pour soi-même.",
+    "La présence du Shaykh Mohamed Faouzi Al Karkari a porté un message fort. Il a appelé à replacer la spiritualité au cœur de nos vies, en prenant conscience que toute la création n’a été créée, en définitive, que pour que nous nous connaissions nous-mêmes et que nous parvenions à la connaissance de notre Créateur.",
+    "Il a également expliqué que la France est perçue dans le monde entier, et notamment au Maroc, comme une terre de liberté et de vivre-ensemble. Peuplée d’habitants de toutes origines et de toutes religions, elle demande à chacun, a-t-il rappelé, de respecter les règles et les lois établies, afin que la société puisse se construire dans le respect de chacun.",
+    "Nos remerciements vont à l’association Les Compagnons qui, à travers ces « Assises fraternelles », poursuit son engagement en faveur du dialogue, de la paix et du rapprochement entre les différentes composantes de la société.",
+  ],
+  photos: [
+    { src: `${assises}/salle.jpg`, alt: "Public assis en rangs dans une salle aux boiseries, à l’écoute d’un intervenant", width: 1179, height: 1176 },
+    { src: `${assises}/intervenant.jpg`, alt: "Un intervenant s’exprime au micro, entouré d’autres participants", width: 1179, height: 1218 },
+    { src: `${assises}/ecoute.jpg`, alt: "Participants attentifs pendant les échanges, certains vêtus de muraqaas", width: 1179, height: 1470 },
+    { src: `${assises}/participant.jpg`, alt: "Un participant écoute attentivement, assis dans la salle", width: 1350, height: 1800 },
+  ],
+});
+
 /** Modèles de démonstration pour les catégories encore vides (non indexés). À supprimer au fur et à mesure. */
 const templates: Article[] = actions.map((a) => ({
   category: a.slug,

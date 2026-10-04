@@ -7,6 +7,21 @@ import Photo from "@/components/ui/Photo";
 import { articles, getAction, getArticle } from "@/content/actions";
 import { formatDate } from "@/lib/format";
 
+type Block = { type: "p"; text: string } | { type: "list"; items: string[] };
+
+/** Les lignes commençant par « - » sont regroupées en liste à puces ; les autres sont des paragraphes. */
+function groupBody(body: string[]): Block[] {
+  const out: Block[] = [];
+  for (const line of body) {
+    if (line.startsWith("- ")) {
+      const last = out[out.length - 1];
+      if (last?.type === "list") last.items.push(line.slice(2));
+      else out.push({ type: "list", items: [line.slice(2)] });
+    } else out.push({ type: "p", text: line });
+  }
+  return out;
+}
+
 export function generateStaticParams() {
   return articles.map((a) => ({ category: a.category, slug: a.slug }));
 }
@@ -43,13 +58,22 @@ export default async function ArticlePage({ params }: { params: Promise<{ catego
             <p className={`mb-8 ${article.location ? "eyebrow text-earth" : "ph-label text-umber/55"}`}>{article.location ?? "[LIEU À AJOUTER]"}</p>
           )}
           <div className="space-y-6 text-lg leading-relaxed text-umber/85">
-            {article.body.map((p) =>
-              p.startsWith("«") ? (
-                <blockquote key={p} className="border-l-2 border-saffron pl-6 font-serif text-[1.35em] italic leading-snug text-brown">
-                  {p}
+            {groupBody(article.body).map((block, i) =>
+              block.type === "list" ? (
+                <ul key={i} className="list-none space-y-3 border-l border-umber/15 pl-6">
+                  {block.items.map((it) => (
+                    <li key={it} className="relative">
+                      <span aria-hidden="true" className="absolute -left-[1.85rem] top-[0.62em] h-1.5 w-1.5 rotate-45 bg-saffron" />
+                      {it}
+                    </li>
+                  ))}
+                </ul>
+              ) : block.text.startsWith("«") ? (
+                <blockquote key={i} className="border-l-2 border-saffron pl-6 font-serif text-[1.35em] italic leading-snug text-brown">
+                  {block.text}
                 </blockquote>
               ) : (
-                <p key={p}>{p}</p>
+                <p key={i}>{block.text}</p>
               ),
             )}
           </div>
