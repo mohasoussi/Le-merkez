@@ -43,9 +43,15 @@ export default async function ArticlePage({ params }: { params: Promise<{ catego
             <p className={`mb-8 ${article.location ? "eyebrow text-earth" : "ph-label text-umber/55"}`}>{article.location ?? "[LIEU À AJOUTER]"}</p>
           )}
           <div className="space-y-6 text-lg leading-relaxed text-umber/85">
-            {article.body.map((p) => (
-              <p key={p}>{p}</p>
-            ))}
+            {article.body.map((p) =>
+              p.startsWith("«") ? (
+                <blockquote key={p} className="border-l-2 border-saffron pl-6 font-serif text-[1.35em] italic leading-snug text-brown">
+                  {p}
+                </blockquote>
+              ) : (
+                <p key={p}>{p}</p>
+              ),
+            )}
           </div>
           {article.photos && article.photos.length > 0 && (
             <div className="mt-14 columns-2 gap-3 md:gap-4">

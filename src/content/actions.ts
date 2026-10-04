@@ -204,6 +204,40 @@ published.push({
   ],
 });
 
+const paix = "/images/actions/rencontre-centre-etudes-paix";
+
+published.push({
+  category: "rencontres-interreligieuses",
+  slug: "visite-centre-etudes-pour-la-paix",
+  title: "Visite au Centre d’études pour la Paix",
+  date: null, // [DATE À AJOUTER] — « ce week-end » ; format AAAA-MM-JJ
+  location: "Centre d’études pour la Paix",
+  excerpt:
+    "Un groupe de disciples karkaris a été invité à une rencontre avec les membres de l’association Karuna Ceprobreiz, au Centre d’études pour la Paix.",
+  cover: {
+    src: `${paix}/table-ronde.jpg`,
+    alt: "Repas partagé autour de tables dans une grande salle, disciples en muraqaa et membres de l’association mêlés",
+    width: 1600,
+    height: 900,
+  },
+  body: [
+    "Ce week-end, un groupe de disciples karkaris a été invité à une rencontre avec les membres de l’association Karuna Ceprobreiz, au Centre d’études pour la Paix.",
+    "Cette rencontre a réuni des femmes et des hommes aux parcours et aux convictions divers, animés par un même désir : apprendre à se connaître et bâtir, pas à pas, des ponts entre les êtres et entre les chemins.",
+    "Parmi les participants se trouvaient des croyants de différentes sensibilités, mais aussi des personnes en recherche spirituelle ou philosophique. Cette diversité a donné à cette rencontre une profondeur particulière, parfois exigeante, mais sincère.",
+    "Se rencontrer vraiment n’est jamais simple. Cela demande de l’écoute, de la patience, et l’humilité d’accueillir l’autre tel qu’il est. Ce temps partagé a été une tentative sincère, riche d’enseignements pour les uns et les autres — et il appelle à se poursuivre, pour faire mieux encore, ensemble.",
+    "Au-delà des différences de langage, de culture ou de perception, chacun a essayé, à sa manière, d’honorer ce qui unit les êtres humains dans leur quête de vérité, de paix et de sens.",
+    "Dans cet esprit, nous retenons cette parole :",
+    "« La vraie sagesse ne se proclame pas. Elle se reconnaît dans la façon d’aimer, d’écouter et de rencontrer l’autre sans condition, avec un cœur ouvert et sincère. »",
+    "Merci à chacune et chacun pour la sincérité de cette présence. Que ce temps partagé en appelle d’autres, plus profonds encore, dans le respect, la vérité et la lumière.",
+  ],
+  photos: [
+    { src: `${paix}/salle-lumineuse.jpg`, alt: "Table dressée dans une salle lumineuse ouverte sur un jardin, convives de tous âges", width: 1800, height: 1012 },
+    { src: `${paix}/repas-partage.jpg`, alt: "Longue table où l’on partage le repas et la conversation autour d’un piano", width: 960, height: 540 },
+    { src: `${paix}/echanges.jpg`, alt: "Convives attablés qui échangent, participants en muraqaa et membres de l’association", width: 960, height: 540 },
+    { src: `${paix}/cuisine.jpg`, alt: "Conversation dans la cuisine ouverte, au milieu des préparatifs du repas", width: 960, height: 540 },
+  ],
+});
+
 /** Modèles de démonstration pour les catégories encore vides (non indexés). À supprimer au fur et à mesure. */
 const templates: Article[] = actions.map((a) => ({
   category: a.slug,
