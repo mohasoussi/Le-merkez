@@ -142,6 +142,8 @@ export interface Article {
   body: string[];
   /** Photos de l'événement, affichées sous le texte. */
   photos?: Media[];
+  /** Bouton d'action en bas d'article (inscription, réservation…). */
+  cta?: { label: string; href: string };
   /** true = modèle de démonstration, non indexé, à supprimer. */
   placeholder?: boolean;
 }
@@ -287,6 +289,87 @@ published.push({
     { src: `${assises}/ecoute.jpg`, alt: "Participants attentifs pendant les échanges, certains vêtus de muraqaas", width: 1179, height: 1470 },
     { src: `${assises}/participant.jpg`, alt: "Un participant écoute attentivement, assis dans la salle", width: 1350, height: 1800 },
   ],
+});
+
+const ev = "/images/evenements";
+
+// ─── Prochaines actions (événements à venir) ───
+published.push({
+  category: "rencontres-interreligieuses",
+  slug: "rencontre-d-assise-40-ans-apres",
+  title: "La Rencontre d’Assise, 40 ans après : grande marche pour la paix à Paris",
+  date: "2026-10-18",
+  location: "Paris",
+  excerpt:
+    "Dimanche 18 octobre 2026, une grande marche pour la paix relie des lieux de culte de Paris, autour de la responsabilité des religions et des cultures dans la construction de la paix.",
+  cover: {
+    src: `${ev}/assise-affiche.jpg`,
+    alt: "Affiche : La Rencontre d’Assise, 40 ans après ! Dimanche 18 octobre 2026, Paris, grande marche pour la paix",
+    width: 1061,
+    height: 1500,
+  },
+  body: [
+    "Dimanche 18 octobre 2026, Paris accueille une grande marche pour la paix, sur le thème : « La responsabilité des religions et des cultures dans la construction de la paix ».",
+    "En 1986, le pape Jean-Paul II a réuni à Assise 130 responsables religieux du monde entier pour une journée de prière pour la paix.",
+    "40 ans après, des croyants de différentes traditions, des acteurs associatifs et des citoyens de toutes convictions se rassemblent à Paris pour faire vivre cet esprit et témoigner ensemble que la paix se construit par la rencontre, le dialogue et la fraternité.",
+    "## Le parcours",
+    "- 8 h 15 – 8 h 45 : Grande Pagode du Bois de Vincennes — accueil et visite (30 min). Étape facultative avant le départ principal.",
+    "- 10 h 45 – 11 h 20 : Grande Mosquée de Paris — accueil et visite (35 min). Départ principal de la marche.",
+    "- 12 h 10 – 12 h 40 : Église Saint-Sulpice (après la messe de 11 h) — accueil et visite (30 min).",
+    "- 12 h 40 – 13 h 40 : déjeuner libre (tiré du sac) dans le quartier Saint-Sulpice.",
+    "- 14 h 00 – 14 h 30 : Cathédrale ukrainienne catholique Saint-Volodymyr-le-Grand — accueil et visite (30 min).",
+    "- 16 h 40 – 17 h 10 : Synagogue JEM de Beaugrenelle — accueil et visite (30 min).",
+    "- 18 h 00 – 19 h 00 : Parvis des Droits de l’Homme (Trocadéro) — grand rassemblement pour la paix (1 heure).",
+    "- 19 h 40 – 20 h 40 : Centre Bahá’í, 45 rue Pergolèse, Paris 16e — accueil et visite (1 heure).",
+    "## Informations pratiques",
+    "- Des transports en commun permettent de rejoindre le groupe entre certaines étapes : rejoignez la marche à l’étape de votre choix.",
+    "- Parcours réduit : environ 7 km de marche (18 km pour le parcours complet).",
+    "- Pensez à prendre de l’eau, un pique-nique pour le déjeuner et des chaussures confortables.",
+    "Une journée ouverte à toutes et à tous !",
+  ],
+  photos: [{ src: `${ev}/assise-parcours.jpg`, alt: "Le parcours de la marche, étape par étape, avec les horaires et les informations pratiques", width: 1061, height: 1500 }],
+});
+
+published.push({
+  category: "retraites-spirituelles",
+  slug: "retraite-mont-blanc-chamonix",
+  title: "Retraite spirituelle soufie au cœur du Mont-Blanc",
+  date: "2026-12-04",
+  location: "Chamonix",
+  excerpt:
+    "Du 4 au 7 décembre 2026, quatre jours et trois nuits à Chamonix, face au Mont Blanc, avec le compagnonnage du Shaykh Mohamed Faouzi al-Karkari : méditation, marche en montagne, enseignements.",
+  cover: {
+    src: `${ev}/mont-blanc-affiche.jpg`,
+    alt: "Affiche : retraite spirituelle soufie au cœur du Mont-Blanc, du 4 au 7 décembre 2026 à Chamonix",
+    width: 509,
+    height: 720,
+  },
+  body: [
+    "Rejoignez-nous pour quatre jours et trois nuits hors du tumulte du monde, au cœur des Alpes françaises, face au majestueux Mont Blanc.",
+    "Un temps pour ralentir, se recentrer et revenir à l’essentiel à travers la méditation, les enseignements spirituels, la contemplation des montagnes et des moments de partage, dans la compagnie d’un maître soufi vivant, Sidi Mohamed Faouzi al-Karkari.",
+    "## Au programme",
+    "- Méditation",
+    "- Marche en montagne",
+    "- Enseignements",
+    "- Visite de la « Mer de glace »",
+    "## Séances de méditation collective",
+    "Dans la compagnie du Maître, nous nous réunissons dans les dernières heures de la nuit pour un temps de méditation et d’invocation, avant la prière de l’aube (fajr), puis nous récitons ensemble les litanies Karkariya, une litanie traditionnelle de la voie soufie.",
+    "Nous nous retrouvons également au coucher du soleil pour un nouveau temps de remembrance collective (dhikr), dans la présence et l’unité.",
+    "## Construire autour de la Lumière divine",
+    "Nous souhaitons rassembler celles et ceux qui sont en quête de sens, de compréhension et de profondeur intérieure, au-delà des différences de parcours et de traditions.",
+    "Des femmes et des hommes réunis par un même élan : chercher le Divin, cultiver la présence et cheminer vers une connaissance plus profonde de soi et du monde, sous la guidance de notre éminent Maître, Sidi Mohamed Faouzi al-Karkari.",
+    "## Informations pratiques",
+    "- Dates : du 4 au 7 décembre 2026, à Chamonix.",
+    "- Tarif : 280 € — séjour de 3 nuits et 4 jours, pension complète.",
+    "- Réservation : thezawiya.fr",
+    "- Contact : +33 6 74 79 79 16 · contact@thezawiya.fr",
+  ],
+  photos: [
+    { src: `${ev}/mont-blanc-meditation.jpg`, alt: "Séance de méditation collective dans une salle en bois, à la lueur de bougies", width: 472, height: 212 },
+    { src: `${ev}/mont-blanc-marche.jpg`, alt: "Marche en forêt, des participants vêtus de muraqaas sur un chemin", width: 472, height: 230 },
+    { src: `${ev}/mont-blanc-sommet.jpg`, alt: "Sommet enneigé éclairé par le soleil, au-dessus d’une vallée", width: 472, height: 270 },
+  ],
+  cta: { label: "Réserver sur thezawiya.fr", href: "https://thezawiya.fr" },
 });
 
 /** Modèles de démonstration pour les catégories encore vides (non indexés). À supprimer au fur et à mesure. */

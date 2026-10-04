@@ -88,9 +88,15 @@ export default function Footer() {
           <ul className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
             {footerLinks.map((l) => (
               <li key={l.href}>
-                <Link href={l.href} className={linkCls}>
-                  {l.label}
-                </Link>
+                {l.href.startsWith("http") ? (
+                  <a href={l.href} target="_blank" rel="noopener noreferrer" className={linkCls}>
+                    {l.label} <span aria-hidden="true">↗</span>
+                  </a>
+                ) : (
+                  <Link href={l.href} className={linkCls}>
+                    {l.label}
+                  </Link>
+                )}
               </li>
             ))}
           </ul>

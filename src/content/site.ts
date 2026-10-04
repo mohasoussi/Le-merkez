@@ -48,6 +48,9 @@ export const nav: NavItem[] = [
   { label: "Ouvrages", href: "/librairie" },
 ];
 
+/** Bouton « Nous rejoindre » : canal Telegram de la communauté. */
+export const joinCta = { label: "Nous rejoindre", href: "https://t.me/+ntcTlHvj-fk5NjE0" };
+
 /** Bouton permanent de la navigation. */
 export const navCta = { label: "Nous soutenir", href: "/#soutenir" };
 
@@ -62,6 +65,7 @@ export const footerLinks = [
   { label: "Humanitaire", href: "/actions/actions-humanitaires" },
   { label: "Ouvrages", href: "/librairie" },
   { label: "Nous soutenir", href: "/#soutenir" },
+  { label: "Nous rejoindre", href: joinCta.href },
   { label: "Contactez-nous", href: "/#contact" },
 ];
 

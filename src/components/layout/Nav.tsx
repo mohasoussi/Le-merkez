@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { gsap, useGSAP } from "@/components/motion/gsap";
 import Emblem from "@/components/ui/Emblem";
-import { nav, navCta, type NavItem } from "@/content/site";
+import { joinCta, nav, navCta, type NavItem } from "@/content/site";
 import { makePatches, patchStyle } from "@/lib/patchwork";
 
 const menuPatches = makePatches(24, 41);
@@ -177,6 +177,14 @@ export default function Nav() {
           </ul>
 
           <div className="flex items-center gap-3">
+            <a
+              href={joinCta.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden whitespace-nowrap rounded-full border border-cream/45 px-5 py-2.5 text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-cream transition-colors duration-500 hover:border-cream hover:bg-cream hover:text-night xl:inline-block"
+            >
+              {joinCta.label}
+            </a>
             <Link
               href={navCta.href}
               className="whitespace-nowrap rounded-full bg-saffron px-4 py-2.5 text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-night transition-colors duration-500 hover:bg-cream sm:px-5"
@@ -256,9 +264,20 @@ export default function Nav() {
               </li>
             ))}
           </ul>
+          <div className="flex flex-col">
+          <a
+            data-menu-foot
+            href={joinCta.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mb-6 inline-flex items-center justify-center gap-3 self-start rounded-full border border-cream/45 px-7 py-4 text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-cream"
+          >
+            {joinCta.label} <span aria-hidden="true">↗</span>
+          </a>
           <p data-menu-foot className="font-serif text-lg italic text-cream/70">
             « Afin que vous vous connaissiez. »
           </p>
+          </div>
         </div>
       </div>
     </>

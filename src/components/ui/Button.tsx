@@ -98,6 +98,13 @@ export default function Button({
     </>
   );
 
+  if (href && /^https?:\/\//.test(href)) {
+    return (
+      <a ref={ref as Ref<HTMLAnchorElement>} href={href} target="_blank" rel="noopener noreferrer" className={cls} {...rest}>
+        {inner}
+      </a>
+    );
+  }
   if (href) {
     return (
       <Link ref={ref as Ref<HTMLAnchorElement>} href={href} className={cls} {...rest}>

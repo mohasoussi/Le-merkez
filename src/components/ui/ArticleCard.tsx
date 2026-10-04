@@ -15,7 +15,7 @@ export default function ArticleCard({ article, tone = "light", index = 0 }: { ar
           seed={index * 3 + 12}
           sizes="(min-width:1024px) 30vw, (min-width:640px) 50vw, 100vw"
           className="h-full w-full"
-          imgClassName="transition-transform duration-[1.4s] ease-[var(--ease-silk)] group-hover:scale-[1.06]"
+          imgClassName={`transition-transform duration-[1.4s] ease-[var(--ease-silk)] group-hover:scale-[1.06] ${(article.cover.height ?? 0) > (article.cover.width ?? 1) ? "[&_img]:object-top" : ""}`}
         />
         <span aria-hidden="true" className="absolute left-0 top-0 h-1 w-full origin-left scale-x-[.25] transition-transform duration-700 ease-[var(--ease-silk)] group-hover:scale-x-100" style={{ backgroundColor: axis?.color }} />
       </div>

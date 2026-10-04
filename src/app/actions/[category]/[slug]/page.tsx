@@ -3,11 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageHeader from "@/components/layout/PageHeader";
+import Button from "@/components/ui/Button";
 import Photo from "@/components/ui/Photo";
 import { articles, getAction, getArticle } from "@/content/actions";
 import { formatDate } from "@/lib/format";
 
-type Block = { type: "p"; text: string } | { type: "list"; items: string[] };
+type Block = { type: "p"; text: string } | { type: "h"; text: string } | { type: "list"; items: string[] };
 
 /** Les lignes commençant par « - » sont regroupées en liste à puces ; les autres sont des paragraphes. */
 function groupBody(body: string[]): Block[] {
@@ -17,7 +18,8 @@ function groupBody(body: string[]): Block[] {
       const last = out[out.length - 1];
       if (last?.type === "list") last.items.push(line.slice(2));
       else out.push({ type: "list", items: [line.slice(2)] });
-    } else out.push({ type: "p", text: line });
+    } else if (line.startsWith("## ")) out.push({ type: "h", text: line.slice(3) });
+    else out.push({ type: "p", text: line });
   }
   return out;
 }
@@ -50,16 +52,29 @@ export default async function ArticlePage({ params }: { params: Promise<{ catego
     <article>
       <PageHeader eyebrow={`${action.short} — ${formatDate(article.date)}`} title={article.title} color={action.color} seed={slug.length * 3} />
       <div className="bg-cream text-umber">
-        <div className="gutter mx-auto max-w-[1100px] -translate-y-12">
-          <Photo media={article.cover} seed={5} priority sizes="(min-width:1100px) 1100px, 100vw" className="aspect-[16/9] w-full shadow-[0_40px_80px_-30px_rgba(20,16,12,.5)]" />
-        </div>
+        {(article.cover.height ?? 0) > (article.cover.width ?? 1) ? (
+          // Affiche (format portrait) : affichée entière, sans recadrage.
+          <div className="gutter mx-auto max-w-[1100px] -translate-y-12">
+            <div className="relative mx-auto w-full max-w-[440px] shadow-[0_40px_80px_-30px_rgba(20,16,12,.5)]" style={{ aspectRatio: `${article.cover.width} / ${article.cover.height}` }}>
+              <Image src={article.cover.src!} alt={article.cover.alt} fill priority sizes="440px" className="object-cover" />
+            </div>
+          </div>
+        ) : (
+          <div className="gutter mx-auto max-w-[1100px] -translate-y-12">
+            <Photo media={article.cover} seed={5} priority sizes="(min-width:1100px) 1100px, 100vw" className="aspect-[16/9] w-full shadow-[0_40px_80px_-30px_rgba(20,16,12,.5)]" />
+          </div>
+        )}
         <div className="gutter mx-auto max-w-[760px] pb-28">
           {article.location !== undefined && (
             <p className={`mb-8 ${article.location ? "eyebrow text-earth" : "ph-label text-umber/55"}`}>{article.location ?? "[LIEU À AJOUTER]"}</p>
           )}
           <div className="space-y-6 text-lg leading-relaxed text-umber/85">
             {groupBody(article.body).map((block, i) =>
-              block.type === "list" ? (
+              block.type === "h" ? (
+                <h2 key={i} className="!mt-12 text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-madder">
+                  {block.text}
+                </h2>
+              ) : block.type === "list" ? (
                 <ul key={i} className="list-none space-y-3 border-l border-umber/15 pl-6">
                   {block.items.map((it) => (
                     <li key={it} className="relative">
@@ -77,8 +92,15 @@ export default async function ArticlePage({ params }: { params: Promise<{ catego
               ),
             )}
           </div>
+          {article.cta && (
+            <div className="mt-12">
+              <Button href={article.cta.href} variant="dark">
+                {article.cta.label}
+              </Button>
+            </div>
+          )}
           {article.photos && article.photos.length > 0 && (
-            <div className="mt-14 columns-2 gap-3 md:gap-4">
+            <div className={`mt-14 gap-3 md:gap-4 ${article.photos.length === 1 ? "columns-1" : "columns-2"}`}>
               {article.photos.map((ph, i) => (
                 <figure key={ph.src ?? i} className="group mb-3 break-inside-avoid overflow-hidden rounded-[4px] md:mb-4">
                   <Image
@@ -86,7 +108,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ catego
                     alt={ph.alt}
                     width={ph.width ?? 1600}
                     height={ph.height ?? 1200}
-                    sizes="(min-width:760px) 380px, 50vw"
+                    sizes={(article.photos?.length ?? 0) === 1 ? "(min-width:760px) 760px, 100vw" : "(min-width:760px) 380px, 50vw"}
                     className="h-auto w-full transition-transform duration-[1.4s] ease-[var(--ease-silk)] group-hover:scale-[1.04]"
                   />
                 </figure>
