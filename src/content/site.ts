@@ -39,7 +39,7 @@ export const nav: NavItem[] = [
     inHeader: true,
     children: [
       { label: "Le projet", href: "/le-merkez" },
-      { label: "Le futur lieu", href: "/le-merkez#lieu" },
+      { label: "Le futur lieu", href: "/le-futur-lieu" },
       { label: "Le Shaykh", href: "/le-shaykh" },
     ],
   },
@@ -56,7 +56,8 @@ export const joinCta = { label: "Nous rejoindre", href: "https://t.me/+ntcTlHvj-
 export const navCta = { label: "Nous soutenir", href: "/#soutenir" };
 
 export const footerLinks = [
-  { label: "Le Merkez", href: "/le-merkez" },
+  { label: "Le projet", href: "/le-merkez" },
+  { label: "Le futur lieu", href: "/le-futur-lieu" },
   { label: "Le Shaykh", href: "/le-shaykh" },
   { label: "Actualités", href: "/actualites" },
   { label: "Nos actions", href: "/#actions" },

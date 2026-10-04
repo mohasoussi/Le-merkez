@@ -9,8 +9,10 @@ import { place } from "@/content/place";
 
 const O = 30; // marge
 const C = 180; // taille d'une case
-const cells = [0, 1, 2, 3, 5, 6, 7, 8]; // 3×3 sans le centre (4)
+/** Cases occupées dans la grille 3×3 (le centre, 4, reste la cour). 6 espaces : les quatre angles + les deux côtés ; les entrées (1 et 7) restent ouvertes. */
+const cells = place.spaces.length === 6 ? [0, 2, 3, 5, 6, 8] : [0, 1, 2, 3, 5, 6, 7, 8];
 const patterns = ["stripes", "dots", "diag", "check", "stripes", "diag", "dots", "check"];
+const openCells = [0, 1, 2, 3, 5, 6, 7, 8].filter((c) => !cells.includes(c));
 
 /** Petite arcade (série d'arcs) le long d'un côté de la cour. */
 function arcade(x: number, y: number, w: number, n: number) {
@@ -27,7 +29,7 @@ function arcade(x: number, y: number, w: number, n: number) {
  * UN LIEU POUR SE RENCONTRER — plan conceptuel : huit espaces cousus autour d'un centre,
  * comme les carrés d'une muraqaa. Le tracé se dessine au scroll puis chaque espace se colore.
  */
-export default function PhysicalPlace() {
+export default function PhysicalPlace({ headless = false, withMaquette = true }: { headless?: boolean; withMaquette?: boolean }) {
   const root = useRef<HTMLElement>(null);
   const [active, setActive] = useState<number | null>(null);
 
@@ -63,6 +65,7 @@ export default function PhysicalPlace() {
 
   return (
     <section ref={root} id="lieu" aria-labelledby="place-title" className="grain relative overflow-hidden bg-night text-cream">
+      {!headless && (
       <div className="gutter mx-auto max-w-[1600px] pt-28 md:pt-40">
         <SectionHeading
           id="place-title"
@@ -76,6 +79,7 @@ export default function PhysicalPlace() {
           <RevealText className="text-lg leading-relaxed text-cream/75 md:col-span-5 md:col-start-8">{place.text}</RevealText>
         </div>
       </div>
+      )}
 
       <div data-place-stage className="gutter mx-auto grid max-w-[1600px] items-center gap-12 py-20 lg:h-[100svh] lg:grid-cols-12 lg:py-0">
         <figure className="lg:col-span-6 lg:col-start-1">
@@ -130,6 +134,11 @@ export default function PhysicalPlace() {
               );
             })}
 
+            {/* Entrées ouvertes (cases sans salle) : jardin / passage */}
+            {openCells.map((cell) => (
+              <rect key={`open-${cell}`} data-room x={O + (cell % 3) * C + 7} y={O + Math.floor(cell / 3) * C + 7} width={C - 14} height={C - 14} fill="url(#p-dots)" opacity=".5" />
+            ))}
+
             {/* Cour centrale */}
             <circle data-core-glow cx="300" cy="300" r="120" fill="url(#core-glow)" />
 
@@ -158,7 +167,7 @@ export default function PhysicalPlace() {
         </figure>
 
         <div className="lg:col-span-5 lg:col-start-8">
-          <p className="eyebrow mb-6 text-saffron">Le lieu accueillera</p>
+          <p className="eyebrow mb-6 text-saffron">{place.listTitle}</p>
           <ol className="divide-y divide-cream/15 border-y border-cream/15" onMouseLeave={() => setActive(null)}>
             {place.spaces.map((s, i) => (
               <li key={s.label} data-space>
@@ -180,7 +189,7 @@ export default function PhysicalPlace() {
         </div>
       </div>
 
-      {place.images.length > 0 && (
+      {withMaquette && place.images.length > 0 && (
         <div data-maquette className="gutter mx-auto max-w-[1600px] pb-28 pt-8 md:pb-40">
           <div className="grid gap-6 md:grid-cols-12">
             <h3 className="display text-[clamp(1.8rem,3.6vw,3.4rem)] md:col-span-6">{place.maquetteTitle}</h3>

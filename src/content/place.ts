@@ -6,23 +6,22 @@ import type { Media } from "./types";
  * (plan en patchwork autour d'un centre) est affichée.
  */
 export const place = {
-  eyebrow: "Le projet physique",
+  eyebrow: "Le futur lieu",
   title: "Un lieu pour se rencontrer",
   subtitle: "Une maison de la rencontre.",
-  text: "Le Merkez a vocation à disposer d’un lieu physique, ouvert, capable d’accueillir des personnes venant de différents horizons.",
+  text: "Le futur lieu constituera la matérialisation d’une œuvre déjà en mouvement pour accueillir les activités du Merkez et leur donner un espace permanent.",
+  listTitle: "Ce lieu réunit",
   centerLabel: "Le centre",
   centerNote: "En turc, « merkez » signifie « centre ».",
   disclaimer: "Visualisation conceptuelle — aucun lieu n’est encore arrêté.",
-  /** Les 8 espaces autour du centre (ordre : de gauche à droite, de haut en bas). */
+  /** Les espaces du futur lieu, tels que décrits dans la plaquette (ordre de lecture du plan). */
   spaces: [
-    { label: "Rencontres", color: textile.indigo },
-    { label: "Retraites", color: textile.moss },
-    { label: "Conférences", color: textile.madder },
-    { label: "Transmission", color: textile.saffron },
-    { label: "Tables rondes", color: textile.rose },
-    { label: "Actions humanitaires", color: textile.terracotta },
-    { label: "Activités culturelles", color: textile.olive },
-    { label: "Accueil", color: textile.ochre },
+    { label: "Espaces de retraite", color: textile.moss },
+    { label: "Espaces de rencontre et de conférence", color: textile.indigo },
+    { label: "Espaces de spiritualité", color: textile.madder },
+    { label: "Espaces de nature", color: textile.olive },
+    { label: "Librairie et boutique", color: textile.saffron },
+    { label: "Espaces dédiés aux actions solidaires", color: textile.rose },
   ],
   /** Maquette du projet : visualisations conceptuelles du futur lieu (aucun lieu n'est encore arrêté). */
   maquetteTitle: "La maquette du projet",
