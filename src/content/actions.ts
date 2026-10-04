@@ -255,10 +255,10 @@ published.push({
   excerpt:
     "Le 18 mai, l’association Les Compagnons a organisé les « Assises fraternelles », sur le thème « Pourquoi le dialogue est la seule solution ? », en présence du Shaykh Mohamed Faouzi Al Karkari.",
   cover: {
-    src: `${assises}/table-ronde.jpg`,
-    alt: "Assemblée réunie en cercle dans une salle lumineuse, un intervenant prend la parole au micro",
+    src: `${assises}/shaykh-parole.jpg`,
+    alt: "Le Shaykh Mohamed Faouzi Al Karkari prend la parole au micro, au centre d’un cercle de participants",
     width: 1179,
-    height: 1116,
+    height: 1248,
   },
   body: [
     "Le lundi 18 mai, l’association Les Compagnons a organisé les « Assises fraternelles », une rencontre placée sous le thème : « Pourquoi le dialogue est la seule solution ? ».",
@@ -277,6 +277,11 @@ published.push({
     "Nos remerciements vont à l’association Les Compagnons qui, à travers ces « Assises fraternelles », poursuit son engagement en faveur du dialogue, de la paix et du rapprochement entre les différentes composantes de la société.",
   ],
   photos: [
+    { src: `${assises}/table-ronde.jpg`, alt: "Assemblée réunie en cercle dans une salle lumineuse, un intervenant prend la parole au micro", width: 1179, height: 1116 },
+    { src: `${assises}/cercle-attentif.jpg`, alt: "Participants attentifs, assis en cercle, pendant que le Shaykh s’exprime", width: 1179, height: 1452 },
+    { src: `${assises}/intervenant-micro.jpg`, alt: "Un intervenant en chapeau noir prend la parole au micro, devant des participants attentifs", width: 1179, height: 1314 },
+    { src: `${assises}/shaykh-ecoute.jpg`, alt: "Le Shaykh écoute attentivement un intervenant, un micro au premier plan", width: 1350, height: 1800 },
+    { src: `${assises}/portrait-profil.jpg`, alt: "Portrait de profil d’un participant en chapeau noir, dans la salle aux boiseries", width: 1350, height: 1800 },
     { src: `${assises}/salle.jpg`, alt: "Public assis en rangs dans une salle aux boiseries, à l’écoute d’un intervenant", width: 1179, height: 1176 },
     { src: `${assises}/intervenant.jpg`, alt: "Un intervenant s’exprime au micro, entouré d’autres participants", width: 1179, height: 1218 },
     { src: `${assises}/ecoute.jpg`, alt: "Participants attentifs pendant les échanges, certains vêtus de muraqaas", width: 1179, height: 1470 },
