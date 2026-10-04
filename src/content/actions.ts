@@ -235,6 +235,11 @@ published.push({
     { src: `${paix}/repas-partage.jpg`, alt: "Longue table où l’on partage le repas et la conversation autour d’un piano", width: 960, height: 540 },
     { src: `${paix}/echanges.jpg`, alt: "Convives attablés qui échangent, participants en muraqaa et membres de l’association", width: 960, height: 540 },
     { src: `${paix}/cuisine.jpg`, alt: "Conversation dans la cuisine ouverte, au milieu des préparatifs du repas", width: 960, height: 540 },
+    { src: `${paix}/grande-salle.jpg`, alt: "Grande salle lumineuse où les convives déjeunent à plusieurs tables, ouverte sur la campagne", width: 1800, height: 1012 },
+    { src: `${paix}/barbecue.jpg`, alt: "Trois hommes préparent des grillades sur un barbecue en plein air", width: 960, height: 540 },
+    { src: `${paix}/accueil.jpg`, alt: "Moment de rencontre autour d’une table : participants en muraqaa et invités, des fanions de couleur derrière la baie vitrée", width: 960, height: 540 },
+    { src: `${paix}/table-longue.jpg`, alt: "Longue table où l’on partage le repas et la conversation, un homme en tunique blanche debout au fond", width: 960, height: 540 },
+    { src: `${paix}/diner.jpg`, alt: "Dîner partagé autour d’une longue table, un participant en muraqaa au premier plan", width: 960, height: 540 },
   ],
 });
 
