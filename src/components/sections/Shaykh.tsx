@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, useState, type KeyboardEvent } from "react";
 import { gsap, MQ, useGSAP } from "@/components/motion/gsap";
 import RevealText from "@/components/motion/RevealText";
@@ -28,6 +29,14 @@ export default function Shaykh({ headingAs = "h2" }: { headingAs?: "h1" | "h2" }
           ease: "expo.inOut",
           scrollTrigger: { trigger: "[data-portrait]", start: "top 80%", once: true },
         });
+        gsap.utils.toArray<HTMLElement>("[data-shaykh-photo]").forEach((el, i) => {
+          gsap.from(el, {
+            clipPath: i % 2 ? "inset(0% 0% 100% 0%)" : "inset(100% 0% 0% 0%)",
+            duration: 1.6,
+            ease: "expo.inOut",
+            scrollTrigger: { trigger: el, start: "top 85%", once: true },
+          });
+        });
         gsap.fromTo(
           "[data-portrait-inner]",
           { yPercent: -6, scale: 1.15 },
@@ -51,7 +60,7 @@ export default function Shaykh({ headingAs = "h2" }: { headingAs?: "h1" | "h2" }
         <div className="lg:col-span-5">
           <div data-portrait className="relative aspect-[4/5] overflow-hidden lg:sticky lg:top-28">
             <div data-portrait-inner className="absolute inset-0">
-              <Photo media={shaykh.portrait} seed={88} sizes="(min-width:1024px) 40vw, 100vw" className="h-full w-full" />
+              <Photo media={shaykh.portrait} seed={88} priority sizes="(min-width:1024px) 40vw, 100vw" className="h-full w-full" imgClassName="object-[50%_25%]" />
             </div>
           </div>
         </div>
@@ -119,6 +128,35 @@ export default function Shaykh({ headingAs = "h2" }: { headingAs?: "h1" | "h2" }
           </div>
         </div>
       </div>
+
+      {shaykh.photos.length > 0 && (
+        <div className="gutter mx-auto mt-24 max-w-[1600px] md:mt-32">
+          <p className="eyebrow mb-8 flex items-center gap-4 text-madder">
+            <span aria-hidden="true" className="stitch inline-block w-10" />
+            En images
+          </p>
+          <div className="grid gap-4 md:grid-cols-12 md:gap-6">
+            {shaykh.photos.map((ph, i) => (
+              <figure
+                key={ph.src}
+                data-shaykh-photo
+                className={i === 0 ? "md:col-span-5 md:row-span-2" : i === 1 ? "md:col-span-7" : "md:col-span-7"}
+              >
+                <div className={`relative overflow-hidden ${i === 0 ? "aspect-[4/5] md:aspect-auto md:h-full" : "aspect-[4/3]"}`}>
+                  <Image
+                    src={ph.src!}
+                    alt={ph.alt}
+                    fill
+                    sizes={i === 0 ? "(min-width:768px) 40vw, 100vw" : "(min-width:768px) 55vw, 100vw"}
+                    className="object-cover transition-transform duration-[1.6s] ease-[var(--ease-silk)] hover:scale-[1.04]"
+                  />
+                </div>
+                {ph.credit && <figcaption className="mt-2 text-[0.65rem] uppercase tracking-[0.16em] text-umber/50">{ph.credit}</figcaption>}
+              </figure>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 }
