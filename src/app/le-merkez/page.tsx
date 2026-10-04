@@ -14,7 +14,7 @@ import { donation } from "@/content/donation";
 export const metadata: Metadata = {
   title: "Le Merkez",
   description:
-    "Le Merkez expliqué : une idée (se connaître), une métaphore (la muraqaa), cinq actions, un futur lieu pour se rencontrer.",
+    "Le Merkez expliqué : une idée (se connaître), une métaphore (la muraqaa), des actions de terrain, un futur lieu pour se rencontrer.",
   alternates: { canonical: "/le-merkez" },
 };
 
@@ -113,7 +113,7 @@ export default function MerkezPage() {
         </div>
       </section>
 
-      {/* 3 — Les cinq actions */}
+      {/* 3 — Les actions */}
       <section id="actions" className="relative bg-night py-24 text-cream md:py-36">
         <div className="gutter mx-auto max-w-[1600px]">
           <p className="eyebrow mb-6 flex items-center gap-4 text-saffron">
@@ -126,9 +126,9 @@ export default function MerkezPage() {
             </RevealText>
             <p className="self-end text-lg leading-relaxed text-cream/70 lg:col-span-4 lg:col-start-9">{c.axes.text}</p>
           </div>
-          <ul className="mt-14 grid gap-px bg-cream/10 md:grid-cols-2 lg:grid-cols-5">
+          <ul className="mt-14 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
             {actions.map((a) => (
-              <li key={a.slug} className="group relative bg-night">
+              <li key={a.slug} className="group relative border border-cream/10 bg-night">
                 <Reveal className="flex h-full flex-col p-7 md:p-8">
                   <span aria-hidden="true" className="mb-6 block h-1.5 w-12 transition-all duration-700 group-hover:w-full" style={{ backgroundColor: a.color }} />
                   <span className="text-[0.65rem] font-semibold tracking-[0.3em]" style={{ color: a.accent }}>

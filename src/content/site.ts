@@ -64,6 +64,8 @@ export const footerLinks = [
   { label: "Retraites", href: "/actions/retraites-spirituelles" },
   { label: "Conférences", href: "/actions/conferences-tables-rondes" },
   { label: "Humanitaire", href: "/actions/actions-humanitaires" },
+  { label: "Solidaire", href: "/actions/actions-solidaires" },
+  { label: "Marches", href: "/actions/marches" },
   { label: "Ouvrages", href: "/librairie" },
   { label: "Nous soutenir", href: "/#soutenir" },
   { label: "Nous rejoindre", href: joinCta.href },

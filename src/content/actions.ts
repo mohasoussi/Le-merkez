@@ -2,7 +2,7 @@ import { textile } from "@/lib/palette";
 import type { Media } from "./types";
 
 /**
- * Les 5 grands axes du Merkez et les articles (actions menées) classés par catégorie.
+ * Les grands axes du Merkez et les articles (actions menées) classés par catégorie.
  *
  * Pour publier un article : ajouter un objet dans `articles` avec la bonne `category`
  * (slug d'un axe), un `slug` unique, un titre, une date ISO (AAAA-MM-JJ), un extrait,
@@ -14,6 +14,8 @@ export type ActionSlug =
   | "retraites-spirituelles"
   | "conferences-tables-rondes"
   | "actions-humanitaires"
+  | "actions-solidaires"
+  | "marches"
   | "librairie";
 
 export interface ActionAxis {
@@ -105,21 +107,43 @@ export const actions: ActionAxis[] = [
       "Le Merkez est également tourné vers l’action.",
       "Parce que se connaître, c’est aussi prendre soin les uns des autres.",
     ],
-    highlights: [
-      "Maraudes",
-      "Distributions",
-      "Actions solidaires",
-      "Visites dans les EHPAD",
-      "Soutien aux personnes isolées",
-      "Actions humanitaires",
-    ],
     color: textile.terracotta,
+    accent: textile.sand,
+    image: { src: null, alt: "Action humanitaire", placeholder: "[PHOTO À FOURNIR — Action humanitaire]" },
+  },
+  {
+    slug: "actions-solidaires",
+    number: "05",
+    title: "Actions solidaires",
+    short: "Solidaire",
+    summary: "Aller vers les personnes, près de chez soi : maraudes, visites dans les EHPAD, soutien aux personnes isolées.",
+    description: [
+      "Des gestes concrets, au plus près des personnes.",
+      "Montrer des échanges humains plutôt que des images misérabilistes : rencontrer, écouter, accompagner.",
+    ],
+    highlights: ["Maraudes", "Visites dans les EHPAD", "Soutien aux personnes isolées", "Distributions", "Actions solidaires"],
+    color: textile.rose,
     accent: textile.sand,
     image: { src: null, alt: "Échange humain lors d’une action solidaire", placeholder: "[PHOTO À FOURNIR — Action solidaire]" },
   },
   {
+    slug: "marches",
+    number: "06",
+    title: "Marches",
+    short: "Marches",
+    summary: "Les pérégrinations (siyahas) des fuqaras et les rencontres que l’on fait en chemin.",
+    description: [
+      "Marcher, c’est aller vers l’autre.",
+      "Les marches et les pérégrinations (siyahas) des fuqaras, et les rencontres de personnes faites à travers elles, de chemin en chemin.",
+    ],
+    highlights: ["Marches", "Pérégrinations (siyahas)", "Rencontres en chemin"],
+    color: textile.olive,
+    accent: textile.sand,
+    image: { src: null, alt: "Marche des fuqaras sur un chemin", placeholder: "[PHOTO À FOURNIR — Marche, siyaha]" },
+  },
+  {
     slug: "librairie",
-    number: "05",
+    number: "07",
     title: "Librairie",
     short: "Librairie",
     summary: "Des ouvrages pour prolonger la rencontre, transmettre et approfondir.",

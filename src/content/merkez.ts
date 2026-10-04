@@ -43,7 +43,7 @@ export const merkezPage = {
 
   axes: {
     eyebrow: "Ce que nous faisons",
-    title: "Cinq façons de se rencontrer",
+    title: "Des chemins pour se rencontrer",
     text: "Le Merkez n’est pas uniquement une idée : c’est un projet qui vit sur le terrain.",
   },
 

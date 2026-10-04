@@ -182,7 +182,7 @@ export default function ActionChapters() {
             Nos actions
           </h2>
           <p className="mt-6 max-w-sm text-base leading-relaxed text-cream/70 md:text-lg">
-            Se rencontrer, dialoguer, se retirer, réfléchir, servir et transmettre : cinq chemins pour une même intention.
+            Se rencontrer, dialoguer, se retirer, marcher, servir et transmettre : autant de chemins pour une même intention.
           </p>
           <p aria-hidden="true" className="eyebrow mt-10 flex items-center gap-3 text-cream/50">
             Faites défiler <span className="inline-block animate-pulse">→</span>
