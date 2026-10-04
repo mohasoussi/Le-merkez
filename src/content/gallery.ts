@@ -25,11 +25,11 @@ export const galleryIntro = {
 
 export const gallery: GalleryItem[] = [
   { category: "Rencontres", format: "portrait", src: null, alt: "Rencontre", placeholder: "[PHOTO — Rencontres]" },
-  { category: "Retraites", format: "landscape", src: null, alt: "Retraite", placeholder: "[PHOTO — Retraites]" },
+  { category: "Retraites", format: "landscape", src: "/images/retraites/flute.jpg", alt: "Un participant joue de la flûte traversière pendant une retraite" },
   { category: "Conférences", format: "square", src: null, alt: "Conférence", placeholder: "[PHOTO — Conférences]" },
-  { category: "Paysages", format: "full", src: null, alt: "Paysage", placeholder: "[PHOTO — Paysages]" },
+  { category: "Retraites", format: "full", src: "/images/retraites/musique.jpg", alt: "Musique partagée à l’oud et à la guitare pendant une retraite" },
   { category: "Actions humanitaires", format: "landscape", src: null, alt: "Action humanitaire", placeholder: "[PHOTO — Humanitaire]" },
   { category: "Voyages", format: "portrait", src: null, alt: "Voyage", placeholder: "[PHOTO — Voyages]" },
-  { category: "Communautés", format: "portrait", src: null, alt: "Communauté", placeholder: "[PHOTO — Communautés]" },
+  { category: "Retraites", format: "portrait", src: "/images/retraites/marche.jpg", alt: "Marche en forêt, vêtus de muraqaas colorées" },
   { category: "Livres", format: "square", src: null, alt: "Livres", placeholder: "[PHOTO — Livres]" },
 ];

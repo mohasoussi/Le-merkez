@@ -28,8 +28,8 @@ export interface ActionAxis {
   color: string;
   accent: string;
   image: Media;
-  /** Visuels secondaires (ambiance). */
-  moodImages?: Media[];
+  /** Photos de l'axe (affichées sur sa page, en galerie). */
+  photos?: Media[];
 }
 
 export const actions: ActionAxis[] = [
@@ -61,10 +61,18 @@ export const actions: ActionAxis[] = [
     highlights: ["Nature", "Montagne", "Silence", "Marche", "Méditation", "Rencontres"],
     color: textile.moss,
     accent: textile.sand,
-    image: { src: null, alt: "Retraite spirituelle en montagne", placeholder: "[PHOTO À FOURNIR — Retraite, nature, montagne]" },
-    moodImages: [
-      { src: null, alt: "Marche en silence", placeholder: "[PHOTO — Marche]" },
-      { src: null, alt: "Méditation", placeholder: "[PHOTO — Méditation]" },
+    image: {
+      src: "/images/retraites/marche.jpg",
+      alt: "Un groupe vêtu de muraqaas colorées marche sur un chemin en forêt",
+      width: 1350,
+      height: 1800,
+    },
+    photos: [
+      { src: "/images/retraites/marche.jpg", alt: "Marche en forêt, vêtus de muraqaas aux carrés de tissu colorés", width: 1350, height: 1800 },
+      { src: "/images/retraites/musique.jpg", alt: "Deux participants jouent de l’oud et de la guitare devant un mur de briques", width: 1800, height: 1350 },
+      { src: "/images/retraites/table.jpg", alt: "Table du petit-déjeuner dressée devant une fenêtre ouverte sur la forêt", width: 1350, height: 1800 },
+      { src: "/images/retraites/flute.jpg", alt: "Un participant joue de la flûte traversière près d’une baie vitrée", width: 1800, height: 1350 },
+      { src: "/images/retraites/repas.jpg", alt: "Repas partagé autour d’une longue table face à la forêt", width: 1350, height: 1800 },
     ],
   },
   {

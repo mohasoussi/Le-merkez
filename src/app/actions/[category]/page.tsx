@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageHeader from "@/components/layout/PageHeader";
@@ -55,6 +56,26 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
                 </li>
               ))}
             </ul>
+          )}
+
+          {action.photos && action.photos.length > 0 && (
+            <div className="mb-20">
+              <h2 className="eyebrow mb-8 text-umber/60">En images</h2>
+              <div className="columns-1 gap-4 sm:columns-2 lg:columns-3">
+                {action.photos.map((ph, i) => (
+                  <figure key={ph.src ?? i} className="group mb-4 break-inside-avoid overflow-hidden rounded-[4px]">
+                    <Image
+                      src={ph.src!}
+                      alt={ph.alt}
+                      width={ph.width ?? 1200}
+                      height={ph.height ?? 900}
+                      sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
+                      className="h-auto w-full transition-transform duration-[1.4s] ease-[var(--ease-silk)] group-hover:scale-[1.04]"
+                    />
+                  </figure>
+                ))}
+              </div>
+            </div>
           )}
 
           <h2 className="eyebrow mb-10 text-umber/60">Actions menées</h2>

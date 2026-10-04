@@ -40,12 +40,27 @@ function ActionCard({ action, index }: { action: ActionAxis; index: number }) {
         />
 
         {/* Patchwork animé */}
-        <div aria-hidden="true" className="relative mx-5 mt-5 grid h-[42%] grid-cols-4 grid-rows-3 gap-[3px] overflow-hidden rounded-[16px] [perspective:800px] md:mx-6 md:mt-6">
-          {patches.map((p) => (
-            <span key={p.id} data-tile className="block" style={patchStyle(p)} />
+        <div role={action.image.src ? "img" : undefined} aria-label={action.image.src ? action.image.alt : undefined} aria-hidden={action.image.src ? undefined : true} className="relative mx-5 mt-5 grid h-[42%] grid-cols-4 grid-rows-3 gap-[3px] overflow-hidden rounded-[16px] [perspective:800px] md:mx-6 md:mt-6">
+          {patches.map((p, i) => (
+            <span
+              key={p.id}
+              data-tile
+              className="block"
+              style={
+                action.image.src
+                  ? {
+                      // la photo de l'axe, découpée en 12 carrés de tissu
+                      backgroundImage: `url(${action.image.src})`,
+                      backgroundSize: "400% 300%",
+                      backgroundPosition: `${((i % 4) / 3) * 100}% ${(Math.floor(i / 4) / 2) * 100}%`,
+                    }
+                  : patchStyle(p)
+              }
+            />
           ))}
           <span
             data-number
+            aria-hidden="true"
             className="absolute bottom-2 right-3 text-[clamp(3rem,7vw,6rem)] font-extralight leading-none text-cream mix-blend-overlay"
           >
             {action.number}
