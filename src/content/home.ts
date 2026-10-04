@@ -89,6 +89,66 @@ export const film = {
   caption: null as string | null,
 };
 
+/**
+ * Les cinq gestes du Merkez, en bandes de tissu superposées (couture entre chaque bande).
+ * `photo.src: null` → visuel de remplacement « [PHOTO À FOURNIR] ».
+ * Pour la bande « Cultiver », les couvertures de livres s'affichent à la place d'une photo (`books: true`).
+ */
+export interface FabricBand {
+  word: string;
+  line: string;
+  /** Couleur du tissu, couleur du texte, couleur du fil / des broderies. */
+  color: string;
+  ink: string;
+  thread: string;
+  photo: { src: string | null; alt: string; placeholder?: string; position?: string };
+  books?: boolean;
+}
+
+export const fabricBands: FabricBand[] = [
+  {
+    word: "Rencontrer",
+    line: "Rencontres interreligieuses et interculturelles",
+    color: "#efe6d3",
+    ink: "#4a3324",
+    thread: "#a67c3d",
+    photo: { src: "/images/actions/rencontre-abbaye-de-fleury/jardin.jpg", alt: "Fuqaras en muraqaa et moines bénédictins réunis dans le parc de l’abbaye de Fleury", position: "50% 28%" },
+  },
+  {
+    word: "Se retrouver",
+    line: "Retraites et temps de présence",
+    color: "#d8c3a0",
+    ink: "#7a4a1d",
+    thread: "#8a6a35",
+    photo: { src: "/images/retraites/flute.jpg", alt: "Un participant joue de la flûte traversière près d’une baie vitrée pendant une retraite" },
+  },
+  {
+    word: "Transmettre",
+    line: "Conférences, visites et transmission",
+    color: "#6e1b21",
+    ink: "#f4ecdd",
+    thread: "#d9b15c",
+    photo: { src: "/images/actions/assises-fraternelles/shaykh-parole.jpg", alt: "Le Shaykh Mohamed Faouzi Al Karkari prend la parole au micro, au centre d’un cercle de participants", position: "50% 18%" },
+  },
+  {
+    word: "Servir",
+    line: "Actions humanitaires et solidaires",
+    color: "#1f4a36",
+    ink: "#f4ecdd",
+    thread: "#c9a35a",
+    photo: { src: null, alt: "Action solidaire", placeholder: "[PHOTO À FOURNIR — Action solidaire]" },
+  },
+  {
+    word: "Cultiver",
+    line: "Initiatives culturelles, connaissance et livres",
+    color: "#14233f",
+    ink: "#f4ecdd",
+    thread: "#d9b15c",
+    photo: { src: null, alt: "Ouvrages des éditions Les 7 Lectures" },
+    books: true,
+  },
+];
+
 export const vision = {
   /** Phrase écrite au cœur du patchwork qui se constitue (seul texte de la section). */
   statement:

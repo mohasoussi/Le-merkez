@@ -2,6 +2,7 @@ import FragmentDivider from "@/components/layout/FragmentDivider";
 import ActionChapters from "@/components/sections/ActionChapters";
 import Books from "@/components/sections/Books";
 import Donation from "@/components/sections/Donation";
+import FabricBands from "@/components/sections/FabricBands";
 import FilmFrame from "@/components/sections/FilmFrame";
 import Gallery from "@/components/sections/Gallery";
 import Hero from "@/components/sections/Hero";
@@ -21,6 +22,7 @@ export default function Home() {
       <FilmFrame />
       <FragmentDivider from="var(--color-night)" to="var(--color-cream)" seed={3} />
       <InAction />
+      <FabricBands />
       <Vision />
       <FragmentDivider from="var(--color-cream)" to="var(--color-night)" seed={12} />
       <ActionChapters />

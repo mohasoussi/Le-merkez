@@ -16,6 +16,7 @@ export default function Photo({
   seed = 1,
   tone = "dark",
   showLabel = true,
+  position,
 }: {
   media: Media;
   sizes?: string;
@@ -26,11 +27,13 @@ export default function Photo({
   tone?: "dark" | "light";
   /** Masquer l'étiquette (le parent l'affiche lui-même). */
   showLabel?: boolean;
+  /** Cadrage de l'image (object-position CSS, ex. « 50% 30% »). */
+  position?: string;
 }) {
   if (media.src) {
     return (
       <div className={`relative overflow-hidden ${className}`}>
-        <Image src={media.src} alt={media.alt} fill sizes={sizes} priority={priority} className={`object-cover ${imgClassName}`} />
+        <Image src={media.src} alt={media.alt} fill sizes={sizes} priority={priority} className={`object-cover ${imgClassName}`} style={position ? { objectPosition: position } : undefined} />
       </div>
     );
   }

@@ -28,6 +28,7 @@ chaque carré = une personne, une culture, une tradition. Les fragments textiles
 
 | Section | Animation |
 | --- | --- |
+| Les gestes | cinq bandes de tissu (Rencontrer, Se retrouver, Transmettre, Servir, Cultiver) qui se déroulent au scroll, photo à droite (`fabricBands` dans `home.ts`) |
 | Vidéo | un lecteur YouTube serti dans un cadre en patchwork, sous le hero (`film` dans `home.ts`) |
 | Hero | photos qui coulissent (le projet du Merkez, puis nos actions), avec les fragments qui s'assemblent en emblème et « LE MERKEZ » ; photos dans `heroSlides` (`home.ts`) |
 | Hero (animation) | fragments épars → ils dérivent, se rapprochent, se cousent en un emblème 3×3 → « LE MERKEZ » |
