@@ -1,0 +1,631 @@
+// Schéma de la plateforme agence web.
+// Montants : toujours en CENTIMES (Int) pour éviter les erreurs d'arrondi.
+// Les URL de connexion sont dans prisma.config.ts (variables d'environnement).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────────── Utilisateurs & authentification
+
+enum Role {
+  ADMIN
+  CLIENT
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String?   // null tant que l'invitation n'a pas été acceptée
+  firstName    String
+  lastName     String    @default("")
+  role         Role
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+
+  clientId String?
+  client   Client? @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  sessions   Session[]
+  authTokens AuthToken[]
+  messages   Message[]
+  files      ProjectFile[]
+  activities Activity[]
+  notes      Note[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([clientId])
+}
+
+model Session {
+  id        String   @id // SHA-256 du jeton envoyé dans le cookie
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+enum AuthTokenType {
+  INVITATION
+  PASSWORD_RESET
+}
+
+model AuthToken {
+  id        String        @id @default(cuid())
+  tokenHash String        @unique
+  type      AuthTokenType
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime      @default(now())
+
+  @@index([userId])
+}
+
+model RateLimit {
+  key         String   @id
+  count       Int
+  windowStart DateTime
+}
+
+// ─────────────────────────────── Prospects
+
+enum PipelineStage {
+  NEW
+  TO_QUALIFY
+  CALL_SCHEDULED
+  CALL_DONE
+  QUOTE_SENT
+  NEGOTIATION
+  DEPOSIT_RECEIVED
+  IN_PRODUCTION
+  CLIENT_REVIEW
+  COMPLETED
+  MAINTENANCE
+  LOST
+}
+
+enum LeadSource {
+  TIKTOK
+  INSTAGRAM
+  FACEBOOK
+  GOOGLE
+  SEO
+  REFERRAL
+  ADS
+  DIRECT
+  OTHER
+}
+
+enum ProjectType {
+  NEW_SITE
+  REDESIGN
+  LANDING_PAGE
+  RESTAURANT_SITE
+  SHOWCASE_SITE
+  ECOMMERCE
+  OTHER
+}
+
+enum Sector {
+  RESTAURANT
+  RETAIL
+  CRAFTSMAN
+  CONSULTANT
+  FREELANCER
+  ASSOCIATION
+  LIBERAL_PROFESSION
+  SMALL_BUSINESS
+  OTHER
+}
+
+enum BudgetRange {
+  UNDER_500
+  FROM_500_TO_1000
+  FROM_1000_TO_1500
+  FROM_1500_TO_3000
+  OVER_3000
+}
+
+enum Timeline {
+  ASAP
+  WITHIN_MONTH
+  ONE_TO_THREE_MONTHS
+  LATER
+}
+
+model Lead {
+  id        String  @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String
+  phone     String
+
+  companyName    String
+  activity       String
+  city           String
+  country        String  @default("France")
+  currentWebsite String?
+  instagram      String?
+  facebook       String?
+  otherSocial    String?
+
+  projectType ProjectType
+  sector      Sector
+  budget      BudgetRange
+  needs       String[] // codes de NEEDS (src/lib/constants.ts)
+  needsOther  String?
+  description String
+  references  String?
+  timeline    Timeline
+
+  // Acquisition
+  source      LeadSource @default(DIRECT)
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  utmTerm     String?
+  utmContent  String?
+  referrer    String?
+  landingPath String?
+
+  // Consentement (RGPD)
+  consentAt      DateTime
+  consentVersion String
+  ipHash         String? // hash salé, jamais l'IP en clair
+
+  // Commercial
+  stage             PipelineStage @default(NEW)
+  stageChangedAt    DateTime      @default(now())
+  offerId           String?
+  offer             Offer?        @relation(fields: [offerId], references: [id], onDelete: SetNull)
+  dealAmountCents   Int?          // montant du devis / valeur estimée (TTC)
+  nextCallAt        DateTime?
+  lastInteractionAt DateTime      @default(now())
+  lostReason        String?
+
+  isDemo Boolean @default(false)
+
+  client     Client?
+  notes      Note[]
+  activities Activity[]
+  quotes     Quote[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([stage])
+  @@index([createdAt])
+  @@index([email])
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  leadId    String
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  authorId  String?
+  author    User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([leadId])
+}
+
+// ─────────────────────────────── Clients
+
+model Client {
+  id          String  @id @default(cuid())
+  leadId      String? @unique
+  lead        Lead?   @relation(fields: [leadId], references: [id], onDelete: SetNull)
+  firstName   String
+  lastName    String
+  email       String
+  phone       String?
+  companyName String
+  activity    String?
+  address     String?
+  city        String?
+  country     String  @default("France")
+  website     String?
+  notes       String?
+  isDemo      Boolean @default(false)
+
+  users         User[]
+  projects      Project[]
+  payments      Payment[]
+  subscriptions MaintenanceSubscription[]
+  activities    Activity[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─────────────────────────────── Projets
+
+enum ProjectStatus {
+  BRIEF
+  DESIGN
+  DEVELOPMENT
+  REVISION
+  VALIDATION
+  LAUNCH
+  DONE
+}
+
+model Project {
+  id               String        @id @default(cuid())
+  clientId         String
+  client           Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  name             String
+  offerId          String?
+  offer            Offer?        @relation(fields: [offerId], references: [id], onDelete: SetNull)
+  priceCents       Int?
+  startDate        DateTime?
+  dueDate          DateTime?
+  status           ProjectStatus @default(BRIEF)
+  progressOverride Int? // null = progression calculée depuis le statut
+  previewUrl       String?
+  liveUrl          String?
+  notes            String? // notes internes (jamais visibles par le client)
+  briefEnabled     Boolean       @default(false) // ouvert au client après l'acompte
+  contentReceivedAt DateTime?
+  completedAt      DateTime?
+
+  brief      Brief?
+  files      ProjectFile[]
+  messages   Message[]
+  payments   Payment[]
+  activities Activity[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([clientId])
+  @@index([status])
+}
+
+enum BriefStatus {
+  DRAFT
+  SUBMITTED
+}
+
+model Brief {
+  id          String      @id @default(cuid())
+  projectId   String      @unique
+  project     Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  data        Json        @default("{}")
+  status      BriefStatus @default(DRAFT)
+  submittedAt DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+enum FileCategory {
+  LOGO
+  PHOTOS
+  TEXTS
+  BRAND
+  DOCUMENTS
+  OTHER
+}
+
+model ProjectFile {
+  id           String       @id @default(cuid())
+  projectId    String
+  project      Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  uploadedById String?
+  uploadedBy   User?        @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+  category     FileCategory
+  originalName String
+  storageKey   String       @unique
+  mimeType     String
+  sizeBytes    Int
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([projectId])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  authorId  String?
+  author    User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId, createdAt])
+}
+
+// ─────────────────────────────── Historique
+
+enum ActivityType {
+  LEAD_CREATED
+  STAGE_CHANGED
+  CALL_SCHEDULED
+  NOTE_ADDED
+  LEAD_UPDATED
+  QUOTE_CREATED
+  QUOTE_SENT
+  QUOTE_ACCEPTED
+  QUOTE_REFUSED
+  PAYMENT_RECORDED
+  DEPOSIT_RECEIVED
+  CLIENT_CREATED
+  CLIENT_ACCESS_CREATED
+  PROJECT_CREATED
+  PROJECT_STATUS_CHANGED
+  PROJECT_UPDATED
+  BRIEF_SUBMITTED
+  FILE_UPLOADED
+  MESSAGE_POSTED
+  SUBSCRIPTION_CREATED
+  SUBSCRIPTION_UPDATED
+}
+
+model Activity {
+  id        String       @id @default(cuid())
+  type      ActivityType
+  message   String
+  metadata  Json?
+  leadId    String?
+  lead      Lead?        @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  clientId  String?
+  client    Client?      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  projectId String?
+  project   Project?     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  actorId   String?
+  actor     User?        @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  createdAt DateTime     @default(now())
+
+  @@index([leadId, createdAt])
+  @@index([clientId, createdAt])
+  @@index([projectId, createdAt])
+}
+
+// ─────────────────────────────── Offres & catalogue
+
+enum OfferType {
+  SITE
+  MAINTENANCE
+}
+
+model Offer {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  type        OfferType @default(SITE)
+  name        String
+  tagline     String?
+  priceCents  Int // SITE : prix indicatif ; MAINTENANCE : prix mensuel
+  priceLabel  String? // ex. « à partir de »
+  features    String[]
+  highlighted Boolean   @default(false)
+  isActive    Boolean   @default(true)
+  sortOrder   Int       @default(0)
+
+  leads         Lead[]
+  projects      Project[]
+  subscriptions MaintenanceSubscription[]
+  quoteItems    QuoteItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OfferOption {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  priceCents  Int? // null = sur devis
+  isActive    Boolean @default(true)
+  sortOrder   Int     @default(0)
+
+  quoteItems QuoteItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─────────────────────────────── Devis & paiements
+
+enum QuoteStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  REFUSED
+  EXPIRED
+}
+
+model Quote {
+  id            String      @id @default(cuid())
+  number        String      @unique
+  leadId        String
+  lead          Lead        @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  issueDate     DateTime    @default(now())
+  validUntil    DateTime
+  status        QuoteStatus @default(DRAFT)
+  vatRateBps    Int // taux de TVA en points de base : 2000 = 20 %, 0 = TVA non applicable
+  totalHtCents  Int         @default(0)
+  totalVatCents Int         @default(0)
+  totalTtcCents Int         @default(0)
+  notes         String?
+  sentAt        DateTime?
+  respondedAt   DateTime?
+
+  items    QuoteItem[]
+  payments Payment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([leadId])
+}
+
+model QuoteItem {
+  id             String       @id @default(cuid())
+  quoteId        String
+  quote          Quote        @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  label          String
+  description    String?
+  quantity       Int          @default(1)
+  unitPriceCents Int
+  offerId        String?
+  offer          Offer?       @relation(fields: [offerId], references: [id], onDelete: SetNull)
+  optionId       String?
+  option         OfferOption? @relation(fields: [optionId], references: [id], onDelete: SetNull)
+  sortOrder      Int          @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum PaymentKind {
+  DEPOSIT
+  BALANCE
+  MAINTENANCE
+  OTHER
+}
+
+enum PaymentMethod {
+  TRANSFER
+  CARD
+  CASH
+  CHECK
+  OTHER
+}
+
+model Payment {
+  id          String        @id @default(cuid())
+  clientId    String
+  client      Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  projectId   String?
+  project     Project?      @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  quoteId     String?
+  quote       Quote?        @relation(fields: [quoteId], references: [id], onDelete: SetNull)
+  kind        PaymentKind
+  method      PaymentMethod @default(TRANSFER)
+  amountCents Int
+  paidAt      DateTime
+  reference   String?
+  notes       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([clientId])
+  @@index([paidAt])
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAUSED
+  CANCELLED
+}
+
+model MaintenanceSubscription {
+  id          String             @id @default(cuid())
+  clientId    String
+  client      Client             @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  offerId     String?
+  offer       Offer?             @relation(fields: [offerId], references: [id], onDelete: SetNull)
+  planName    String // copie du nom du plan au moment de la souscription
+  priceCents  Int // prix mensuel convenu
+  startDate   DateTime
+  status      SubscriptionStatus @default(ACTIVE)
+  nextDueDate DateTime?
+  cancelledAt DateTime?
+  notes       String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([clientId])
+}
+
+// ─────────────────────────────── Contenu du site public
+
+enum PortfolioStatus {
+  DRAFT
+  PUBLISHED
+}
+
+model PortfolioProject {
+  id           String          @id @default(cuid())
+  slug         String          @unique
+  name         String
+  category     Sector
+  imageKey     String? // image téléversée (stockage)
+  imageUrl     String? // ou image externe
+  imageAlt     String?
+  description  String
+  url          String?
+  technologies String[]
+  date         DateTime?
+  status       PortfolioStatus @default(DRAFT)
+  sortOrder    Int             @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Faq {
+  id        String  @id @default(cuid())
+  question  String
+  answer    String
+  isActive  Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SiteSettings {
+  id Int @id @default(1)
+
+  brandName    String @default("Studio Web")
+  heroTitle    String @default("Votre site internet professionnel, sans prise de tête.")
+  heroSubtitle String @default("Des sites modernes, rapides et adaptés à votre activité.")
+  problemQuote String @default("Votre Instagram montre votre activité. Votre site doit rassurer vos clients.")
+  ctaTitle     String @default("Parlons de votre projet.")
+  ctaSubtitle  String @default("Décrivez-nous votre activité et vos besoins. Nous vous recontacterons pour étudier votre projet.")
+  seoTitle       String @default("Création de sites internet pour petites entreprises")
+  seoDescription String @default("Des sites internet modernes, rapides et professionnels pour les petites entreprises, commerces, restaurants et indépendants.")
+
+  contactEmail String?
+  phone        String?
+  address      String?
+  city         String?
+  instagramUrl String?
+  tiktokUrl    String?
+  facebookUrl  String?
+  linkedinUrl  String?
+
+  // Mentions légales / devis
+  legalName      String?
+  legalForm      String?
+  siret          String?
+  vatNumber      String?
+  hostingInfo    String?
+  vatRateBps     Int     @default(0)
+  vatMention     String? @default("TVA non applicable, art. 293 B du CGI")
+  depositPercent Int     @default(50)
+  quoteValidityDays Int  @default(30)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -1,0 +1,23 @@
+node_modules
+.next
+out
+next-env.d.ts
+*.tsbuildinfo
+.DS_Store
+.vercel
+
+# Secrets : ne JAMAIS commiter
+.env
+.env*.local
+.env.test
+
+# Code généré par Prisma
+src/generated
+
+# Fichiers téléversés (stockage local)
+storage/
+
+# Tests
+playwright-report
+test-results
+coverage
