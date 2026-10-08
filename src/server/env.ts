@@ -1,5 +1,5 @@
 import "server-only";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 
 const bool = z
   .enum(["true", "false", "1", "0", ""])

@@ -102,3 +102,14 @@ describe("CRM — prospects", () => {
     await expect(changeLeadStage(user, "x", "LOST")).rejects.toThrow("Accès refusé");
   });
 });
+
+describe("messages de validation", () => {
+  it("sont en français, y compris pour un champ absent", async () => {
+    const { leadSubmissionSchema } = await import("@/lib/validation/lead");
+    const r = leadSubmissionSchema.safeParse({});
+    expect(r.success).toBe(false);
+    const messages = r.error!.issues.map((i) => i.message).join(" ");
+    expect(messages).not.toMatch(/Invalid|expected/);
+    expect(messages).toContain("Ce champ est requis.");
+  });
+});

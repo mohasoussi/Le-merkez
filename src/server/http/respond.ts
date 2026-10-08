@@ -1,6 +1,6 @@
 import "server-only";
 import { NextResponse } from "next/server";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { AppError, GENERIC_ERROR } from "@/server/errors";
 import { logger } from "@/server/logger";
 import { zodFieldErrors } from "@/server/actions/result";

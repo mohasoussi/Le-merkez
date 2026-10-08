@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { requireActor, requireAdmin } from "@/server/auth/guards";
 import { reopenBrief, saveBriefDraft, submitBrief } from "@/server/services/briefs";
 import { postMessage } from "@/server/services/messages";

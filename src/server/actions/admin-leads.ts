@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { requireAdmin } from "@/server/auth/guards";
 import * as leads from "@/server/services/leads";
 import { convertLeadToClient } from "@/server/services/clients";

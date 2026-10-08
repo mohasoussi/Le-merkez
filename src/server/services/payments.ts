@@ -1,5 +1,5 @@
 import "server-only";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { db } from "@/server/db";
 import { AppError, notFound } from "@/server/errors";
 import { assertAdmin } from "@/server/auth/guards";

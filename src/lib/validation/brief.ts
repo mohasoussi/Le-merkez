@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@/lib/zod";
 
 const t = (max = 2000) => z.string().max(max, `${max} caractères maximum.`).optional().default("");
 

@@ -1,0 +1,46 @@
+# Déploiement « tout-en-un » sur un VPS : PostgreSQL + migrations + application.
+#   cp .env.example .env   (puis renseigner APP_URL, APP_SECRET, POSTGRES_PASSWORD, SMTP…)
+#   docker compose up -d --build
+# Placez un reverse proxy HTTPS devant (Caddy, Nginx, Traefik) — voir README.
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: agence
+      POSTGRES_USER: agence
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Définissez POSTGRES_PASSWORD dans .env}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agence -d agence"]
+      interval: 5s
+      retries: 10
+
+  # Applique les migrations et le contenu de départ, puis s'arrête.
+  migrate:
+    build: { context: ., target: builder }
+    command: sh -c "npx prisma migrate deploy && npx tsx --conditions=react-server prisma/seed.ts"
+    environment:
+      DATABASE_URL: postgresql://agence:${POSTGRES_PASSWORD}@db:5432/agence?schema=public
+    depends_on:
+      db: { condition: service_healthy }
+
+  app:
+    build: { context: ., target: runner }
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://agence:${POSTGRES_PASSWORD}@db:5432/agence?schema=public
+      STORAGE_LOCAL_DIR: /app/storage
+    ports:
+      - "127.0.0.1:3000:3000" # exposé uniquement en local : le reverse proxy HTTPS s'y connecte
+    volumes:
+      - uploads:/app/storage
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+
+volumes:
+  db-data:
+  uploads:

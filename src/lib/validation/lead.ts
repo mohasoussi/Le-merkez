@@ -1,9 +1,9 @@
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { BUDGETS, LEAD_SOURCES, NEEDS, PROJECT_TYPES, SECTORS, TIMELINES } from "@/lib/constants";
 
 // Schéma partagé navigateur / serveur : mêmes règles et mêmes messages des deux côtés.
 
-const text = (max: number) => z.string().trim().max(max, `${max} caractères maximum.`);
+const text = (max: number) => z.string({ error: "Ce champ est requis." }).trim().max(max, `${max} caractères maximum.`);
 const required = (label: string, max = 120) => text(max).min(1, `${label} requis.`);
 const optional = (max = 300) =>
   text(max)

@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { clearSessionCookie, getSessionToken, setSessionCookie } from "@/server/auth/cookies";
 import { createSession, invalidateSession } from "@/server/auth/session";
 import { requireActor } from "@/server/auth/guards";

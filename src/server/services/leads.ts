@@ -1,5 +1,5 @@
 import "server-only";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { db } from "@/server/db";
 import { AppError, notFound } from "@/server/errors";
 import { assertAdmin } from "@/server/auth/guards";
@@ -10,7 +10,7 @@ import { leadSubmissionSchema } from "@/lib/validation/lead";
 import { resolveLeadSource } from "@/lib/attribution";
 import { BUDGET_LABELS, CONSENT_VERSION, LEAD_SOURCE_LABELS, PIPELINE_STAGE_LABELS, PIPELINE_STAGES, PROJECT_TYPE_LABELS, BUDGETS, LEAD_SOURCES, PROJECT_TYPES, SECTORS } from "@/lib/constants";
 import { checkFormToken, verifyTurnstile } from "@/server/security/antispam";
-import { enforceRateLimit, RATE_LIMITS } from "@/server/security/rate-limit";
+import { enforceRateLimit, purgeRateLimits, RATE_LIMITS } from "@/server/security/rate-limit";
 import { hashIp } from "@/server/security/ip";
 import { notifyNewLead } from "@/server/email/notifications";
 import type { PipelineStage, Prisma } from "@/generated/prisma/client";
@@ -26,6 +26,8 @@ export type SubmitResult = { status: "created"; leadId: string } | { status: "di
  */
 export async function submitLead(raw: unknown, ctx: { ip: string; skipAntiSpam?: boolean }): Promise<SubmitResult> {
   await enforceRateLimit(`lead:${ctx.ip}`, RATE_LIMITS.leadForm);
+  // Nettoyage occasionnel des compteurs expirés (pas de tâche planifiée à maintenir)
+  if (Math.random() < 0.02) void purgeRateLimits().catch(() => {});
   const input = leadSubmissionSchema.parse(raw);
 
   if (!ctx.skipAntiSpam) {

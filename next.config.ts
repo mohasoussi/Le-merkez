@@ -33,6 +33,8 @@ const nextConfig: NextConfig = {
   distDir: process.env.NEXT_DIST_DIR || ".next",
   output: "standalone",
   serverExternalPackages: ["@node-rs/argon2"],
+  // Images des réalisations envoyées via Server Action (les fichiers clients passent par une route API dédiée)
+  experimental: { serverActions: { bodySizeLimit: "6mb" } },
   images: {
     formats: ["image/avif", "image/webp"],
   },
