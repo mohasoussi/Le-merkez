@@ -115,7 +115,7 @@ export default async function AdminProjectPage({ params, searchParams }: { param
             <Card>
               <CardHeader title="Statut" description="Visible par le client dans sa timeline." />
               <CardBody>
-                <ProjectStatusForm key={project.status} projectId={project.id} status={project.status} hasClientAccount={hasAccount} />
+                <ProjectStatusForm projectId={project.id} status={project.status} hasClientAccount={hasAccount} />
               </CardBody>
             </Card>
             <Card>

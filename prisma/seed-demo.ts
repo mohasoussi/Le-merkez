@@ -64,7 +64,7 @@ export async function seedDemo(db: PrismaClient) {
   const offers = Object.fromEntries((await db.offer.findMany()).map((o) => [o.slug, o]));
   const admin = await db.user.findFirst({ where: { role: "ADMIN" } });
   let quoteCounter = 1;
-  let firstClientId: string | null = null;
+  let demoAccountClientId: string | null = null;
 
   for (const l of LEADS) {
     const offer = offers[l.offer];
@@ -127,7 +127,7 @@ export async function seedDemo(db: PrismaClient) {
     const client = await db.client.create({
       data: { leadId: lead.id, firstName: l.first, lastName: l.last, email: lead.email, phone: lead.phone, companyName: l.company, activity: l.activity, city: l.city, isDemo: true, createdAt: ago(l.createdDaysAgo - 5) },
     });
-    firstClientId ??= client.id;
+    if (l.client.project === "DEVELOPMENT") demoAccountClientId = client.id;
     const started = ago(l.createdDaysAgo - 6);
     const done = l.client.project === "DONE";
     const project = await db.project.create({
@@ -181,11 +181,11 @@ export async function seedDemo(db: PrismaClient) {
     }
   }
 
-  // Compte client de démonstration (lié au premier client fictif : projet au stade « Brief »)
-  if (firstClientId && !(await db.user.findUnique({ where: { email: DEMO_CLIENT_EMAIL } }))) {
-    const client = await db.client.findUniqueOrThrow({ where: { id: firstClientId } });
+  // Compte client de démonstration (lié au client fictif dont le projet est en développement)
+  if (demoAccountClientId && !(await db.user.findUnique({ where: { email: DEMO_CLIENT_EMAIL } }))) {
+    const client = await db.client.findUniqueOrThrow({ where: { id: demoAccountClientId } });
     await db.user.create({
-      data: { email: DEMO_CLIENT_EMAIL, role: "CLIENT", clientId: firstClientId, firstName: client.firstName, lastName: client.lastName, passwordHash: await hash(DEMO_CLIENT_PASSWORD, { memoryCost: 19456, timeCost: 2, parallelism: 1 }) },
+      data: { email: DEMO_CLIENT_EMAIL, role: "CLIENT", clientId: demoAccountClientId, firstName: client.firstName, lastName: client.lastName, passwordHash: await hash(DEMO_CLIENT_PASSWORD, { memoryCost: 19456, timeCost: 2, parallelism: 1 }) },
     });
   }
 

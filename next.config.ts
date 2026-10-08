@@ -29,6 +29,8 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Dossier de build séparé pour les tests e2e (permet un 2e serveur en parallèle du dev)
+  distDir: process.env.NEXT_DIST_DIR || ".next",
   output: "standalone",
   serverExternalPackages: ["@node-rs/argon2"],
   images: {

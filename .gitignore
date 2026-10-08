@@ -21,3 +21,6 @@ storage/
 playwright-report
 test-results
 coverage
+.test-storage/
+.e2e-storage/
+.next-e2e/

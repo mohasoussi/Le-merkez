@@ -140,7 +140,7 @@ export default async function LeadPage({ params }: { params: Promise<{ id: strin
           <Card>
             <CardHeader title="Statut" />
             <CardBody className="flex flex-col gap-4">
-              <StageForm key={lead.stage} leadId={lead.id} stage={lead.stage} />
+              <StageForm leadId={lead.id} stage={lead.stage} />
               {lead.lostReason && lead.stage === "LOST" && <p className="text-sm text-muted">Raison : {lead.lostReason}</p>}
             </CardBody>
           </Card>
