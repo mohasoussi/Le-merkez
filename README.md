@@ -7,7 +7,8 @@ Application complète pour vendre et produire des sites internet :
 - **CRM** (`/admin`) : tableau de bord, pipeline Kanban, fiches prospects, clients, projets, devis, paiements, maintenance, statistiques, contenus du site.
 - **Espace client** (`/client`) : avancement du projet, brief avec sauvegarde automatique, dépôt de fichiers, messages.
 
-Stack : Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · PostgreSQL 16 · Prisma 7 · Zod 4 · Argon2id.
+Stack : Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · PostgreSQL · Prisma 7 · Zod 4 · scrypt.
+Hébergement prévu : **Cloudflare Workers** (via OpenNext) + PostgreSQL Neon + Cloudflare R2. Docker/VPS reste possible.
 Choix techniques et modèle de données : [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ---
@@ -37,11 +38,12 @@ Générer un secret : `openssl rand -base64 48`
 | `APP_URL` | oui | URL publique sans `/` final (liens des emails, SEO, contrôle d'origine) |
 | `APP_SECRET` | oui | Secret ≥ 32 caractères (anti-spam, empreinte des IP) |
 | `TRUST_PROXY` | conseillé | `true` si l'app est derrière un proxy/CDN de confiance (Vercel, Nginx, Caddy, Cloudflare). Nécessaire pour que le rate-limit distingue les visiteurs. **Ne pas activer** si l'app est exposée directement (en-têtes falsifiables). |
-| `EMAIL_DRIVER` | non | `console` (emails affichés dans les logs) ou `smtp` |
+| `EMAIL_DRIVER` | non | `console` (emails affichés dans les logs), `resend` (API HTTP — **à utiliser sur Cloudflare**) ou `smtp` |
+| `RESEND_API_KEY` | si resend | Clé d'API Resend (resend.com, offre gratuite 3 000 emails/mois) |
 | `EMAIL_FROM` | si smtp | Expéditeur, ex. `"Mon Studio <contact@mondomaine.fr>"` |
 | `ADMIN_NOTIFICATION_EMAIL` | conseillé | Reçoit : nouveau prospect, nouveau client, brief terminé, nouveau fichier, message client |
 | `SMTP_HOST` `SMTP_PORT` `SMTP_SECURE` `SMTP_USER` `SMTP_PASSWORD` | si smtp | Brevo, Resend, OVH, Gmail… |
-| `STORAGE_DRIVER` | non | `local` (disque) ou `s3` |
+| `STORAGE_DRIVER` | non | `local` (disque), `r2` (liaison Cloudflare R2 « FILES », **sur Cloudflare**) ou `s3` |
 | `STORAGE_LOCAL_DIR` | si local | Dossier des fichiers (défaut `./storage`, à sauvegarder !) |
 | `S3_ENDPOINT` `S3_REGION` `S3_BUCKET` `S3_ACCESS_KEY_ID` `S3_SECRET_ACCESS_KEY` | si s3 | Cloudflare R2, Scaleway, AWS… Le bucket doit rester **privé** |
 | `UPLOAD_MAX_MB` | non | Taille max d'un fichier (défaut 15) |
@@ -94,10 +96,54 @@ Fiche prospect → **Convertir en client** → fiche client → **Créer l'accè
 
 ## 8. Déploiement
 
-Le build ne nécessite pas de base de données (`npm run build`). Le site public est rendu à la demande avec un cache de données
-invalidé automatiquement à chaque modification dans l'admin.
+Le build ne nécessite pas de base de données. Le site public est rendu à la demande ; une modification faite dans l'admin
+est visible immédiatement.
 
-### Option A — VPS + Docker (coût minimal, recommandé pour démarrer)
+### Cloudflare Workers (hébergement retenu)
+
+L'application tourne sur Workers grâce à [OpenNext](https://opennext.js.org/cloudflare). Le code est déjà adapté :
+mots de passe en scrypt (pas de module natif), client Prisma « workerd », fichiers dans **R2**, emails via **Resend** (HTTP),
+une connexion base par requête. Testé en local dans le runtime Cloudflare (`npm run preview`) avec le parcours e2e complet.
+
+**Pré-requis** : offre **Workers Paid (5 $/mois)**. L'offre gratuite limite le CPU à 10 ms par requête et le Worker à 3 Mo ;
+cette application en fait ~4,5 Mo compressés et le rendu des pages + la vérification des mots de passe dépassent 10 ms.
+
+1. **Base de données — Neon** (gratuit) : créez un projet PostgreSQL, région *Europe (Frankfurt)*. Copiez la chaîne de connexion.
+2. **Initialiser la base** depuis votre ordinateur (Node 22 installé), à la racine du projet :
+   ```bash
+   npm install
+   DATABASE_URL="<chaîne Neon>" npm run db:deploy
+   DATABASE_URL="<chaîne Neon>" npm run db:seed
+   DATABASE_URL="<chaîne Neon>" npm run admin:create -- --email vous@domaine.fr --name "Prénom Nom"
+   ```
+3. **Fichiers — R2** : tableau de bord Cloudflare → R2 → *Créer un bucket* nommé **`agence-web-fichiers`** (laisser privé).
+4. **Emails — Resend** : créez un compte, vérifiez votre domaine d'envoi, créez une clé d'API.
+5. **Connexion à la base (conseillé) — Hyperdrive** : *Stockage et bases de données → Hyperdrive → Créer*, collez la chaîne Neon,
+   **désactivez la mise en cache**, puis copiez l'identifiant et décommentez la ligne `hyperdrive` de `wrangler.jsonc` avec cet identifiant.
+   (Sans Hyperdrive, l'application se connecte directement via le secret `DATABASE_URL`, un peu plus lentement.)
+6. **Créer le Worker relié à GitHub** : *Workers & Pages → Créer → Importer un dépôt* → ce dépôt, branche de production
+   `claude/agence-web-platform`.
+   - Commande de build : `npm run cf:build`
+   - Commande de déploiement : `npx opennextjs-cloudflare deploy`
+7. **Variables et secrets** (Worker `agence-web` → Paramètres → Variables et secrets) :
+
+   | Nom | Type | Valeur |
+   | --- | --- | --- |
+   | `APP_URL` | texte | `https://agence-web.<votre-sous-domaine>.workers.dev` (puis votre domaine) |
+   | `APP_SECRET` | secret | `openssl rand -base64 48` |
+   | `DATABASE_URL` | secret | chaîne Neon (inutile si Hyperdrive est configuré, mais sans risque) |
+   | `RESEND_API_KEY` | secret | clé Resend |
+   | `EMAIL_FROM` | texte | `Votre Marque <contact@votre-domaine.fr>` |
+   | `ADMIN_NOTIFICATION_EMAIL` | texte | votre adresse |
+
+   `STORAGE_DRIVER=r2`, `EMAIL_DRIVER=resend` et `TRUST_PROXY=true` sont déjà dans `wrangler.jsonc`.
+8. **Déployer** : chaque `git push` sur la branche déclenche un déploiement. Le site est alors en ligne sur
+   **`https://agence-web.<votre-sous-domaine>.workers.dev`**. Domaine personnalisé : Worker → *Paramètres → Domaines et routes*.
+
+Tester le Worker en local avant de pousser : `cp .dev.vars.example .dev.vars` (à compléter) puis `npm run preview` → http://localhost:8787.
+Déployer depuis votre poste (au lieu de GitHub) : `npx wrangler login` puis `npm run deploy`.
+
+### Option A — VPS + Docker
 Un VPS 2 Go (Hetzner, OVH, Scaleway…) suffit.
 
 ```bash
@@ -134,6 +180,7 @@ Les fichiers clients sont dans le volume Docker `uploads`, la base dans `db-data
 | Logs | `docker compose logs -f app` (JSON, une ligne par événement ; les erreurs portent `"level":"error"`) |
 | Dépendances | `npm outdated` puis `npm audit` régulièrement |
 | Données de démo | `npm run db:demo:clear` |
+| Mot de passe admin perdu | `npm run admin:create -- --email vous@domaine.fr --reset` |
 
 ## Tests
 
@@ -148,13 +195,13 @@ npm run typecheck
 - Navigateur e2e : `npx playwright install chromium`, ou `PLAYWRIGHT_CHROMIUM_PATH=/chemin/vers/chromium`.
 
 Couvert : création de prospect, validation (front/back, messages FR), anti-spam, rate-limit, conversion prospect → client,
-authentification (Argon2, sessions, invitation, réinitialisation), permissions admin/client, projets et statuts (synchronisation du pipeline),
+authentification (scrypt, sessions, invitation, réinitialisation), permissions admin/client, projets et statuts (synchronisation du pipeline),
 acompte → ouverture du brief, brief, upload (types, signatures, taille), **isolation stricte entre clients** (projets, brief, fichiers, messages, export),
 devis (numérotation, totaux, statuts), contenus administrables, statistiques exactes, cohérence constantes ↔ schéma.
 
 ## Sécurité (résumé)
 
-Mots de passe Argon2id · sessions en base révocables, cookie `__Host-` HttpOnly/Secure/SameSite · contrôle d'accès dans chaque service ·
+Mots de passe scrypt (paramètres OWASP) · sessions en base révocables, cookie `__Host-` HttpOnly/Secure/SameSite · contrôle d'accès dans chaque service ·
 Zod sur toutes les entrées · requêtes Prisma paramétrées · protection CSRF (Server Actions + vérification d'`Origin`) · rate-limit en base ·
 honeypot + jeton horodaté signé + Turnstile optionnel · uploads en liste blanche avec vérification de signature binaire, SVG refusé,
 téléchargements authentifiés en `attachment` · en-têtes CSP/HSTS/X-Frame-Options · aucun secret dans le code ni dans le navigateur.

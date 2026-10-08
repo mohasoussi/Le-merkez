@@ -1,5 +1,5 @@
 import "server-only";
-import nodemailer, { type Transporter } from "nodemailer";
+import type { Transporter } from "nodemailer";
 import { env } from "@/server/env";
 import { logger } from "@/server/logger";
 
@@ -16,8 +16,10 @@ export const consoleOutbox: EmailMessage[] = [];
 
 let transporter: Transporter | null = null;
 
-function getTransporter() {
+async function getTransporter() {
   const e = env();
+  // Import à la demande : nodemailer (sockets TCP) n'est chargé que pour le pilote SMTP.
+  const nodemailer = (await import("nodemailer")).default;
   transporter ??= nodemailer.createTransport({
     host: e.SMTP_HOST,
     port: e.SMTP_PORT,
@@ -40,7 +42,18 @@ export async function sendEmail(message: EmailMessage): Promise<boolean> {
       else logger.info("email.console", { to: message.to, subject: message.subject, text: message.text });
       return true;
     }
-    await getTransporter().sendMail({ from: e.EMAIL_FROM, ...message });
+    if (e.EMAIL_DRIVER === "resend") {
+      // API HTTP : fonctionne partout, y compris sur Cloudflare Workers
+      const res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${e.RESEND_API_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ from: e.EMAIL_FROM, to: [message.to], subject: message.subject, html: message.html, text: message.text, reply_to: message.replyTo }),
+        signal: AbortSignal.timeout(10_000),
+      });
+      if (!res.ok) throw new Error(`Resend ${res.status}: ${(await res.text()).slice(0, 200)}`);
+      return true;
+    }
+    await (await getTransporter()).sendMail({ from: e.EMAIL_FROM, ...message });
     return true;
   } catch (error) {
     logger.error("email.send_failed", { to: message.to, subject: message.subject, error });

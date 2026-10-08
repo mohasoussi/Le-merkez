@@ -1,0 +1,27 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Nom du Worker → URL https://agence-web.<votre-sous-domaine>.workers.dev
+  "name": "agence-web",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
+  "services": [
+    // Auto-référence requise par OpenNext (doit correspondre à "name")
+    { "binding": "WORKER_SELF_REFERENCE", "service": "agence-web" }
+  ],
+  // Fichiers des clients et images des réalisations (bucket PRIVÉ, à créer : agence-web-fichiers)
+  "r2_buckets": [{ "binding": "FILES", "bucket_name": "agence-web-fichiers" }],
+  // Optionnel mais conseillé : accélère la connexion à PostgreSQL. Créez une configuration Hyperdrive
+  // (cache désactivé) puis décommentez en mettant son identifiant :
+  // "hyperdrive": [{ "binding": "HYPERDRIVE", "id": "<ID_HYPERDRIVE>", "localConnectionString": "postgresql://agence:agence@localhost:5432/agence" }],
+  "vars": {
+    "STORAGE_DRIVER": "r2",
+    "EMAIL_DRIVER": "resend",
+    "TRUST_PROXY": "true",
+    "UPLOAD_MAX_MB": "15"
+  },
+  // Conserve les variables définies dans le tableau de bord Cloudflare (APP_URL, EMAIL_FROM…)
+  "keep_vars": true,
+  "observability": { "enabled": true }
+}

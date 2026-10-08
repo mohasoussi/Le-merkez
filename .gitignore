@@ -15,7 +15,7 @@ next-env.d.ts
 src/generated
 
 # Fichiers téléversés (stockage local)
-storage/
+/storage/
 
 # Tests
 playwright-report
@@ -25,3 +25,9 @@ coverage
 .e2e-storage/
 .next-e2e/
 .next-*/
+
+# Cloudflare / OpenNext
+.open-next
+.wrangler
+.dev.vars
+cloudflare-env.d.ts

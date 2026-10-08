@@ -8,5 +8,5 @@ run("npm run db:seed");
 try {
   run('npm run admin:create -- --email admin-e2e@example.com --name "Admin E2E"', { ADMIN_PASSWORD: "AdminE2E-2026!" });
 } catch {
-  console.log("ℹ Admin e2e déjà présent.");
+  run("npm run admin:create -- --email admin-e2e@example.com --reset", { ADMIN_PASSWORD: "AdminE2E-2026!" });
 }

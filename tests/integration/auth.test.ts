@@ -62,7 +62,7 @@ describe("authentification", () => {
   it("crée un administrateur avec un mot de passe haché (jamais en clair)", async () => {
     const admin = await createAdminUser({ email: "Boss@Test.local", password: "TresSecret-2026", firstName: "Boss" });
     expect(admin.email).toBe("boss@test.local");
-    expect(admin.passwordHash).toMatch(/^\$argon2id\$/);
+    expect(admin.passwordHash).toMatch(/^scrypt\$16384\$8\$5\$/);
     await expect(createAdminUser({ email: "boss@test.local", password: "TresSecret-2026", firstName: "B" })).rejects.toThrow(
       /existe déjà/,
     );

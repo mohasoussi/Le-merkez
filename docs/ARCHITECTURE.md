@@ -27,7 +27,7 @@ Trois espaces : **public** (`/`), **administration** (`/admin`), **client** (`/c
 | Base de données | **PostgreSQL 16** | Relationnel (le domaine l'est), fiable, hébergements gratuits/peu chers (Neon, Supabase, Scaleway, VPS). |
 | ORM | **Prisma 7** (adaptateur `pg`) | Schéma lisible, migrations versionnées, requêtes typées et paramétrées (pas d'injection SQL). La 8.0 est encore en RC : non retenue. |
 | Validation | **Zod 4** | Mêmes schémas côté navigateur et serveur. |
-| Authentification | **Maison, sessions en base** + **Argon2id** (`@node-rs/argon2`) | Besoin simple (email + mot de passe, 2 rôles). Une solution maison de ~200 lignes, auditable, évite une dépendance lourde. Jeton aléatoire 256 bits en cookie `HttpOnly`/`Secure`/`SameSite=Lax`, seul son hash SHA-256 est stocké. |
+| Authentification | **Maison, sessions en base** + **scrypt** (`node:crypto`, paramètres OWASP — fonctionne aussi sur Cloudflare Workers, sans module natif) | Besoin simple (email + mot de passe, 2 rôles). Une solution maison de ~200 lignes, auditable, évite une dépendance lourde. Jeton aléatoire 256 bits en cookie `HttpOnly`/`Secure`/`SameSite=Lax`, seul son hash SHA-256 est stocké. |
 | Fichiers | Interface `Storage` avec 2 pilotes : **disque local** (dev / VPS) et **S3-compatible** (Cloudflare R2, Scaleway, AWS) | Les fichiers clients ne sont jamais publics : ils passent par une route qui vérifie les droits. |
 | Emails | Interface `Mailer` : pilote **console** (dev) ou **SMTP** (`nodemailer`) | SMTP fonctionne avec tous les fournisseurs (Brevo, Resend, OVH, Gmail…). Un échec d'email ne bloque jamais l'action. |
 | Kanban | `@dnd-kit/core` | Glisser-déposer accessible, support tactile (mobile). |
@@ -92,7 +92,7 @@ Choix notables :
 
 ## 5. Sécurité
 
-- Mots de passe Argon2id ; sessions en base, révocables ; cookie `__Host-` en production.
+- Mots de passe scrypt ; sessions en base, révocables ; cookie `__Host-` en production.
 - Contrôle d'accès **côté serveur dans chaque service** (le `proxy` Next ne fait qu'une redirection de confort).
 - Server Actions : vérification d'origine intégrée à Next ; routes API mutantes : vérification `Origin`.
 - Zod sur toutes les entrées ; Prisma = requêtes paramétrées ; React échappe le HTML ; aucun `dangerouslySetInnerHTML` avec une donnée utilisateur.
@@ -110,7 +110,8 @@ Choix notables :
 
 ## 7. Déploiement
 
-- **Option A (coût minimal, recommandé pour démarrer)** : un VPS (Hetzner, OVH, Scaleway ~5 €/mois) avec `docker compose` (app + PostgreSQL), stockage disque local, sauvegardes `pg_dump`.
+- **Retenu : Cloudflare Workers** (OpenNext) + Neon (PostgreSQL, via Hyperdrive) + R2 (fichiers) + Resend (emails). Adaptations :
+  client Prisma « workerd », un client base par requête, pilote de stockage R2, pilote d'email HTTP. Voir README §8.
+- **Option A (coût minimal)** : un VPS (Hetzner, OVH, Scaleway ~5 €/mois) avec `docker compose` (app + PostgreSQL), stockage disque local, sauvegardes `pg_dump`.
 - **Option B (zéro serveur à gérer)** : Vercel + Neon (PostgreSQL) + Cloudflare R2 (fichiers, pilote S3).
 
-Cloudflare Workers (utilisé pour le site du Merkez) n'est pas retenu ici : Prisma + uploads + Argon2 natif y sont plus contraignants.

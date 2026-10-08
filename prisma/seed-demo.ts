@@ -1,4 +1,4 @@
-import { hash } from "@node-rs/argon2";
+import { hashPassword } from "../src/server/auth/password";
 import type { PipelineStage, PrismaClient, ProjectStatus } from "../src/generated/prisma/client";
 
 /**
@@ -185,7 +185,7 @@ export async function seedDemo(db: PrismaClient) {
   if (demoAccountClientId && !(await db.user.findUnique({ where: { email: DEMO_CLIENT_EMAIL } }))) {
     const client = await db.client.findUniqueOrThrow({ where: { id: demoAccountClientId } });
     await db.user.create({
-      data: { email: DEMO_CLIENT_EMAIL, role: "CLIENT", clientId: demoAccountClientId, firstName: client.firstName, lastName: client.lastName, passwordHash: await hash(DEMO_CLIENT_PASSWORD, { memoryCost: 19456, timeCost: 2, parallelism: 1 }) },
+      data: { email: DEMO_CLIENT_EMAIL, role: "CLIENT", clientId: demoAccountClientId, firstName: client.firstName, lastName: client.lastName, passwordHash: await hashPassword(DEMO_CLIENT_PASSWORD) },
     });
   }
 

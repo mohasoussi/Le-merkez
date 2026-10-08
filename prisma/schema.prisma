@@ -7,6 +7,14 @@ generator client {
   output   = "../src/generated/prisma"
 }
 
+// Variante pour Cloudflare Workers (le moteur WebAssembly y est importé comme module).
+// Utilisée automatiquement par `npm run cf:build` (voir next.config.ts).
+generator workerd {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma-workerd"
+  runtime  = "workerd"
+}
+
 datasource db {
   provider = "postgresql"
 }

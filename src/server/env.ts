@@ -13,7 +13,8 @@ const schema = z.object({
   TRUST_PROXY: bool,
   DATABASE_URL: z.string().min(1),
 
-  EMAIL_DRIVER: z.enum(["console", "smtp"]).default("console"),
+  EMAIL_DRIVER: z.enum(["console", "smtp", "resend"]).default("console"),
+  RESEND_API_KEY: z.string().optional().default(""),
   EMAIL_FROM: z.string().default("Studio Web <contact@example.com>"),
   ADMIN_NOTIFICATION_EMAIL: z.string().optional().default(""),
   SMTP_HOST: z.string().optional(),
@@ -22,7 +23,7 @@ const schema = z.object({
   SMTP_USER: z.string().optional(),
   SMTP_PASSWORD: z.string().optional(),
 
-  STORAGE_DRIVER: z.enum(["local", "s3"]).default("local"),
+  STORAGE_DRIVER: z.enum(["local", "s3", "r2"]).default("local"),
   STORAGE_LOCAL_DIR: z.string().default("./storage"),
   S3_ENDPOINT: z.string().optional(),
   S3_REGION: z.string().default("auto"),

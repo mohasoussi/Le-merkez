@@ -10,11 +10,12 @@ export default defineConfig({
   fullyParallel: false,
   workers: 1,
   reporter: [["list"]],
-  use: { baseURL: "http://localhost:3100", trace: "retain-on-failure", launchOptions: { executablePath } },
+  // E2E_BASE_URL : tester un serveur déjà lancé (ex. le Worker Cloudflare en local : npm run preview → http://localhost:8787)
+  use: { baseURL: process.env.E2E_BASE_URL ?? "http://localhost:3100", trace: "retain-on-failure", launchOptions: { executablePath } },
   projects: [
     { name: "mobile", use: { ...devices["Pixel 7"], launchOptions: { executablePath } } },
   ],
-  webServer: {
+  webServer: process.env.E2E_BASE_URL ? undefined : {
     command: "node tests/e2e/prepare.mjs && npx next dev --port 3100",
     url: "http://localhost:3100/connexion",
     reuseExistingServer: false,

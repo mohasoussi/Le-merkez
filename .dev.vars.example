@@ -1,0 +1,9 @@
+# Variables pour `npm run preview` (Worker exécuté en local). Copier en .dev.vars (ignoré par git).
+# En production, définissez-les dans Cloudflare : Workers → agence-web → Paramètres → Variables et secrets.
+APP_URL=http://localhost:8787
+APP_SECRET=remplacez-par-openssl-rand-base64-48-xxxxxxxxxxxxxxxx
+DATABASE_URL=postgresql://agence:agence@localhost:5432/agence?schema=public
+EMAIL_DRIVER=console
+EMAIL_FROM="Studio Web <contact@example.com>"
+ADMIN_NOTIFICATION_EMAIL=
+RESEND_API_KEY=

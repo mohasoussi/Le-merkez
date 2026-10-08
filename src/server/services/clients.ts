@@ -145,7 +145,7 @@ export async function createClientAccess(actor: Actor, clientId: string, emailIn
   await logActivity(db, { type: "CLIENT_ACCESS_CREATED", clientId, leadId: client.leadId, actorId: actor.id, message: `Accès client envoyé à ${email}` });
   const settings = await getSettings();
   const sent = await sendInvitation({ to: email, firstName: client.firstName, token, brandName: settings.brandName });
-  return { link: `${env().APP_URL}/activation?token=${encodeURIComponent(token)}`, emailSent: sent && env().EMAIL_DRIVER === "smtp" };
+  return { link: `${env().APP_URL}/activation?token=${encodeURIComponent(token)}`, emailSent: sent && env().EMAIL_DRIVER !== "console" };
 }
 
 export async function setClientUserActive(actor: Actor, userId: string, isActive: boolean) {
